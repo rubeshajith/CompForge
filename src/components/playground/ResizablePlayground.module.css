@@ -1,0 +1,281 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── Topbar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 52px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.topbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: color 0.15s;
+}
+.backLink:hover {
+  color: var(--text-primary);
+}
+
+.logoMark {
+  color: var(--accent);
+  font-size: 18px;
+}
+
+.logoText {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.separator {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.componentName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent-light);
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Main layout ── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── Preview pane ── */
+.previewPane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+  min-height: 0;
+}
+
+/* ── Label bar ── */
+.previewLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Mode toggle pill */
+.modeToggle {
+  display: flex;
+  background: var(--bg-4);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+  margin-left: 4px;
+}
+
+.modeBtn {
+  background: none;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.modeBtn:hover {
+  color: var(--text-secondary);
+}
+.modeBtnActive {
+  background: var(--bg-2);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.modeHint {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.7;
+  margin-left: auto;
+}
+
+/* ── Preview stage ── */
+.previewStage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--bg);
+  background-image:
+    radial-gradient(
+      circle at 30% 40%,
+      rgba(124, 108, 252, 0.04) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 49.5%,
+      var(--border) 49.5%,
+      var(--border) 50.5%,
+      transparent 50.5%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 49.5%,
+      var(--border) 49.5%,
+      var(--border) 50.5%,
+      transparent 50.5%
+    );
+  background-size:
+    100% 100%,
+    24px 24px,
+    24px 24px;
+}
+
+.previewStageLight {
+  background: #f4f4f8;
+  background-image:
+    radial-gradient(
+      circle at 30% 40%,
+      rgba(108, 92, 231, 0.05) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 49.5%,
+      #d4d4e0 49.5%,
+      #d4d4e0 50.5%,
+      transparent 50.5%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 49.5%,
+      #d4d4e0 49.5%,
+      #d4d4e0 50.5%,
+      transparent 50.5%
+    );
+  background-size:
+    100% 100%,
+    24px 24px,
+    24px 24px;
+}
+
+/* Inner scroll so large components (e.g. range calendar) can be scrolled without breaking layout */
+.previewScroll {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+/* ── Drag handle ── */
+.dragHandle {
+  flex-shrink: 0;
+  height: 12px;
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+  transition: background 0.15s;
+  z-index: 2;
+}
+.dragHandle:hover {
+  background: var(--bg-3);
+}
+.dragHandle:hover .dragPill {
+  background: var(--accent);
+}
+
+.dragPill {
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border-light);
+  transition: background 0.15s;
+}
+
+/* ── Code pane — height set inline via JS ── */
+.codePane {
+  flex-shrink: 0;
+  overflow: hidden;
+  border-top: none; /* handle provides the visual separator */
+}
+
+/* ── Control pane ── */
+.controlPane {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
