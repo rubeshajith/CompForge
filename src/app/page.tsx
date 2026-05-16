@@ -75,6 +75,13 @@ const components: {
     preview: "◌ Loading...",
   },
   {
+    id: "skeleton",
+    name: "Skeleton Loader",
+    description: "Skeleton loading placeholders for content areas",
+    status: "ready",
+    preview: "◌ Loading...",
+  },
+  {
     id: "filterModal",
     name: "Modal Filter",
     description: "Dialog modals with backdrop and transitions",
@@ -108,6 +115,13 @@ const components: {
     description: "Modal for collecting user login information",
     status: "ready",
     preview: "⊡ Open Modal",
+  },
+  {
+    id: "kanban",
+    name: "Kanban Board",
+    description: "Interactive Kanban board with drag-and-drop functionality",
+    status: "ready",
+    preview: "⊡ Open Kanban Board",
   },
   {
     id: "button",
