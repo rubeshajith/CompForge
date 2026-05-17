@@ -75,6 +75,27 @@ const components: {
     preview: "◌ Loading...",
   },
   {
+    id: "checkbox",
+    name: "Checkbox",
+    description: "Customizable checkboxes with various styles and animations",
+    status: "ready",
+    preview: "☐ Checked",
+  },
+  {
+    id: "systemState",
+    name: "System State",
+    description: "Display various system states with customizable variants",
+    status: "ready",
+    preview: "● System State",
+  },
+  {
+    id: "timeline",
+    name: "Timeline",
+    description: "Interactive timeline with customizable nodes and connectors",
+    status: "ready",
+    preview: "● Timeline",
+  },
+  {
     id: "skeleton",
     name: "Skeleton Loader",
     description: "Skeleton loading placeholders for content areas",
@@ -122,6 +143,13 @@ const components: {
     description: "Interactive Kanban board with drag-and-drop functionality",
     status: "ready",
     preview: "⊡ Open Kanban Board",
+  },
+  {
+    id: "formBuilder",
+    name: "Form Builder",
+    description: "Visual form builder with drag-and-drop functionality",
+    status: "ready",
+    preview: "⊡ Open Form Builder",
   },
   {
     id: "button",
