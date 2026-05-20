@@ -54,6 +54,27 @@ const components: {
     preview: " progress",
   },
   {
+    id: "stepper",
+    name: "Stepper",
+    description: "customizable progress step flow",
+    status: "ready",
+    preview: " progress",
+  },
+  {
+    id: "stepper1",
+    name: "Stepper 1.0",
+    description: "customizable progress step flow",
+    status: "ready",
+    preview: " progress",
+  },
+  {
+    id: "stepper2",
+    name: "Stepper 2.0",
+    description: "customizable progress step flow",
+    status: "ready",
+    preview: " progress",
+  },
+  {
     id: "toast",
     name: "Toast",
     description: "Notification toasts with variants and positioning",
