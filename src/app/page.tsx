@@ -25,6 +25,13 @@ const components: {
     preview: "☑ Select multiple",
   },
   {
+    id: "accordion",
+    name: "Accordion",
+    description: "Expandable content sections with various animation effects",
+    status: "ready",
+    preview: "▾ Accordion",
+  },
+  {
     id: "calendar",
     name: "Calendar",
     description: "Interactive calendar with date selection and navigation",
@@ -171,6 +178,21 @@ const components: {
     description: "Visual form builder with drag-and-drop functionality",
     status: "ready",
     preview: "⊡ Open Form Builder",
+  },
+  {
+    id: "imageCarousel",
+    name: "Image Carousel",
+    description:
+      "Interactive image carousel with zoom and thumbnail navigation",
+    status: "ready",
+    preview: "⊡ Open Image Carousel",
+  },
+  {
+    id: "spotlightSearch",
+    name: "Spotlight Search",
+    description: "Search component with spotlight effect",
+    status: "ready",
+    preview: "⊡ Open Image Carousel",
   },
   {
     id: "button",
