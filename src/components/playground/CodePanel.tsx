@@ -31,13 +31,13 @@ export function CodePanel({ jsx, css }: Props) {
             className={`${styles.tab} ${tab === "jsx" ? styles.tabActive : ""}`}
             onClick={() => setTab("jsx")}
           >
-            Dropdown.jsx
+            jsx
           </button>
           <button
             className={`${styles.tab} ${tab === "css" ? styles.tabActive : ""}`}
             onClick={() => setTab("css")}
           >
-            Dropdown.css
+            css
           </button>
         </div>
         <button className={styles.copyBtn} onClick={handleCopy}>

@@ -32,6 +32,13 @@ const components: {
     preview: "▾ Accordion",
   },
   {
+    id: "sidebar",
+    name: "Sidebar",
+    description: "Customizable sidebar with various themes and layouts",
+    status: "ready",
+    preview: "▾ Sidebar",
+  },
+  {
     id: "calendar",
     name: "Calendar",
     description: "Interactive calendar with date selection and navigation",
@@ -192,7 +199,63 @@ const components: {
     name: "Spotlight Search",
     description: "Search component with spotlight effect",
     status: "ready",
-    preview: "⊡ Open Image Carousel",
+    preview: "⊡ Open Spotlight Search",
+  },
+  {
+    id: "dataTable",
+    name: "Data Table",
+    description:
+      "Interactive data table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open Data Table",
+  },
+  {
+    id: "analyticsTable",
+    name: "Analytics Table",
+    description:
+      "Interactive analytics table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open Analytics Table",
+  },
+  {
+    id: "productTable",
+    name: "Product Table",
+    description:
+      "Interactive product table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open Product Table",
+  },
+  {
+    id: "invoiceTable",
+    name: "Invoice Table",
+    description:
+      "Interactive invoice table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open Invoice Table",
+  },
+  {
+    id: "userTable",
+    name: "User Table",
+    description:
+      "Interactive user table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open User Table",
+  },
+  {
+    id: "orderTable",
+    name: "Order Table",
+    description:
+      "Interactive order table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open Order Table",
+  },
+  {
+    id: "recordTable",
+    name: "Record Table",
+    description:
+      "Interactive record table with sorting, filtering, and pagination",
+    status: "ready",
+    preview: "⊡ Open Record Table",
   },
   {
     id: "button",
