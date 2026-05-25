@@ -258,6 +258,14 @@ const components: {
     preview: "⊡ Open Record Table",
   },
   {
+    id: "indiaMap",
+    name: "India Map",
+    description:
+      "Interactive map of India with data visualization capabilities",
+    status: "ready",
+    preview: "⊡ Open India Map",
+  },
+  {
     id: "button",
     name: "Button",
     description: "Buttons with variants, sizes, and states",
