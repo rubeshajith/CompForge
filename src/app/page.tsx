@@ -173,6 +173,14 @@ const components: {
     preview: "⊡ Open Modal",
   },
   {
+    id: "jobApplicationForm",
+    name: "Job Application Form",
+    description:
+      "Form for submitting job applications with various fields and sections",
+    status: "ready",
+    preview: "⊡ Open Modal",
+  },
+  {
     id: "kanban",
     name: "Kanban Board",
     description: "Interactive Kanban board with drag-and-drop functionality",
