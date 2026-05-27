@@ -202,6 +202,13 @@ const components: {
     preview: "⊡ Open Kanban Board",
   },
   {
+    id: "dashboard",
+    name: "Dashboard",
+    description: "Interactive Dashboard",
+    status: "ready",
+    preview: "⊡ Open Dashboard",
+  },
+  {
     id: "aiChat",
     name: "AI Chat",
     description: "Interactive AI chat",
