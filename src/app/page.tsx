@@ -131,11 +131,25 @@ const components: {
     preview: "● Timeline",
   },
   {
+    id: "breadcrumb",
+    name: "Breadcrumb",
+    description: "Interactive breadcrumbs with variants",
+    status: "ready",
+    preview: "● Breadcrumbs",
+  },
+  {
     id: "skeleton",
     name: "Skeleton Loader",
     description: "Skeleton loading placeholders for content areas",
     status: "ready",
     preview: "◌ Loading...",
+  },
+  {
+    id: "kpiCard",
+    name: "KPI Cards",
+    description: "KPI cards",
+    status: "ready",
+    preview: "◌ Cards...",
   },
   {
     id: "filterModal",
@@ -186,6 +200,13 @@ const components: {
     description: "Interactive Kanban board with drag-and-drop functionality",
     status: "ready",
     preview: "⊡ Open Kanban Board",
+  },
+  {
+    id: "aiChat",
+    name: "AI Chat",
+    description: "Interactive AI chat",
+    status: "ready",
+    preview: "⊡ Open AI Chat",
   },
   {
     id: "formBuilder",
