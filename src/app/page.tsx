@@ -25,6 +25,20 @@ const components: {
     preview: "☑ Select multiple",
   },
   {
+    id: "button",
+    name: "Button, Button group",
+    description: "Expandable content sections with various animation effects",
+    status: "ready",
+    preview: "▾ button",
+  },
+  {
+    id: "toggle",
+    name: "toggle, toggle group",
+    description: "Expandable content sections with various animation effects",
+    status: "ready",
+    preview: "▾ toggle",
+  },
+  {
     id: "accordion",
     name: "Accordion",
     description: "Expandable content sections with various animation effects",
@@ -59,6 +73,13 @@ const components: {
     description: "Date time input field",
     status: "ready",
     preview: "📅 Select date and time",
+  },
+  {
+    id: "progress",
+    name: "Progress",
+    description: "customizable progress step flow",
+    status: "ready",
+    preview: " progress",
   },
   {
     id: "stepProgress",
@@ -115,6 +136,13 @@ const components: {
     description: "Emojis",
     status: "ready",
     preview: " Emojis",
+  },
+  {
+    id: "emailTemplate",
+    name: "Email Template",
+    description: "Email",
+    status: "ready",
+    preview: " Email",
   },
   {
     id: "loader",
