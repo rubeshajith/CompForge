@@ -577,3 +577,726 @@ function generateMonoCSS(c: BreadcrumbConfig): string {
   50% { opacity: 0; }
 }`;
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// TSX GENERATOR
+// ════════════════════════════════════════════════════════════════════════
+export function generateBreadcrumbTSX(config: BreadcrumbConfig): string {
+  switch (config.variant) {
+    case "pill":
+      return generatePillTSX(config);
+    case "arrow":
+      return generateArrowTSX(config);
+    case "underline":
+      return generateUnderlineTSX(config);
+    case "mono":
+      return generateMonoTSX(config);
+    default:
+      return generateDefaultTSX(config);
+  }
+}
+
+// ─── 1. Default TSX ───────────────────────────────────────────────────
+function generateDefaultTSX(c: BreadcrumbConfig): string {
+  return `import { useState } from "react";
+import "./Breadcrumb.css";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb">
+      <ol className="bc">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          return (
+            <li key={i} className="bc__item">
+              {i > 0 && <span className="bc__sep">/</span>}
+              <span
+                className={\`bc__crumb\${isActive ? " bc__crumb--active" : ""}\${isHovered ? " bc__crumb--hover" : ""}\`}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  ${homeIconJSX(c.textColor)}
+                )}
+                {crumb.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 2. Pill TSX ──────────────────────────────────────────────────────
+function generatePillTSX(c: BreadcrumbConfig): string {
+  return `import { useState } from "react";
+import "./Breadcrumb.css";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb">
+      <ol className="bc bc--pill">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          return (
+            <li key={i} className="bc__item">
+              {i > 0 && (
+                <span className="bc__sep">
+                  ${chevronSepJSX(c.separatorColor)}
+                </span>
+              )}
+              <span
+                className={\`bc__crumb\${isActive ? " bc__crumb--active" : ""}\${isHovered ? " bc__crumb--hover" : ""}\`}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  ${homeIconJSX(c.textColor)}
+                )}
+                {crumb.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 3. Arrow TSX ─────────────────────────────────────────────────────
+function generateArrowTSX(c: BreadcrumbConfig): string {
+  return `import { useState } from "react";
+import "./Breadcrumb.css";
+
+${crumbsConst}
+
+const ARROW_OVERLAP = 12;
+const total = crumbs.length;
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb">
+      <ol className="bc bc--arrow">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+          const isFirst = i === 0;
+          const isLast = i === total - 1;
+
+          return (
+            <li
+              key={i}
+              className={\`bc__crumb bc__crumb--arrow-item\${isActive ? " bc__crumb--active" : ""}\${isHovered ? " bc__crumb--hover" : ""}\${isFirst ? " bc__crumb--first" : ""}\${isLast ? " bc__crumb--last" : ""}\`}
+              style={{ zIndex: total - i }}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => !isActive && onCrumbClick?.(crumb)}
+            >
+              {i === 0 && (
+                ${homeIconJSX("#ffffff")}
+              )}
+              {crumb.label}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 4. Underline TSX ─────────────────────────────────────────────────
+function generateUnderlineTSX(c: BreadcrumbConfig): string {
+  return `import { useState } from "react";
+import "./Breadcrumb.css";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb">
+      <ol className="bc bc--underline">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          return (
+            <li key={i} className="bc__item">
+              {i > 0 && <span className="bc__sep">·</span>}
+              <span
+                className={\`bc__crumb\${isActive ? " bc__crumb--active" : ""}\${isHovered ? " bc__crumb--hover" : ""}\`}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  ${homeIconJSX(c.textColor)}
+                )}
+                {crumb.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 5. Mono TSX ──────────────────────────────────────────────────────
+function generateMonoTSX(c: BreadcrumbConfig): string {
+  return `import { useState } from "react";
+import "./Breadcrumb.css";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb">
+      <ol className="bc bc--mono">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          return (
+            <li key={i} className="bc__item">
+              {i > 0 && <span className="bc__sep">/</span>}
+              <span
+                className={\`bc__crumb\${isActive ? " bc__crumb--active" : ""}\${isHovered ? " bc__crumb--hover" : ""}\`}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && <span className="bc__tilde">~</span>}
+                {crumb.label.toLowerCase()}
+                {isActive && <span className="bc__cursor">_</span>}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// TAILWIND GENERATOR
+// ════════════════════════════════════════════════════════════════════════
+export function generateBreadcrumbTailwind(config: BreadcrumbConfig): string {
+  switch (config.variant) {
+    case "pill":
+      return generatePillTailwind(config);
+    case "arrow":
+      return generateArrowTailwind(config);
+    case "underline":
+      return generateUnderlineTailwind(config);
+    case "mono":
+      return generateMonoTailwind(config);
+    default:
+      return generateDefaultTailwind(config);
+  }
+}
+
+// ─── 1. Default Tailwind ──────────────────────────────────────────────
+function generateDefaultTailwind(c: BreadcrumbConfig): string {
+  const fs = c.fontSize;
+  const fwNormal = c.fontWeight;
+  const fwActive = c.fontWeight + 100;
+
+  return `import { useState, CSSProperties } from "react";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the Breadcrumb
+const bcVars: CSSProperties = {
+  "--bc-text":        "${c.textColor}",
+  "--bc-text-hover":  "${c.textHoverColor}",
+  "--bc-text-active": "${c.activeTextColor}",
+  "--bc-sep":         "${c.separatorColor}",
+} as CSSProperties;
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb" style={bcVars}>
+      <ol className="flex items-center flex-wrap gap-[${c.gap}px] list-none m-0 p-0">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          let cls = "flex items-center gap-1.5 text-[${fs}px] font-[${fwNormal}] font-sans px-[${c.itemPaddingX}px] py-[${c.itemPaddingY}px] cursor-pointer";
+          if (isActive) {
+            cls += " text-[var(--bc-text-active)] font-[${fwActive}] cursor-default";
+          } else if (isHovered) {
+            cls += " text-[var(--bc-text-hover)]";
+          } else {
+            cls += " text-[var(--bc-text)]";
+          }
+          ${c.animate ? `cls += " transition-colors duration-[150ms] ease-in-out";` : ""}
+
+          return (
+            <li key={i} className="flex items-center gap-[${c.gap}px] list-none">
+              {i > 0 && (
+                <span className="text-[var(--bc-sep)] text-[${fs}px] select-none">/</span>
+              )}
+              <span
+                className={cls}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                    <path d="M2 6.5L8 1.5L14 6.5V14H10V10H6V14H2V6.5Z" stroke="var(--bc-text)" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                  </svg>
+                )}
+                {crumb.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 2. Pill Tailwind ─────────────────────────────────────────────────
+function generatePillTailwind(c: BreadcrumbConfig): string {
+  const fs = c.fontSize;
+  const fwNormal = c.fontWeight;
+  const fwActive = c.fontWeight + 100;
+  const pillRadius = c.borderRadius + 4;
+
+  return `import { useState, CSSProperties } from "react";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the Breadcrumb
+const bcVars: CSSProperties = {
+  "--bc-bg":              "${c.backgroundColor}",
+  "--bc-border":          "${c.borderColor}",
+  "--bc-text":            "${c.textColor}",
+  "--bc-text-hover":      "${c.textHoverColor}",
+  "--bc-text-active":     "${c.activeTextColor}",
+  "--bc-sep":             "${c.separatorColor}",
+  "--bc-item-hover-bg":   "${c.itemHoverBackground}",
+  "--bc-active-bg":       "${c.activeBackground}",
+  "--bc-active-border":   "${c.activeBorderColor}",
+  "--bc-radius":          "${c.borderRadius}px",
+} as CSSProperties;
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb" style={bcVars}>
+      <ol className="flex items-center flex-wrap gap-[${c.gap}px] list-none m-0 p-1 bg-[var(--bc-bg)] border border-[var(--bc-border)] rounded-[${pillRadius}px] w-fit">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          let cls = "flex items-center gap-1.5 px-[${c.itemPaddingX}px] py-[${c.itemPaddingY}px] rounded-[var(--bc-radius)] border border-transparent text-[${fs}px] font-[${fwNormal}] font-sans cursor-pointer";
+          if (isActive) {
+            cls += " bg-[var(--bc-active-bg)] border-[var(--bc-active-border)]/25 text-[var(--bc-text-active)] font-[${fwActive}] cursor-default";
+          } else if (isHovered) {
+            cls += " bg-[var(--bc-item-hover-bg)] text-[var(--bc-text-hover)]";
+          } else {
+            cls += " text-[var(--bc-text)]";
+          }
+          ${c.animate ? `cls += " transition-[color,background,border-color] duration-[150ms] ease-in-out";` : ""}
+
+          return (
+            <li key={i} className="flex items-center gap-[${c.gap}px] list-none">
+              {i > 0 && (
+                <span className="flex items-center text-[var(--bc-sep)]">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
+                    <path d="M4 2L8 6L4 10" stroke="var(--bc-sep)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              )}
+              <span
+                className={cls}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                    <path d="M2 6.5L8 1.5L14 6.5V14H10V10H6V14H2V6.5Z" stroke="var(--bc-text)" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                  </svg>
+                )}
+                {crumb.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 3. Arrow Tailwind ────────────────────────────────────────────────
+function generateArrowTailwind(c: BreadcrumbConfig): string {
+  const fs = c.fontSize;
+  const fwNormal = c.fontWeight;
+  const fwActive = c.fontWeight + 100;
+  const overlap = 12;
+  const total = 4; // crumbs.length baked
+
+  return `import { useState, CSSProperties } from "react";
+
+${crumbsConst}
+
+const ARROW_OVERLAP = ${overlap};
+const total = crumbs.length;
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the Breadcrumb
+const bcVars: CSSProperties = {
+  "--bc-border":        "${c.borderColor}",
+  "--bc-radius":        "${c.borderRadius}px",
+  "--bc-item-bg":       "${c.itemBackground}",
+  "--bc-item-hover-bg": "${c.itemHoverBackground}",
+  "--bc-text":          "${c.textColor}",
+  "--bc-text-hover":    "${c.textHoverColor}",
+  "--bc-accent":        "${c.accentColor}",
+} as CSSProperties;
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb" style={bcVars}>
+      <ol className="flex items-center list-none m-0 p-0 border border-[var(--bc-border)] rounded-[var(--bc-radius)] overflow-hidden w-fit">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+          const isFirst = i === 0;
+          const isLast = i === total - 1;
+
+          // clip-path must be inline — Tailwind cannot express dynamic polygon values
+          const clipPath = isFirst && isLast
+            ? "none"
+            : isFirst
+            ? \`polygon(0 0, calc(100% - ${overlap}px) 0, 100% 50%, calc(100% - ${overlap}px) 100%, 0 100%)\`
+            : isLast
+            ? \`polygon(${overlap}px 0, 100% 0, 100% 100%, ${overlap}px 100%, 0 50%)\`
+            : \`polygon(${overlap}px 0, calc(100% - ${overlap}px) 0, 100% 50%, calc(100% - ${overlap}px) 100%, ${overlap}px 100%, 0 50%)\`;
+
+          let bgColor: string;
+          if (isActive) {
+            bgColor = "var(--bc-accent)";
+          } else if (isHovered) {
+            bgColor = "var(--bc-item-hover-bg)";
+          } else {
+            bgColor = "var(--bc-item-bg)";
+          }
+
+          const textColor = isActive
+            ? "#ffffff"
+            : isHovered
+            ? "var(--bc-text-hover)"
+            : "var(--bc-text)";
+
+          const paddingRight = isLast ? ${c.itemPaddingX} : ${c.itemPaddingX + overlap};
+          const marginLeft = isFirst ? 0 : -${overlap};
+
+          return (
+            <li
+              key={i}
+              className="flex items-center gap-1.5 list-none text-[${fs}px] font-sans cursor-pointer"
+              style={{
+                background: bgColor,
+                color: textColor,
+                fontWeight: isActive ? ${fwActive} : ${fwNormal},
+                cursor: isActive ? "default" : "pointer",
+                clipPath,
+                zIndex: total - i,
+                marginLeft,
+                paddingTop: ${c.itemPaddingY},
+                paddingBottom: ${c.itemPaddingY},
+                paddingLeft: ${c.itemPaddingX},
+                paddingRight,
+                ${c.animate ? `transition: "background 0.15s ease, color 0.15s ease",` : ""}
+              }}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => !isActive && onCrumbClick?.(crumb)}
+            >
+              {i === 0 && (
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                  <path d="M2 6.5L8 1.5L14 6.5V14H10V10H6V14H2V6.5Z" stroke="#ffffff" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                </svg>
+              )}
+              {crumb.label}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 4. Underline Tailwind ────────────────────────────────────────────
+function generateUnderlineTailwind(c: BreadcrumbConfig): string {
+  const fs = c.fontSize;
+  const fsSep = c.fontSize - 1;
+  const fwNormal = c.fontWeight;
+  const fwActive = c.fontWeight + 100;
+  const pyActive = c.itemPaddingY + 2;
+
+  return `import { useState, CSSProperties } from "react";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the Breadcrumb
+const bcVars: CSSProperties = {
+  "--bc-text":        "${c.textColor}",
+  "--bc-text-hover":  "${c.textHoverColor}",
+  "--bc-text-active": "${c.activeTextColor}",
+  "--bc-sep":         "${c.separatorColor}",
+  "--bc-accent":      "${c.accentColor}",
+} as CSSProperties;
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb" style={bcVars}>
+      <ol className="flex items-center flex-wrap gap-[${c.gap}px] list-none m-0 p-0">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          let cls = "flex items-center gap-1.5 text-[${fs}px] font-[${fwNormal}] font-sans px-[${c.itemPaddingX}px] pt-[${c.itemPaddingY}px] pb-[${pyActive}px] cursor-pointer border-b-2";
+          if (isActive) {
+            cls += " text-[var(--bc-text-active)] font-[${fwActive}] border-[var(--bc-accent)] cursor-default";
+          } else if (isHovered) {
+            cls += " text-[var(--bc-text-hover)] border-[var(--bc-sep)]";
+          } else {
+            cls += " text-[var(--bc-text)] border-transparent";
+          }
+          ${c.animate ? `cls += " transition-[color,border-color] duration-[150ms] ease-in-out";` : ""}
+
+          return (
+            <li key={i} className="flex items-center gap-[${c.gap}px] list-none">
+              {i > 0 && (
+                <span className="text-[var(--bc-sep)] text-[${fsSep}px] select-none pb-0.5">·</span>
+              )}
+              <span
+                className={cls}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="shrink-0">
+                    <path d="M2 6.5L8 1.5L14 6.5V14H10V10H6V14H2V6.5Z" stroke="var(--bc-text)" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                  </svg>
+                )}
+                {crumb.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}
+
+// ─── 5. Mono Tailwind ─────────────────────────────────────────────────
+function generateMonoTailwind(c: BreadcrumbConfig): string {
+  const fs = c.fontSize - 1;
+  const fsSep = c.fontSize - 1;
+  const fsTilde = c.fontSize - 2;
+  const radiusInner = Math.max(0, c.borderRadius - 2);
+
+  return `import { useState, CSSProperties } from "react";
+
+${crumbsConst}
+
+interface Crumb {
+  label: string;
+  href: string | null;
+}
+
+interface BreadcrumbProps {
+  onCrumbClick?: (crumb: Crumb) => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the Breadcrumb
+const bcVars: CSSProperties = {
+  "--bc-bg":            "${c.backgroundColor}",
+  "--bc-border":        "${c.borderColor}",
+  "--bc-radius":        "${c.borderRadius}px",
+  "--bc-text":          "${c.textColor}",
+  "--bc-text-hover":    "${c.textHoverColor}",
+  "--bc-item-hover-bg": "${c.itemHoverBackground}",
+  "--bc-accent":        "${c.accentColor}",
+} as CSSProperties;
+
+export default function Breadcrumb({ onCrumbClick }: BreadcrumbProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <nav aria-label="breadcrumb" style={bcVars}>
+      <style>{\`
+        @keyframes bc-blink {
+          0%, 100% { opacity: 0.9; }
+          50% { opacity: 0; }
+        }
+      \`}</style>
+      <ol className="flex items-center list-none m-0 py-0.5 px-1 bg-[var(--bc-bg)] border border-[var(--bc-border)] rounded-[var(--bc-radius)] w-fit">
+        {crumbs.map((crumb, i) => {
+          const isActive = crumb.href === null;
+          const isHovered = hoveredIndex === i && !isActive;
+
+          let cls = "flex items-center gap-[5px] px-[${c.itemPaddingX}px] py-[${c.itemPaddingY}px] text-[${fs}px] font-mono tracking-[0.02em] cursor-pointer rounded-[${radiusInner}px]";
+          if (isActive) {
+            cls += " bg-[color-mix(in_srgb,var(--bc-accent)_8%,transparent)] text-[var(--bc-accent)] cursor-default";
+          } else if (isHovered) {
+            cls += " bg-[var(--bc-item-hover-bg)] text-[var(--bc-text-hover)]";
+          } else {
+            cls += " text-[var(--bc-text)]";
+          }
+          ${c.animate ? `cls += " transition-[color,background] duration-[150ms] ease-in-out";` : ""}
+
+          return (
+            <li key={i} className="flex items-center list-none">
+              {i > 0 && (
+                <span className="text-[var(--bc-accent)] font-mono text-[${fsSep}px] px-0.5 select-none opacity-70">/</span>
+              )}
+              <span
+                className={cls}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => !isActive && onCrumbClick?.(crumb)}
+              >
+                {i === 0 && (
+                  <span className="opacity-60 text-[${fsTilde}px]">~</span>
+                )}
+                {crumb.label.toLowerCase()}
+                {isActive && (
+                  <span
+                    className="text-[var(--bc-accent)] opacity-90"
+                    style={{ animation: "bc-blink 1s step-end infinite" }}
+                  >_</span>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}`;
+}

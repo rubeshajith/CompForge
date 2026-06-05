@@ -11,6 +11,8 @@ import {
 import {
   generateCalendarJSX,
   generateCalendarCSS,
+  generateCalendarTailwind,
+  generateCalendarTSX,
 } from "@/lib/generateCalendarCode";
 import { CalendarPreview } from "@/components/playground/CalendarPreview";
 import { CalendarControlPanel } from "@/components/playground/CalendarControlPanel";
@@ -43,6 +45,11 @@ export default function CalendarPlayground() {
 
   const jsxCode = useMemo(() => generateCalendarJSX(config), [config]);
   const cssCode = useMemo(() => generateCalendarCSS(config), [config]);
+  const tsxCode = useMemo(() => generateCalendarTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateCalendarTailwind(config),
+    [config],
+  );
 
   const stageStyle =
     mode === "light"
@@ -71,7 +78,14 @@ export default function CalendarPlayground() {
           onReset={handleReset}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }
