@@ -20,7 +20,10 @@ function cssVars(config: EcommerceDashboardConfig) {
 }`;
 }
 
-export function generateEcommerceDashboardJSX(_config: EcommerceDashboardConfig): string {
+// ─── JSX + CSS ────────────────────────
+export function generateEcommerceDashboardJSX(
+  _config: EcommerceDashboardConfig,
+): string {
   return `import "./EcommerceDashboard.css";
 
 const navItems = [
@@ -186,7 +189,10 @@ export default function EcommerceDashboard({ onRangeChange }) {
 }`;
 }
 
-export function generateEcommerceDashboardCSS(config: EcommerceDashboardConfig): string {
+// ─── CSS ──────────────────────────────
+export function generateEcommerceDashboardCSS(
+  config: EcommerceDashboardConfig,
+): string {
   return `@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 
 ${cssVars(config)}
@@ -961,5 +967,562 @@ ${cssVars(config)}
   .edash__toast {
     display: none;
   }
+}`;
+}
+
+// ─── TSX + CSS ────────────────────────
+export function generateEcommerceDashboardTSX(
+  _config: EcommerceDashboardConfig,
+): string {
+  return `import { CSSProperties } from "react";
+import "./EcommerceDashboard.css";
+
+const navItems: [string, string][] = [
+  ["payments", "FinTech"],
+  ["monitor_heart", "HealthTech"],
+  ["shopping_cart", "E-commerce"],
+  ["security", "Cybersecurity"],
+  ["local_shipping", "Logistics"],
+  ["campaign", "Marketing"],
+  ["analytics", "SaaS"],
+  ["bolt", "Energy"],
+];
+
+interface ProductRow {
+  name: string;
+  category: string;
+  sku: string;
+  price: string;
+  sold: string;
+  stock: string;
+  stockValue: string;
+  trend: string;
+  trendIcon: string;
+  color: string;
+  image: string;
+}
+
+const products: ProductRow[] = [
+  { name: "AeroPulse Running Shoes", category: "Footwear / Athletics", sku: "AP-2024-RED", price: "$189.00", sold: "1,204 units", stock: "85%", stockValue: "85%", trend: "+18%", trendIcon: "trending_up", color: "success", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDrXnVvNeNkTJL96YgKRP6HhVEc-L8krk7NFTpg73D17NHGY7i181U53bXHRJ4LPj4egotEU32ytW1ZNM68e_CvIynlFX-ZabTWUCgsWs5ANE4pKmzyrbEWe5SQEM8yWBnOdhUMaseO0nblzj1a7_-nq5fhz0JyF_WEE7BF9As0SNalA9WJMDQ80vjW3gWIrbFlvr85wrWJXcW9uCxV8N_X1DxOUDoqNd69HtdbKvz78A03dBh60gerMGElP4h-BeKP78n31bTJCZnO" },
+  { name: "Zenith Pro Headphones", category: "Electronics / Audio", sku: "ZP-H1-BLK", price: "$299.00", sold: "842 units", stock: "Critical", stockValue: "15%", trend: "Stable", trendIcon: "trending_flat", color: "warning", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuApjQEbPugqIRCPe2iXBw5-cPhVU-EuOggHSIJevnssmdD5SA6T0d7UrNG_xiefgHUvmR8eWcEYKq_Rpi7IDanH7F5eVQwUV0seAk89L7OoMzq5mi6HLBjWXPj8PLj_6T6ezHdK0jjHjRK3H2JeThR7uFKCg5jj57GLKZPRtydmq1LWKFhm-MhRjYCcgw5ksJ45mjT6_V5qYPkpm3a-Hwmvtm4z_hJrOHmnuNmIaLksCpU7vQmuLEkIlA7KqCJ5wlAw4aaWB98X_tUg" },
+  { name: "Chronos Minimal Watch", category: "Accessories / Jewelry", sku: "CH-MIN-01", price: "$145.00", sold: "620 units", stock: "45%", stockValue: "45%", trend: "+5%", trendIcon: "trending_up", color: "success", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA0OTJ87XqtOw8MPELgzxBzQLgLoZUdn9hM4VcIcxntti2Qomx9dRjIo9Sizjb33iDBaDdQW72CgBqEXDK1eDZw8_7S08eKcQM1OU-2OhEMPn27JZ37Q_8sapFT8uHILUG2GsKadvSjw7V8g3k6dJ5Eye2B9tdx4_BLWvFGGDLjzhy1ZzEKuoKUZ0-SD0BRWSCn7H1WOvaszvOztjl-DiwLvhwkbYGyT44-zx6ftcu5z9qXI3C8zbbCG_R2lAGJQV7ucFnt057K_Mkc" },
+];
+
+const profileImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuB98Iz7kIHnzrgHkihvQzyGgUprUoAWxTNf2yRnXZlEoQCAmrH3FKM_SsZvomXDuFA6GyUD_f9NdmKVwbnmF6IILPGyPZOZKzs1eHlqCztEpCUQ-EnWI9ALOtQDVooCL2-AlkhP8Ci3vmpapLWYEOhYqgBD7saLZC8zX3R_qpBkj1dxmFM1tC3o5dBxA4GcMI1YCL67wu5AIZgmahgorNPWJ3kh_dXZS__3rwDRLhx9X3Ff3ved_o19JW54qrwehpYHxfq3gNP2pLcj";
+const mapImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuBS3ZQbRAdvrwA6DfJ-RUQJ3aCkKlwUkKn4rtzgk_7qMyPF4B-Klma9MrW6zLIkKYzO8ktvviOs3eOLy6ee4ze6R7ySjOvQfPIMqPTq1cCRlGUt617SNvgV7oFCX3j2zTQQe-9mU-L6woCqThHiTCq498AQhtyxfDiudenTJXT26gUmRziXVZtatsAwfMdIZTgBbd2TM-Dc8rYtkZz3mecxdH63DICC0XVzKOMyA7hGXUDWk2wmdFlUGqAr4v_DQeCyN3dNPLNecoqQ";
+
+interface IconProps {
+  name: string;
+}
+
+function Icon({ name }: IconProps): JSX.Element {
+  return <span aria-hidden="true" className="material-symbols-outlined">{name}</span>;
+}
+
+interface MetricCardProps {
+  icon: string;
+  label: string;
+  value: string;
+  change: string;
+  tone?: string;
+  progress?: string;
+  note?: string;
+}
+
+function MetricCard({ icon, label, value, change, tone = "accent", progress, note }: MetricCardProps): JSX.Element {
+  return (
+    <div className="edash__metric">
+      <div className="edash__metric-top">
+        <div className={\`edash__metric-icon edash__metric-icon--\${tone}\`}><Icon name={icon} /></div>
+        <span className={\`edash__change edash__change--\${tone}\`}>
+          <Icon name={change.startsWith("-") ? "trending_down" : "trending_up"} /> {change}
+        </span>
+      </div>
+      <div>
+        <p>{label}</p>
+        <h3>{value}</h3>
+        {progress ? <div className="edash__progress"><i style={{ width: progress }} /></div> : null}
+        {note ? <small>{note}</small> : null}
+      </div>
+    </div>
+  );
+}
+
+interface EcommerceDashboardProps {
+  onRangeChange?: (range: string) => void;
+}
+
+export default function EcommerceDashboard({ onRangeChange }: EcommerceDashboardProps): JSX.Element {
+  const handleRange = (range: string): void => {
+    onRangeChange?.(range);
+  };
+
+  return (
+    <div className="edash">
+      <aside className="edash__sidebar">
+        <div className="edash__brand">
+          <h1>OmniDash Pro</h1>
+          <p>Enterprise Suite</p>
+        </div>
+        <button className="edash__primary-btn"><Icon name="add" /> New Dashboard</button>
+        <nav className="edash__nav">
+          {navItems.map(([itemIcon, label]) => (
+            <a className={label === "E-commerce" ? "edash__nav-item is-active" : "edash__nav-item"} href="#" key={label}>
+              <Icon name={itemIcon} />
+              <span>{label}</span>
+            </a>
+          ))}
+        </nav>
+        <div className="edash__sidebar-footer">
+          <a className="edash__nav-item" href="#"><Icon name="settings" /><span>Settings</span></a>
+          <a className="edash__nav-item" href="#"><Icon name="help" /><span>Support</span></a>
+        </div>
+      </aside>
+
+      <header className="edash__topbar">
+        <label className="edash__search">
+          <Icon name="search" />
+          <input placeholder="Search analytics, orders, or stock..." />
+        </label>
+        <div className="edash__top-actions">
+          <button aria-label="Notifications"><Icon name="notifications" /><i /></button>
+          <button aria-label="Apps"><Icon name="apps" /></button>
+          <div className="edash__profile">
+            <div><strong>Alex Chen</strong><span>Store Admin</span></div>
+            <img alt="Alex Chen" className="edash__avatar" src={profileImage} />
+          </div>
+        </div>
+      </header>
+
+      <main className="edash__main">
+        <div className="edash__page-head">
+          <div><p>Overview</p><h2>E-commerce Insights</h2></div>
+          <div className="edash__range">
+            <div>
+              <button className="is-selected" onClick={() => handleRange("7d")}>7 Days</button>
+              <button onClick={() => handleRange("30d")}>30 Days</button>
+              <button onClick={() => handleRange("1y")}>1 Year</button>
+            </div>
+            <button className="edash__outline-btn" onClick={() => handleRange("custom")}><Icon name="calendar_today" /> Custom Range</button>
+          </div>
+        </div>
+
+        <section className="edash__metrics">
+          <MetricCard icon="payments" label="Daily Gross Revenue" value="$48,290" change="+12.5%" progress="75%" />
+          <MetricCard icon="conversion_path" label="Conversion Rate" value="4.82%" change="+2.1%" tone="success" note="Global average: 2.3%" />
+          <MetricCard icon="shopping_cart_checkout" label="Abandoned Carts" value="1,402" change="-4.2%" tone="danger" progress="65%" />
+          <div className="edash__metric edash__metric--alert">
+            <div className="edash__metric-top">
+              <div className="edash__metric-icon edash__metric-icon--warning"><Icon name="inventory_2" /></div>
+              <span className="edash__badge">Urgent</span>
+            </div>
+            <div><p>Low Stock Alerts</p><h3>14</h3><button className="edash__link-btn">Review Inventory <Icon name="arrow_forward" /></button></div>
+          </div>
+        </section>
+
+        <section className="edash__middle">
+          <div className="edash__card edash__chart-card">
+            <div className="edash__card-head">
+              <h4>Sales Trend Analysis</h4>
+              <div className="edash__legend"><span><i />This Week</span><span><i />Last Week</span></div>
+            </div>
+            <div className="edash__chart">
+              <svg viewBox="0 0 800 300" role="img" aria-label="Sales trend chart">
+                <path d="M0,250 Q100,240 200,270 T400,220 T600,245 T800,230" />
+                <path d="M0,200 Q100,180 200,140 T400,100 T600,150 T800,80" />
+                <circle cx="400" cy="100" r="6" />
+              </svg>
+              <div className="edash__tooltip"><p>Wednesday Peak</p><strong>$12,403.00</strong><span><Icon name="trending_up" /> +14.2% vs LW</span></div>
+              <div className="edash__axis"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            </div>
+          </div>
+
+          <div className="edash__card edash__map-card">
+            <div className="edash__card-head"><h4>Global Reach</h4><Icon name="public" /></div>
+            <div className="edash__map"><img alt="" className="edash__map-image" src={mapImage} /><div className="edash__map-grid" /><div className="edash__hotspot edash__hotspot--one" /><div className="edash__hotspot edash__hotspot--two" /><div className="edash__hotspot edash__hotspot--three" /></div>
+            <div className="edash__regions"><p><span>USA</span><strong>$124,000</strong></p><p><span>Germany</span><strong>$82,300</strong></p><p><span>Japan</span><strong>$54,100</strong></p></div>
+          </div>
+        </section>
+
+        <section className="edash__table-card">
+          <div className="edash__table-head"><h4>Top Selling Products</h4><button>View All Inventory</button></div>
+          <div className="edash__table-wrap">
+            <table>
+              <thead><tr><th>Product Info</th><th>SKU</th><th>Price</th><th>Sold</th><th>Stock Level</th><th>Trend</th></tr></thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.sku}>
+                    <td><div className="edash__product"><img alt="" className="edash__thumb" src={product.image} /><div><strong>{product.name}</strong><span>{product.category}</span></div></div></td>
+                    <td>{product.sku}</td>
+                    <td><strong>{product.price}</strong></td>
+                    <td>{product.sold}</td>
+                    <td><div className="edash__stock"><div><i className={\`edash__stock-fill edash__stock-fill--\${product.color}\`} style={{ width: product.stockValue }} /></div><strong className={\`edash__stock-label--\${product.color}\`}>{product.stock}</strong></div></td>
+                    <td><span className="edash__trend"><Icon name={product.trendIcon} /> {product.trend}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+      <button className="edash__fab" aria-label="Open chat"><Icon name="chat_bubble" /></button>
+      <div className="edash__toast"><Icon name="check_circle" /><strong>New Sale! +$249.00 from New York, US</strong></div>
+    </div>
+  );
+}`;
+}
+
+// ─── TSX + Tailwind ───────────────────
+export function generateEcommerceDashboardTailwind(
+  config: EcommerceDashboardConfig,
+): string {
+  return `import { CSSProperties } from "react";
+
+const navItems: [string, string][] = [
+  ["payments", "FinTech"],
+  ["monitor_heart", "HealthTech"],
+  ["shopping_cart", "E-commerce"],
+  ["security", "Cybersecurity"],
+  ["local_shipping", "Logistics"],
+  ["campaign", "Marketing"],
+  ["analytics", "SaaS"],
+  ["bolt", "Energy"],
+];
+
+interface ProductRow {
+  name: string;
+  category: string;
+  sku: string;
+  price: string;
+  sold: string;
+  stock: string;
+  stockValue: string;
+  trend: string;
+  trendIcon: string;
+  color: string;
+  image: string;
+}
+
+const products: ProductRow[] = [
+  { name: "AeroPulse Running Shoes", category: "Footwear / Athletics", sku: "AP-2024-RED", price: "$189.00", sold: "1,204 units", stock: "85%", stockValue: "85%", trend: "+18%", trendIcon: "trending_up", color: "success", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDrXnVvNeNkTJL96YgKRP6HhVEc-L8krk7NFTpg73D17NHGY7i181U53bXHRJ4LPj4egotEU32ytW1ZNM68e_CvIynlFX-ZabTWUCgsWs5ANE4pKmzyrbEWe5SQEM8yWBnOdhUMaseO0nblzj1a7_-nq5fhz0JyF_WEE7BF9As0SNalA9WJMDQ80vjW3gWIrbFlvr85wrWJXcW9uCxV8N_X1DxOUDoqNd69HtdbKvz78A03dBh60gerMGElP4h-BeKP78n31bTJCZnO" },
+  { name: "Zenith Pro Headphones", category: "Electronics / Audio", sku: "ZP-H1-BLK", price: "$299.00", sold: "842 units", stock: "Critical", stockValue: "15%", trend: "Stable", trendIcon: "trending_flat", color: "warning", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuApjQEbPugqIRCPe2iXBw5-cPhVU-EuOggHSIJevnssmdD5SA6T0d7UrNG_xiefgHUvmR8eWcEYKq_Rpi7IDanH7F5eVQwUV0seAk89L7OoMzq5mi6HLBjWXPj8PLj_6T6ezHdK0jjHjRK3H2JeThR7uFKCg5jj57GLKZPRtydmq1LWKFhm-MhRjYCcgw5ksJ45mjT6_V5qYPkpm3a-Hwmvtm4z_hJrOHmnuNmIaLksCpU7vQmuLEkIlA7KqCJ5wlAw4aaWB98X_tUg" },
+  { name: "Chronos Minimal Watch", category: "Accessories / Jewelry", sku: "CH-MIN-01", price: "$145.00", sold: "620 units", stock: "45%", stockValue: "45%", trend: "+5%", trendIcon: "trending_up", color: "success", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA0OTJ87XqtOw8MPELgzxBzQLgLoZUdn9hM4VcIcxntti2Qomx9dRjIo9Sizjb33iDBaDdQW72CgBqEXDK1eDZw8_7S08eKcQM1OU-2OhEMPn27JZ37Q_8sapFT8uHILUG2GsKadvSjw7V8g3k6dJ5Eye2B9tdx4_BLWvFGGDLjzhy1ZzEKuoKUZ0-SD0BRWSCn7H1WOvaszvOztjl-DiwLvhwkbYGyT44-zx6ftcu5z9qXI3C8zbbCG_R2lAGJQV7ucFnt057K_Mkc" },
+];
+
+const profileImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuB98Iz7kIHnzrgHkihvQzyGgUprUoAWxTNf2yRnXZlEoQCAmrH3FKM_SsZvomXDuFA6GyUD_f9NdmKVwbnmF6IILPGyPZOZKzs1eHlqCztEpCUQ-EnWI9ALOtQDVooCL2-AlkhP8Ci3vmpapLWYEOhYqgBD7saLZC8zX3R_qpBkj1dxmFM1tC3o5dBxA4GcMI1YCL67wu5AIZgmahgorNPWJ3kh_dXZS__3rwDRLhx9X3Ff3ved_o19JW54qrwehpYHxfq3gNP2pLcj";
+const mapImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuBS3ZQbRAdvrwA6DfJ-RUQJ3aCkKlwUkKn4rtzgk_7qMyPF4B-Klma9MrW6zLIkKYzO8ktvviOs3eOLy6ee4ze6R7ySjOvQfPIMqPTq1cCRlGUt617SNvgV7oFCX3j2zTQQe-9mU-L6woCqThHiTCq498AQhtyxfDiudenTJXT26gUmRziXVZtatsAwfMdIZTgBbd2TM-Dc8rYtkZz3mecxdH63DICC0XVzKOMyA7hGXUDWk2wmdFlUGqAr4v_DQeCyN3dNPLNecoqQ";
+
+// Baked-in CSS variable tokens — update these to reskin the EcommerceDashboard
+const edVars: CSSProperties = {
+  "--ed-bg":          "${config.backgroundColor}",
+  "--ed-surface":     "${config.surfaceColor}",
+  "--ed-muted":       "${config.surfaceMuted}",
+  "--ed-raised":      "${config.surfaceRaised}",
+  "--ed-card":        "${config.cardColor}",
+  "--ed-border":      "${config.borderColor}",
+  "--ed-text":        "${config.textColor}",
+  "--ed-muted-text":  "${config.mutedTextColor}",
+  "--ed-faint":       "${config.faintTextColor}",
+  "--ed-accent":      "${config.accentColor}",
+  "--ed-accent-soft": "${config.accentSoft}",
+  "--ed-success":     "${config.successColor}",
+  "--ed-warning":     "${config.warningColor}",
+  "--ed-danger":      "${config.dangerColor}",
+  "--ed-tertiary":    "${config.tertiaryColor}",
+} as CSSProperties;
+
+interface IconProps {
+  name: string;
+}
+
+function Icon({ name }: IconProps): JSX.Element {
+  return <span aria-hidden="true" className="material-symbols-outlined text-[22px] leading-none [font-feature-settings:'liga']">{name}</span>;
+}
+
+interface MetricCardProps {
+  icon: string;
+  label: string;
+  value: string;
+  change: string;
+  tone?: string;
+  progress?: string;
+  note?: string;
+}
+
+function MetricCard({ icon, label, value, change, tone = "accent", progress, note }: MetricCardProps): JSX.Element {
+  let iconColorCls = "text-[var(--ed-accent)]";
+  let changeCls = "text-[var(--ed-accent)]";
+  if (tone === "success") { iconColorCls = "text-[var(--ed-success)]"; changeCls = "text-[var(--ed-success)]"; }
+  if (tone === "danger")  { iconColorCls = "text-[var(--ed-danger)]";  changeCls = "text-[var(--ed-danger)]"; }
+  if (tone === "warning") { iconColorCls = "text-[var(--ed-warning)]"; changeCls = "text-[var(--ed-warning)]"; }
+
+  return (
+    <div className="bg-[var(--ed-card)] border border-[var(--ed-border)] rounded-[14px] backdrop-blur-[20px] min-h-[210px] p-6 flex flex-col justify-between hover:border-[var(--ed-accent)]/35"
+      style={{ boxShadow: "0 18px 50px rgba(0,0,0,0.25)" }}>
+      <div className="flex items-start justify-between">
+        <div className={\`w-12 h-12 rounded-[10px] grid place-items-center bg-current/[0.13] \${iconColorCls}\`}>
+          <Icon name={icon} />
+        </div>
+        <span className={\`flex items-center gap-1 text-[12px] font-black \${changeCls}\`}>
+          <Icon name={change.startsWith("-") ? "trending_down" : "trending_up"} /> {change}
+        </span>
+      </div>
+      <div>
+        <p className="mt-1 text-[var(--ed-muted-text)] text-[11px] font-extrabold tracking-[0.12em] uppercase">{label}</p>
+        <h3 className="text-[44px] leading-none mt-2">{value}</h3>
+        {progress ? (
+          <div className="h-1 bg-[var(--ed-raised)] rounded-full overflow-hidden mt-[18px]">
+            <i className="block h-full bg-[var(--ed-accent)]" style={{ width: progress }} />
+          </div>
+        ) : null}
+        {note ? <small className="block mt-2 text-[var(--ed-muted-text)] text-[11px] italic">{note}</small> : null}
+      </div>
+    </div>
+  );
+}
+
+interface EcommerceDashboardProps {
+  onRangeChange?: (range: string) => void;
+}
+
+export default function EcommerceDashboard({ onRangeChange }: EcommerceDashboardProps): JSX.Element {
+  const handleRange = (range: string): void => {
+    onRangeChange?.(range);
+  };
+
+  return (
+    <div
+      className="relative min-h-screen overflow-x-auto bg-[var(--ed-bg)] text-[var(--ed-text)] font-sans [&_*]:box-border [&_.material-symbols-outlined]:[font-family:'Material_Symbols_Outlined'] [&_button]:cursor-pointer [&_button]:font-[inherit]"
+      style={edVars}
+    >
+      {/* Sidebar */}
+      <aside className="fixed inset-y-0 left-0 w-[280px] p-6 border-r border-[var(--ed-border)] bg-[var(--ed-surface)] z-[3]">
+        <div className="mb-0">
+          <h1 className="m-0 text-[24px] font-black">OmniDash Pro</h1>
+          <p className="mt-1 text-[var(--ed-muted-text)] text-[11px] font-extrabold tracking-[0.12em] uppercase">Enterprise Suite</p>
+        </div>
+        <button className="w-full mt-7 mb-[18px] border-0 rounded-[12px] bg-[var(--ed-accent)] text-[#07111f] px-3 py-[10px] font-black flex items-center justify-center gap-2">
+          <Icon name="add" /> New Dashboard
+        </button>
+        <nav className="grid gap-[6px]">
+          {navItems.map(([itemIcon, label]) => (
+            <a
+              className={\`flex items-center gap-3 rounded-[10px] px-3 py-[11px] no-underline font-semibold \${
+                label === "E-commerce"
+                  ? "bg-[var(--ed-raised)] text-[var(--ed-accent)] shadow-[inset_-2px_0_var(--ed-accent)]"
+                  : "text-[var(--ed-muted-text)] hover:bg-[var(--ed-raised)] hover:text-[var(--ed-text)]"
+              }\`}
+              href="#"
+              key={label}
+            >
+              <Icon name={itemIcon} />
+              <span>{label}</span>
+            </a>
+          ))}
+        </nav>
+        <div className="absolute left-6 right-6 bottom-5 pt-4 border-t border-[var(--ed-border)]">
+          <a className="flex items-center gap-3 rounded-[10px] px-3 py-[11px] no-underline font-semibold text-[var(--ed-muted-text)] hover:bg-[var(--ed-raised)] hover:text-[var(--ed-text)]" href="#">
+            <Icon name="settings" /><span>Settings</span>
+          </a>
+          <a className="flex items-center gap-3 rounded-[10px] px-3 py-[11px] no-underline font-semibold text-[var(--ed-muted-text)] hover:bg-[var(--ed-raised)] hover:text-[var(--ed-text)]" href="#">
+            <Icon name="help" /><span>Support</span>
+          </a>
+        </div>
+      </aside>
+
+      {/* Topbar */}
+      <header className="fixed left-[280px] right-0 top-0 h-16 bg-[var(--ed-surface)]/[0.86] backdrop-blur-[18px] flex items-center justify-between px-6 z-[2]">
+        <label className="relative w-[min(520px,46vw)] block">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ed-muted-text)]"><Icon name="search" /></span>
+          <input
+            className="w-full h-10 border-0 rounded-[10px] bg-[var(--ed-bg)] text-[var(--ed-text)] pl-[42px] pr-3 outline-none"
+            placeholder="Search analytics, orders, or stock..."
+          />
+        </label>
+        <div className="flex items-center gap-5">
+          <button className="relative border-0 bg-transparent text-[var(--ed-muted-text)] p-0" aria-label="Notifications">
+            <Icon name="notifications" />
+            <i className="absolute w-2 h-2 rounded-full right-0 top-0 bg-[var(--ed-success)] border-2 border-[var(--ed-surface)]" />
+          </button>
+          <button className="border-0 bg-transparent text-[var(--ed-muted-text)] p-0" aria-label="Apps">
+            <Icon name="apps" />
+          </button>
+          <div className="flex items-center gap-3 pl-5 border-l border-[var(--ed-border)]">
+            <div className="text-right">
+              <strong className="block text-[12px]">Alex Chen</strong>
+              <span className="block text-[var(--ed-muted-text)] text-[10px] tracking-[0.08em] uppercase">Store Admin</span>
+            </div>
+            <img alt="Alex Chen" className="w-10 h-10 rounded-full object-cover border border-[var(--ed-border)] bg-[var(--ed-raised)]" src={profileImage} />
+          </div>
+        </div>
+      </header>
+
+      {/* Main content */}
+      <main className="ml-[280px] pt-[88px] pb-7 px-6 min-w-[960px]">
+        {/* Page header */}
+        <div className="flex items-end justify-between mb-7">
+          <div>
+            <p className="mt-1 text-[var(--ed-muted-text)] text-[11px] font-extrabold tracking-[0.12em] uppercase">Overview</p>
+            <h2 className="m-0 text-[32px] leading-[1.2] font-black">E-commerce Insights</h2>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex bg-[var(--ed-muted)] p-1 rounded-[10px]">
+              <button className="border-0 rounded-lg bg-[var(--ed-raised)] text-[var(--ed-text)] px-[14px] py-2 font-bold" onClick={() => handleRange("7d")}>7 Days</button>
+              <button className="border-0 rounded-lg bg-transparent text-[var(--ed-muted-text)] px-[14px] py-2 font-bold" onClick={() => handleRange("30d")}>30 Days</button>
+              <button className="border-0 rounded-lg bg-transparent text-[var(--ed-muted-text)] px-[14px] py-2 font-bold" onClick={() => handleRange("1y")}>1 Year</button>
+            </div>
+            <button className="border border-[var(--ed-border)] rounded-lg bg-[var(--ed-raised)] text-[var(--ed-text)] px-[14px] py-2 font-bold flex items-center gap-2" onClick={() => handleRange("custom")}>
+              <Icon name="calendar_today" /> Custom Range
+            </button>
+          </div>
+        </div>
+
+        {/* Metrics */}
+        <section className="grid grid-cols-4 gap-6 mb-6">
+          <MetricCard icon="payments" label="Daily Gross Revenue" value="$48,290" change="+12.5%" progress="75%" />
+          <MetricCard icon="conversion_path" label="Conversion Rate" value="4.82%" change="+2.1%" tone="success" note="Global average: 2.3%" />
+          <MetricCard icon="shopping_cart_checkout" label="Abandoned Carts" value="1,402" change="-4.2%" tone="danger" progress="65%" />
+          <div
+            className="bg-[var(--ed-card)] border border-[var(--ed-border)] rounded-[14px] backdrop-blur-[20px] min-h-[210px] p-6 flex flex-col justify-between hover:border-[var(--ed-accent)]/35"
+            style={{ background: "linear-gradient(135deg, var(--ed-card), color-mix(in srgb, var(--ed-warning) 12%, var(--ed-card)))", boxShadow: "0 18px 50px rgba(0,0,0,0.25)" }}
+          >
+            <div className="flex items-start justify-between">
+              <div className="w-12 h-12 rounded-[10px] grid place-items-center bg-current/[0.13] text-[var(--ed-warning)]"><Icon name="inventory_2" /></div>
+              <span className="bg-[var(--ed-warning)] text-[#080808] rounded-full px-2 py-1 text-[10px] font-[1000] uppercase">Urgent</span>
+            </div>
+            <div>
+              <p className="mt-1 text-[var(--ed-muted-text)] text-[11px] font-extrabold tracking-[0.12em] uppercase">Low Stock Alerts</p>
+              <h3 className="text-[44px] leading-none mt-2">14</h3>
+              <button className="border-0 bg-transparent text-[var(--ed-warning)] font-black pt-[14px] flex items-center gap-1">
+                Review Inventory <Icon name="arrow_forward" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Middle row */}
+        <section className="grid grid-cols-[2fr_1fr] gap-6 mb-6">
+          {/* Chart card */}
+          <div className="bg-[var(--ed-card)] border border-[var(--ed-border)] rounded-[14px] backdrop-blur-[20px] p-6 hover:border-[var(--ed-accent)]/35" style={{ boxShadow: "0 18px 50px rgba(0,0,0,0.25)" }}>
+            <div className="flex items-center justify-between">
+              <h4 className="m-0 text-[20px] font-bold">Sales Trend Analysis</h4>
+              <div className="flex gap-[18px]">
+                <span className="flex items-center gap-2 text-[var(--ed-muted-text)] text-[13px]">
+                  <i className="w-[11px] h-[11px] rounded-full bg-[var(--ed-accent)] shrink-0" />This Week
+                </span>
+                <span className="flex items-center gap-2 text-[var(--ed-muted-text)] text-[13px]">
+                  <i className="w-[11px] h-[11px] rounded-full bg-[var(--ed-border)] shrink-0" />Last Week
+                </span>
+              </div>
+            </div>
+            <div className="h-[320px] relative mt-4">
+              <svg className="absolute inset-0 w-full h-[260px]" viewBox="0 0 800 300" role="img" aria-label="Sales trend chart">
+                <path d="M0,250 Q100,240 200,270 T400,220 T600,245 T800,230" fill="none" stroke="var(--ed-border)" strokeDasharray="8 4" strokeWidth="2" />
+                <path d="M0,200 Q100,180 200,140 T400,100 T600,150 T800,80" fill="none" stroke="var(--ed-accent)" strokeWidth="3" />
+                <circle cx="400" cy="100" r="6" fill="var(--ed-accent)" />
+              </svg>
+              <div className="absolute top-11 left-[45%] bg-[var(--ed-card)] border border-[var(--ed-accent)]/45 rounded-[10px] p-3" style={{ boxShadow: "0 18px 40px rgba(0,0,0,0.35)" }}>
+                <p className="m-0 text-[var(--ed-muted-text)] text-[10px] font-black uppercase">Wednesday Peak</p>
+                <strong className="block text-[var(--ed-accent)] text-[18px]">$12,403.00</strong>
+                <span className="flex items-center gap-1 text-[var(--ed-success)] text-[10px] font-extrabold"><Icon name="trending_up" /> +14.2% vs LW</span>
+              </div>
+              <div className="absolute left-0 right-0 bottom-0 flex justify-between border-t border-[var(--ed-border)] pt-[14px] text-[var(--ed-muted-text)] text-[10px] font-black tracking-[0.12em] uppercase">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Map card */}
+          <div className="bg-[var(--ed-card)] border border-[var(--ed-border)] rounded-[14px] backdrop-blur-[20px] p-6 hover:border-[var(--ed-accent)]/35" style={{ boxShadow: "0 18px 50px rgba(0,0,0,0.25)" }}>
+            <div className="flex items-center justify-between">
+              <h4 className="m-0 text-[20px] font-bold">Global Reach</h4>
+              <Icon name="public" />
+            </div>
+            <div className="relative h-[240px] mt-4 border border-[var(--ed-border)] rounded-[10px] overflow-hidden" style={{ background: "radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--ed-accent) 35%, transparent), transparent 12%), radial-gradient(circle at 60% 45%, color-mix(in srgb, var(--ed-success) 28%, transparent), transparent 10%), linear-gradient(135deg, var(--ed-bg), var(--ed-muted))" }}>
+              <img alt="" className="absolute inset-0 w-full h-full object-cover opacity-[0.42] mix-blend-luminosity" src={mapImage} />
+              <div className="absolute inset-0 opacity-[0.28]" style={{ backgroundImage: "linear-gradient(var(--ed-border) 1px, transparent 1px), linear-gradient(90deg, var(--ed-border) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+              <div className="absolute w-[15px] h-[15px] rounded-full bg-[var(--ed-accent)] left-[25%] top-[28%]" style={{ boxShadow: "0 0 0 8px color-mix(in srgb, var(--ed-accent) 18%, transparent), 0 0 28px var(--ed-accent)" }} />
+              <div className="absolute w-[12px] h-[12px] rounded-full bg-[var(--ed-success)] left-[52%] top-[38%]" style={{ boxShadow: "0 0 0 8px color-mix(in srgb, var(--ed-success) 18%, transparent), 0 0 28px var(--ed-success)" }} />
+              <div className="absolute w-[20px] h-[20px] rounded-full bg-[var(--ed-accent)] right-[24%] bottom-[32%] opacity-75" style={{ boxShadow: "0 0 0 8px color-mix(in srgb, var(--ed-accent) 18%, transparent), 0 0 28px var(--ed-accent)" }} />
+            </div>
+            <div className="grid gap-[10px] mt-4">
+              <p className="flex justify-between m-0 text-[14px]"><span className="text-[var(--ed-muted-text)]">USA</span><strong>$124,000</strong></p>
+              <p className="flex justify-between m-0 text-[14px]"><span className="text-[var(--ed-muted-text)]">Germany</span><strong>$82,300</strong></p>
+              <p className="flex justify-between m-0 text-[14px]"><span className="text-[var(--ed-muted-text)]">Japan</span><strong>$54,100</strong></p>
+            </div>
+          </div>
+        </section>
+
+        {/* Table */}
+        <section className="bg-[var(--ed-card)] border border-[var(--ed-border)] rounded-[14px] backdrop-blur-[20px] overflow-hidden hover:border-[var(--ed-accent)]/35" style={{ boxShadow: "0 18px 50px rgba(0,0,0,0.25)" }}>
+          <div className="flex items-center justify-between px-6 py-[18px] border-b border-[var(--ed-border)]">
+            <h4 className="m-0 text-[20px] font-bold">Top Selling Products</h4>
+            <button className="border-0 bg-transparent text-[var(--ed-accent)] font-black">View All Inventory</button>
+          </div>
+          <div className="overflow-auto">
+            <table className="w-full border-collapse min-w-[820px]">
+              <thead>
+                <tr>
+                  {["Product Info", "SKU", "Price", "Sold", "Stock Level", "Trend"].map((h) => (
+                    <th key={h} className="bg-[var(--ed-muted)] text-[var(--ed-muted-text)] text-[11px] uppercase tracking-[0.1em] text-left px-6 py-[14px] border-b border-[var(--ed-border)]">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.sku} className="hover:[&>td]:bg-[var(--ed-raised)]/55">
+                    <td className="px-6 py-4 border-b border-[var(--ed-border)] text-[var(--ed-muted-text)] text-[14px]">
+                      <div className="flex items-center gap-3">
+                        <img alt="" className="w-10 h-10 rounded-lg object-cover bg-[var(--ed-raised)]" src={product.image} />
+                        <div>
+                          <strong className="block text-[var(--ed-text)]">{product.name}</strong>
+                          <span className="block text-[var(--ed-muted-text)] text-[10px]">{product.category}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 border-b border-[var(--ed-border)] text-[var(--ed-muted-text)] text-[14px]">{product.sku}</td>
+                    <td className="px-6 py-4 border-b border-[var(--ed-border)] text-[var(--ed-muted-text)] text-[14px]"><strong>{product.price}</strong></td>
+                    <td className="px-6 py-4 border-b border-[var(--ed-border)] text-[var(--ed-muted-text)] text-[14px]">{product.sold}</td>
+                    <td className="px-6 py-4 border-b border-[var(--ed-border)] text-[var(--ed-muted-text)] text-[14px]">
+                      <div className="flex items-center gap-3">
+                        <div className="w-[90px] h-[6px] bg-[var(--ed-raised)] rounded-full overflow-hidden">
+                          <i
+                            className={\`block h-full \${product.color === "success" ? "bg-[var(--ed-success)]" : "bg-[var(--ed-warning)]"}\`}
+                            style={{ width: product.stockValue }}
+                          />
+                        </div>
+                        <strong className={product.color === "success" ? "text-[var(--ed-success)]" : "text-[var(--ed-warning)]"}>{product.stock}</strong>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 border-b border-[var(--ed-border)] text-[var(--ed-muted-text)] text-[14px]">
+                      <span className="flex items-center gap-1 text-[var(--ed-success)] font-black"><Icon name={product.trendIcon} /> {product.trend}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      {/* FAB */}
+      <button
+        className="fixed right-6 bottom-6 w-14 h-14 border-0 rounded-full grid place-items-center bg-[var(--ed-accent)] text-[#050505]"
+        aria-label="Open chat"
+        style={{ boxShadow: "0 0 24px color-mix(in srgb, var(--ed-accent) 35%, transparent)" }}
+      >
+        <Icon name="chat_bubble" />
+      </button>
+
+      {/* Toast */}
+      <div
+        className="fixed left-1/2 -translate-x-1/2 bottom-7 bg-[var(--ed-card)] border border-[var(--ed-success)]/40 rounded-full px-6 py-3 flex items-center gap-3 text-[14px]"
+        style={{ boxShadow: "0 20px 50px rgba(0,0,0,0.4)" }}
+      >
+        <span className="text-[var(--ed-success)]"><Icon name="check_circle" /></span>
+        <strong>New Sale! +$249.00 from New York, US</strong>
+      </div>
+    </div>
+  );
 }`;
 }

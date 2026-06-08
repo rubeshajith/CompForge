@@ -519,3 +519,668 @@ export function generateUserTableCSS(config: UserTableConfig): string {
 }
 `;
 }
+
+// ─── TSX + CSS ────────────────────────
+export function generateUserTableTSX(config: UserTableConfig): string {
+  const pad = getDensityPadding(config.density);
+
+  return `import { useState, useEffect } from "react";
+import "./UserTable.css";
+
+interface UserActivity {
+  time: string;
+  action: string;
+}
+
+interface User {
+  id: string;
+  initials: string;
+  name: string;
+  email: string;
+  role: string;
+  joined: string;
+  lastLogin: string;
+  status: string;
+  permissions: string[];
+  activity: UserActivity[];
+  workspaces?: string;
+}
+
+interface UserTableProps {
+  onUserSelect?: (id: string) => void;
+}
+
+const USERS: User[] = [
+  {
+    id: "u1", initials: "JD", name: "Jordan Davis",
+    email: "jordan.davis@dataengine.pro", role: "Administrator",
+    joined: "12 Mar 2023", lastLogin: "2 mins ago", status: "Active",
+    permissions: ["Data Write", "API Management", "Billing View", "User Invite"],
+    activity: [
+      { time: "10:45 AM", action: "Changed system retention policy to 90 days" },
+      { time: "09:12 AM", action: "Logged in from 192.168.1.1" },
+    ],
+    workspaces: "Global Workspace, Internal Sandbox, Production DB Mirror",
+  },
+  {
+    id: "u2", initials: "MR", name: "Morgan Reed",
+    email: "m.reed@partner.net", role: "Editor",
+    joined: "28 Jan 2024", lastLogin: "Yesterday", status: "Active",
+    permissions: ["Data Write", "API Read"],
+    activity: [{ time: "Yesterday", action: "Updated 3 dataset schemas" }],
+  },
+  {
+    id: "u3", initials: "SK", name: "Sam Kim",
+    email: "sam.kim@external.io", role: "Viewer",
+    joined: "15 Oct 2022", lastLogin: "14 May 2024", status: "Inactive",
+    permissions: ["Data Read"], activity: [],
+  },
+  {
+    id: "u4", initials: "LW", name: "Lee Wong",
+    email: "lee.w@dataengine.pro", role: "Administrator",
+    joined: "03 Aug 2023", lastLogin: "Just now", status: "Active",
+    permissions: ["Data Write", "API Management", "User Invite", "Billing Write"],
+    activity: [{ time: "Just now", action: "Logged in from 10.0.0.42" }],
+    workspaces: "Global Workspace, Production DB Mirror",
+  },
+  {
+    id: "u5", initials: "AP", name: "Alex Park",
+    email: "a.park@dataengine.pro", role: "Editor",
+    joined: "19 Jun 2024", lastLogin: "3 hours ago", status: "Pending",
+    permissions: ["Data Write"],
+    activity: [{ time: "Pending", action: "Awaiting MFA setup" }],
+  },
+];
+
+export default function UserTable({ onUserSelect }: UserTableProps) {
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [visibleRows, setVisibleRows] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setVisibleRows(new Set());
+    const timers = USERS.map((u, i) =>
+      setTimeout(() => setVisibleRows((prev) => new Set([...prev, u.id])), i * 60)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const filtered = USERS.filter(
+    (u) =>
+      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.role.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  function toggleRow(id: string): void {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelect(id: string): void {
+    setSelectedRows((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+    if (onUserSelect) onUserSelect(id);
+  }
+
+  function handleSelectAll(checked: boolean): void {
+    setSelectAll(checked);
+    setSelectedRows(checked ? new Set(filtered.map((u) => u.id)) : new Set());
+  }
+
+  return (
+    <div className="ut-wrap" style={{ width: "${config.tableWidth}px" }}>
+      {selectedRows.size > 0 && (
+        <div className="ut__bulk-bar">
+          <span className="ut__bulk-count">{selectedRows.size} user{selectedRows.size > 1 ? "s" : ""} selected</span>
+          <div className="ut__bulk-divider" />
+          <button className="ut__bulk-action">✎ Change Role</button>
+          <button className="ut__bulk-action ut__bulk-action--danger">✕ Delete</button>
+          <button className="ut__bulk-close" onClick={() => { setSelectedRows(new Set()); setSelectAll(false); }}>×</button>
+        </div>
+      )}
+
+      <div className="ut">
+        <div className="ut__toolbar">
+          <div className="ut__search-wrap">
+            <span className="ut__search-icon">⌕</span>
+            <input
+              className="ut__search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search users…"
+            />
+          </div>
+          <div className="ut__toolbar-actions">
+            <button className="ut__btn ut__btn--ghost">↓ Export</button>
+            <button className="ut__btn ut__btn--primary">+ Add User</button>
+          </div>
+        </div>
+
+        <div className="ut__scroll">
+          <table className="ut__table">
+            <thead>
+              <tr>
+                <th className="ut__th ut__th--check">
+                  <input type="checkbox" checked={selectAll} onChange={(e) => handleSelectAll(e.target.checked)} className="ut__checkbox" />
+                </th>
+                <th className="ut__th">Name</th>
+                <th className="ut__th">Email</th>
+                <th className="ut__th">Role</th>
+                <th className="ut__th">Last Login</th>
+                <th className="ut__th">Status</th>
+                <th className="ut__th ut__th--chevron" />
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((user, i) => {
+                const isExpanded = expandedRows.has(user.id);
+                const isSelected = selectedRows.has(user.id);
+                const isVisible = visibleRows.has(user.id);
+                return [
+                  <tr
+                    key={user.id}
+                    className={\`ut__row\${isSelected ? " ut__row--selected" : ""}\${i % 2 === 1 ? " ut__row--stripe" : ""}\`}
+                    style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(8px)" }}
+                    onClick={() => toggleRow(user.id)}
+                  >
+                    <td className="ut__td ut__td--check" onClick={(e) => e.stopPropagation()}>
+                      <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(user.id)} className="ut__checkbox" />
+                    </td>
+                    <td className="ut__td">
+                      <div className="ut__user-cell">
+                        <div className="ut__avatar">{user.initials}</div>
+                        <div>
+                          <div className="ut__name">{user.name}</div>
+                          <div className="ut__joined">Joined {user.joined}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="ut__td ut__td--muted">{user.email}</td>
+                    <td className="ut__td">
+                      <span className={\`ut__badge ut__badge--\${user.role.toLowerCase()}\`}>{user.role}</span>
+                    </td>
+                    <td className="ut__td ut__td--muted">{user.lastLogin}</td>
+                    <td className="ut__td">
+                      <span className={\`ut__status ut__status--\${user.status.toLowerCase()}\`}>
+                        <span className="ut__status-dot" />
+                        {user.status}
+                      </span>
+                    </td>
+                    <td className="ut__td ut__td--chevron">
+                      <span className={\`ut__chevron\${isExpanded ? " ut__chevron--open" : ""}\`}>›</span>
+                    </td>
+                  </tr>,
+                  isExpanded ? (
+                    <tr key={\`\${user.id}-exp\`} className="ut__expanded-row">
+                      <td colSpan={7} className="ut__expanded-td">
+                        <div className="ut__expanded-inner">
+                          <div className="ut__expanded-section">
+                            <div className="ut__expanded-label">Permissions &amp; Access</div>
+                            <div className="ut__permissions">
+                              {user.permissions.map((p) => (
+                                <span key={p} className="ut__permission-tag">{p}</span>
+                              ))}
+                            </div>
+                            {user.workspaces && (
+                              <>
+                                <div className="ut__expanded-label" style={{ marginTop: 12 }}>Workspaces</div>
+                                <div className="ut__expanded-text">{user.workspaces}</div>
+                              </>
+                            )}
+                          </div>
+                          <div className="ut__expanded-section">
+                            <div className="ut__expanded-label">Recent Activity</div>
+                            {user.activity.length === 0 ? (
+                              <div className="ut__expanded-text ut__expanded-text--empty">No recent activity.</div>
+                            ) : (
+                              <ul className="ut__activity">
+                                {user.activity.map((a, ai) => (
+                                  <li key={ai} className="ut__activity-item">
+                                    <span className="ut__activity-time">{a.time}</span>
+                                    <span className="ut__activity-action">{a.action}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null,
+                ];
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="ut__pagination">
+          <span className="ut__pagination-info">Showing <strong>1–5</strong> of <strong>156</strong> users</span>
+          <div className="ut__pagination-pages">
+            {["‹", "1", "2", "3", "›"].map((p) => (
+              <button key={p} className={\`ut__page-btn\${p === "1" ? " ut__page-btn--active" : ""}\`}>{p}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="ut__cards">
+        {[
+          { icon: "🔒", title: "Security Posture", desc: "88% of users have MFA enabled. 12 pending invites expired." },
+          { icon: "⬡", title: "License Utilization", desc: "156 of 200 seats used. 44 more seats available." },
+          { icon: "⧖", title: "Session Audits", desc: "No suspicious login attempts in the last 72 hours." },
+        ].map((c) => (
+          <div key={c.title} className="ut__card">
+            <div className="ut__card-header">
+              <span className="ut__card-icon">{c.icon}</span>
+              <span className="ut__card-title">{c.title}</span>
+            </div>
+            <p className="ut__card-desc">{c.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+`;
+}
+
+// ─── TSX + Tailwind ───────────────────
+export function generateUserTableTailwind(config: UserTableConfig): string {
+  const pad = getDensityPadding(config.density);
+  const shadow = config.showShadow ? "0 4px 24px rgba(0,0,0,0.5)" : "none";
+
+  // Baked font sizes
+  const fsBase = config.fontSize;
+  const fsSmall = config.fontSize - 1;
+  const fsXSmall = config.fontSize - 2;
+  const fsLarge = config.fontSize + 1;
+
+  return `import { useState, useEffect, CSSProperties } from "react";
+
+interface UserActivity {
+  time: string;
+  action: string;
+}
+
+interface User {
+  id: string;
+  initials: string;
+  name: string;
+  email: string;
+  role: string;
+  joined: string;
+  lastLogin: string;
+  status: string;
+  permissions: string[];
+  activity: UserActivity[];
+  workspaces?: string;
+}
+
+interface UserTableProps {
+  onUserSelect?: (id: string) => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the UserTable
+const utVars: CSSProperties = {
+  "--ut-bg":                      "${config.backgroundColor}",
+  "--ut-border":                  "${config.borderColor}",
+  "--ut-radius":                  "${config.borderRadius}px",
+  "--ut-accent":                  "${config.accentColor}",
+  "--ut-header-bg":               "${config.headerBackground}",
+  "--ut-header-border":           "${config.headerBorderColor}",
+  "--ut-header-text":             "${config.headerTextColor}",
+  "--ut-row-bg":                  "${config.rowBackground}",
+  "--ut-row-text":                "${config.rowTextColor}",
+  "--ut-row-subtext":             "${config.rowSubtextColor}",
+  "--ut-row-hover":               "${config.rowHoverBackground}",
+  "--ut-row-stripe":              "${config.rowStripeColor}",
+  "--ut-row-divider":             "${config.rowDividerColor}",
+  "--ut-bulk-bg":                 "${config.bulkBarBackground}",
+  "--ut-bulk-text":               "${config.bulkBarTextColor}",
+  "--ut-avatar-bg":               "${config.avatarBackground}",
+  "--ut-avatar-text":             "${config.avatarTextColor}",
+  "--ut-avatar-size":             "${config.avatarSize}px",
+  "--ut-avatar-radius":           "${config.avatarBorderRadius}px",
+  "--ut-badge-radius":            "${config.badgeBorderRadius}px",
+  "--ut-admin-badge-bg":          "${config.adminBadgeBackground}",
+  "--ut-admin-badge-text":        "${config.adminBadgeTextColor}",
+  "--ut-editor-badge-bg":         "${config.editorBadgeBackground}",
+  "--ut-editor-badge-text":       "${config.editorBadgeTextColor}",
+  "--ut-viewer-badge-bg":         "${config.viewerBadgeBackground}",
+  "--ut-viewer-badge-text":       "${config.viewerBadgeTextColor}",
+  "--ut-active-bg":               "${config.activeBackground}",
+  "--ut-active-text":             "${config.activeTextColor}",
+  "--ut-active-dot":              "${config.activeDotColor}",
+  "--ut-inactive-bg":             "${config.inactiveBackground}",
+  "--ut-inactive-text":           "${config.inactiveTextColor}",
+  "--ut-inactive-dot":            "${config.inactiveDotColor}",
+  "--ut-pending-bg":              "${config.pendingBackground}",
+  "--ut-pending-text":            "${config.pendingTextColor}",
+  "--ut-pending-dot":             "${config.pendingDotColor}",
+  "--ut-chevron-color":           "${config.chevronColor}",
+  "--ut-expanded-bg":             "${config.expandedBackground}",
+  "--ut-expanded-accent-border":  "${config.expandedAccentBorder}",
+  "--ut-expanded-text":           "${config.expandedTextColor}",
+  "--ut-pagination-bg":           "${config.paginationBackground}",
+  "--ut-pagination-border":       "${config.paginationBorderColor}",
+  "--ut-pagination-text":         "${config.paginationTextColor}",
+  "--ut-pagination-active-bg":    "${config.paginationActiveBackground}",
+  "--ut-pagination-active-text":  "${config.paginationActiveTextColor}",
+  "--ut-card-bg":                 "${config.summaryCardBackground}",
+  "--ut-card-border":             "${config.summaryCardBorderColor}",
+  "--ut-card-icon":               "${config.summaryCardIconColor}",
+  "--ut-checkbox":                "${config.checkboxColor}",
+} as CSSProperties;
+
+const USERS: User[] = [
+  {
+    id: "u1", initials: "JD", name: "Jordan Davis",
+    email: "jordan.davis@dataengine.pro", role: "Administrator",
+    joined: "12 Mar 2023", lastLogin: "2 mins ago", status: "Active",
+    permissions: ["Data Write", "API Management", "Billing View", "User Invite"],
+    activity: [
+      { time: "10:45 AM", action: "Changed system retention policy to 90 days" },
+      { time: "09:12 AM", action: "Logged in from 192.168.1.1" },
+    ],
+    workspaces: "Global Workspace, Internal Sandbox, Production DB Mirror",
+  },
+  {
+    id: "u2", initials: "MR", name: "Morgan Reed",
+    email: "m.reed@partner.net", role: "Editor",
+    joined: "28 Jan 2024", lastLogin: "Yesterday", status: "Active",
+    permissions: ["Data Write", "API Read"],
+    activity: [{ time: "Yesterday", action: "Updated 3 dataset schemas" }],
+  },
+  {
+    id: "u3", initials: "SK", name: "Sam Kim",
+    email: "sam.kim@external.io", role: "Viewer",
+    joined: "15 Oct 2022", lastLogin: "14 May 2024", status: "Inactive",
+    permissions: ["Data Read"], activity: [],
+  },
+  {
+    id: "u4", initials: "LW", name: "Lee Wong",
+    email: "lee.w@dataengine.pro", role: "Administrator",
+    joined: "03 Aug 2023", lastLogin: "Just now", status: "Active",
+    permissions: ["Data Write", "API Management", "User Invite", "Billing Write"],
+    activity: [{ time: "Just now", action: "Logged in from 10.0.0.42" }],
+    workspaces: "Global Workspace, Production DB Mirror",
+  },
+  {
+    id: "u5", initials: "AP", name: "Alex Park",
+    email: "a.park@dataengine.pro", role: "Editor",
+    joined: "19 Jun 2024", lastLogin: "3 hours ago", status: "Pending",
+    permissions: ["Data Write"],
+    activity: [{ time: "Pending", action: "Awaiting MFA setup" }],
+  },
+];
+
+export default function UserTable({ onUserSelect }: UserTableProps) {
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [visibleRows, setVisibleRows] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setVisibleRows(new Set());
+    const timers = USERS.map((u, i) =>
+      setTimeout(() => setVisibleRows((prev) => new Set([...prev, u.id])), i * 60)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const filtered = USERS.filter(
+    (u) =>
+      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.role.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  function toggleRow(id: string): void {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelect(id: string): void {
+    setSelectedRows((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+    if (onUserSelect) onUserSelect(id);
+  }
+
+  function handleSelectAll(checked: boolean): void {
+    setSelectAll(checked);
+    setSelectedRows(checked ? new Set(filtered.map((u) => u.id)) : new Set());
+  }
+
+  return (
+    <div
+      className="font-sans max-w-full"
+      style={{ ...utVars, width: "${config.tableWidth}px" }}
+    >
+      {selectedRows.size > 0 && (
+        <div className="flex items-center gap-4 bg-[var(--ut-bulk-bg)] text-[var(--ut-bulk-text)] border border-[var(--ut-border)] rounded-t-[var(--ut-radius)] px-4 py-2 -mb-px">
+          <span className="font-bold text-[${fsBase}px]">{selectedRows.size} user{selectedRows.size > 1 ? "s" : ""} selected</span>
+          <div className="w-px h-4 bg-[var(--ut-border)]" />
+          <button className="bg-transparent border-none text-[var(--ut-bulk-text)] cursor-pointer text-[${fsBase}px] flex items-center gap-1">✎ Change Role</button>
+          <button className="bg-transparent border-none text-[#f87171] cursor-pointer text-[${fsBase}px] flex items-center gap-1">✕ Delete</button>
+          <button
+            className="bg-transparent border-none text-[var(--ut-bulk-text)] cursor-pointer text-lg leading-none ml-auto"
+            onClick={() => { setSelectedRows(new Set()); setSelectAll(false); }}
+          >×</button>
+        </div>
+      )}
+
+      <div
+        className="bg-[var(--ut-bg)] border border-[var(--ut-border)] rounded-[var(--ut-radius)] overflow-hidden"
+        style={{ boxShadow: "${shadow}" }}
+      >
+        {/* Toolbar */}
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[var(--ut-header-border)] bg-[var(--ut-header-bg)]">
+          <div className="relative">
+            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--ut-header-text)] text-sm pointer-events-none">⌕</span>
+            <input
+              className="bg-[var(--ut-bg)] border border-[var(--ut-border)] rounded-md py-1.5 pr-2.5 pl-7 text-[var(--ut-row-text)] text-[${fsBase}px] outline-none w-[200px] font-[inherit] placeholder:text-[var(--ut-row-subtext)]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search users…"
+            />
+          </div>
+          <div className="flex gap-2">
+            <button className="bg-[var(--ut-bg)] border border-[var(--ut-border)] text-[var(--ut-row-subtext)] hover:text-[var(--ut-row-text)] rounded-md px-3.5 py-1.5 cursor-pointer text-[${fsBase}px] font-[inherit] flex items-center gap-1.5 transition-colors">↓ Export</button>
+            <button className="bg-[var(--ut-accent)] text-white font-semibold rounded-md px-3.5 py-1.5 cursor-pointer text-[${fsBase}px] font-[inherit] flex items-center gap-1.5 border-none hover:opacity-90 transition-opacity">+ Add User</button>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="w-11 px-4 py-2 bg-[var(--ut-header-bg)] text-[var(--ut-header-text)] text-[11px] font-bold tracking-[0.06em] uppercase border-b border-[var(--ut-header-border)] text-left">
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    className="w-3.5 h-3.5 cursor-pointer accent-[var(--ut-checkbox)]"
+                  />
+                </th>
+                {["Name", "Email", "Role", "Last Login", "Status"].map((h) => (
+                  <th key={h} className="px-4 py-2 bg-[var(--ut-header-bg)] text-[var(--ut-header-text)] text-[11px] font-bold tracking-[0.06em] uppercase border-b border-[var(--ut-header-border)] whitespace-nowrap text-left">{h}</th>
+                ))}
+                <th className="w-10 px-4 py-2 bg-[var(--ut-header-bg)] border-b border-[var(--ut-header-border)]" />
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((user, i) => {
+                const isExpanded = expandedRows.has(user.id);
+                const isSelected = selectedRows.has(user.id);
+                const isVisible = visibleRows.has(user.id);
+
+                let rowCls = "cursor-pointer transition-[opacity,transform,background] duration-[250ms,250ms,150ms]";
+                if (isSelected) rowCls += " [&>td]:bg-[color-mix(in_srgb,var(--ut-accent)_9%,transparent)]";
+
+                const tdBase = "px-4 py-2 bg-[var(--ut-row-bg)] text-[var(--ut-row-text)] border-b border-[var(--ut-row-divider)] align-middle transition-colors duration-150";
+                const tdStripe = i % 2 === 1 ? " bg-[var(--ut-row-stripe)]" : "";
+
+                // Badge color per role
+                let badgeCls = "px-2 py-0.5 text-[11px] font-bold tracking-[0.05em] uppercase inline-block rounded-[var(--ut-badge-radius)]";
+                if (user.role === "Administrator") badgeCls += " bg-[var(--ut-admin-badge-bg)] text-[var(--ut-admin-badge-text)]";
+                else if (user.role === "Editor") badgeCls += " bg-[var(--ut-editor-badge-bg)] text-[var(--ut-editor-badge-text)]";
+                else badgeCls += " bg-[var(--ut-viewer-badge-bg)] text-[var(--ut-viewer-badge-text)]";
+
+                // Status color
+                let statusCls = "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold";
+                let dotCls = "w-1.5 h-1.5 rounded-full shrink-0";
+                if (user.status === "Active") { statusCls += " bg-[var(--ut-active-bg)] text-[var(--ut-active-text)]"; dotCls += " bg-[var(--ut-active-dot)]"; }
+                else if (user.status === "Inactive") { statusCls += " bg-[var(--ut-inactive-bg)] text-[var(--ut-inactive-text)]"; dotCls += " bg-[var(--ut-inactive-dot)]"; }
+                else { statusCls += " bg-[var(--ut-pending-bg)] text-[var(--ut-pending-text)]"; dotCls += " bg-[var(--ut-pending-dot)]"; }
+
+                return [
+                  <tr
+                    key={user.id}
+                    className={rowCls}
+                    style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(8px)" }}
+                    onClick={() => toggleRow(user.id)}
+                  >
+                    <td className={\`\${tdBase}\${tdStripe} w-11\`} onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelect(user.id)}
+                        className="w-3.5 h-3.5 cursor-pointer accent-[var(--ut-checkbox)]"
+                      />
+                    </td>
+                    <td className={\`\${tdBase}\${tdStripe}\`}>
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className="flex items-center justify-center font-bold shrink-0 border border-[var(--ut-border)] bg-[var(--ut-avatar-bg)] text-[var(--ut-avatar-text)] tracking-[0.03em]"
+                          style={{
+                            width: "var(--ut-avatar-size)",
+                            height: "var(--ut-avatar-size)",
+                            borderRadius: "var(--ut-avatar-radius)",
+                            fontSize: "${fsSmall}px",
+                          }}
+                        >
+                          {user.initials}
+                        </div>
+                        <div>
+                          <div className="text-[var(--ut-row-text)] font-semibold text-[${fsBase}px] leading-[1.3]">{user.name}</div>
+                          <div className="text-[var(--ut-row-subtext)] text-[${fsXSmall}px] mt-px">Joined {user.joined}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className={\`\${tdBase}\${tdStripe} text-[var(--ut-row-subtext)] text-[${fsBase}px]\`}>{user.email}</td>
+                    <td className={\`\${tdBase}\${tdStripe}\`}>
+                      <span className={badgeCls}>{user.role}</span>
+                    </td>
+                    <td className={\`\${tdBase}\${tdStripe} text-[var(--ut-row-subtext)] text-[${fsBase}px]\`}>{user.lastLogin}</td>
+                    <td className={\`\${tdBase}\${tdStripe}\`}>
+                      <span className={statusCls}>
+                        <span className={dotCls} />
+                        {user.status}
+                      </span>
+                    </td>
+                    <td className={\`\${tdBase}\${tdStripe} w-10 text-center\`}>
+                      <span
+                        className="inline-block text-[var(--ut-chevron-color)] text-base leading-none transition-transform duration-200"
+                        style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
+                      >›</span>
+                    </td>
+                  </tr>,
+                  isExpanded ? (
+                    <tr key={\`\${user.id}-exp\`} className="cursor-default">
+                      <td colSpan={7} className="p-0 bg-[var(--ut-expanded-bg)] border-b border-[var(--ut-row-divider)]">
+                        <div
+                          className="ml-11 px-5 py-4 grid gap-6 border-l-[3px] border-[var(--ut-expanded-accent-border)]"
+                          style={{ gridTemplateColumns: "1fr 1fr" }}
+                        >
+                          <div>
+                            <div className="text-[var(--ut-header-text)] text-[11px] font-bold tracking-[0.06em] uppercase mb-2.5">Permissions &amp; Access</div>
+                            <div className="flex flex-wrap gap-1.5">
+                              {user.permissions.map((p) => (
+                                <span key={p} className="bg-[var(--ut-bg)] border border-[var(--ut-border)] rounded px-2 py-0.5 text-[var(--ut-expanded-text)] text-[${fsSmall}px]">{p}</span>
+                              ))}
+                            </div>
+                            {user.workspaces && (
+                              <>
+                                <div className="text-[var(--ut-header-text)] text-[11px] font-bold tracking-[0.06em] uppercase mt-3 mb-2.5">Workspaces</div>
+                                <div className="text-[var(--ut-expanded-text)] text-[${fsBase}px]">{user.workspaces}</div>
+                              </>
+                            )}
+                          </div>
+                          <div>
+                            <div className="text-[var(--ut-header-text)] text-[11px] font-bold tracking-[0.06em] uppercase mb-2.5">Recent Activity</div>
+                            {user.activity.length === 0 ? (
+                              <div className="text-[var(--ut-expanded-text)] text-[${fsBase}px] italic">No recent activity.</div>
+                            ) : (
+                              <ul className="list-none p-0 m-0">
+                                {user.activity.map((a, ai) => (
+                                  <li key={ai} className="flex gap-3 mb-2 text-[${fsBase}px]">
+                                    <span className="text-[var(--ut-row-subtext)] min-w-[70px] shrink-0">{a.time}</span>
+                                    <span className="text-[var(--ut-expanded-text)]">{a.action}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null,
+                ];
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="px-4 py-2.5 border-t border-[var(--ut-pagination-border)] bg-[var(--ut-pagination-bg)] flex items-center justify-between">
+          <span className="text-[var(--ut-pagination-text)] text-[${fsBase}px]">
+            Showing <strong className="text-[var(--ut-row-text)]">1–5</strong> of <strong className="text-[var(--ut-row-text)]">156</strong> users
+          </span>
+          <div className="flex gap-1">
+            {["‹", "1", "2", "3", "›"].map((p) => {
+              let btnCls = "w-[30px] h-[30px] flex items-center justify-center rounded-md border border-[var(--ut-pagination-border)] bg-[var(--ut-pagination-bg)] text-[var(--ut-pagination-text)] cursor-pointer text-[${fsBase}px] font-[inherit] transition-colors duration-150 hover:bg-[var(--ut-row-hover)] hover:text-[var(--ut-row-text)]";
+              if (p === "1") btnCls += " bg-[var(--ut-pagination-active-bg)] text-[var(--ut-pagination-active-text)] border-[var(--ut-pagination-active-bg)] font-bold";
+              return <button key={p} className={btnCls}>{p}</button>;
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-3 gap-3 mt-4">
+        {[
+          { icon: "🔒", title: "Security Posture", desc: "88% of users have MFA enabled. 12 pending invites expired." },
+          { icon: "⬡", title: "License Utilization", desc: "156 of 200 seats used. 44 more seats available." },
+          { icon: "⧖", title: "Session Audits", desc: "No suspicious login attempts in the last 72 hours." },
+        ].map((c) => (
+          <div key={c.title} className="bg-[var(--ut-card-bg)] border border-[var(--ut-card-border)] rounded-[var(--ut-radius)] px-4 py-3.5">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-[var(--ut-card-icon)] text-base leading-none">{c.icon}</span>
+              <span className="text-[var(--ut-row-text)] font-semibold text-[${fsLarge}px]">{c.title}</span>
+            </div>
+            <p className="text-[var(--ut-row-subtext)] text-[${fsSmall}px] m-0 leading-[1.5]">{c.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+`;
+}

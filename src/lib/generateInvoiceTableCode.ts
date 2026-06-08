@@ -698,3 +698,844 @@ export function generateInvoiceTableCSS(config: InvoiceTableConfig): string {
 }
 `;
 }
+
+// ─── TSX + CSS ────────────────────────────────────────────────────────────────
+
+export function generateInvoiceTableTSX(config: InvoiceTableConfig): string {
+  return `import { useState, useMemo } from "react";
+import "./InvoiceTable.css";
+
+// ── Interfaces ───────────────────────────────────────────────────────────────
+interface Invoice {
+  id: number;
+  invoiceNum: string;
+  clientInitials: string;
+  clientName: string;
+  dateIssued: string;
+  amount: number;
+  status: string;
+  paymentMethod: string;
+  cardLast4?: string;
+  daysOverdue?: number;
+}
+
+interface Client {
+  name: string;
+  initials: string;
+}
+
+// ── Data ────────────────────────────────────────────────────────────────────
+const CLIENTS: Client[] = [
+  { name: "Apex Labs Inc.",    initials: "AL" },
+  { name: "NovaSoft Global",   initials: "NS" },
+  { name: "Blue Rocket Co.",   initials: "BR" },
+  { name: "Quantum Drive",     initials: "QD" },
+  { name: "Stellar Systems",   initials: "SS" },
+  { name: "Forge Digital",     initials: "FD" },
+  { name: "IronPeak Ltd.",     initials: "IP" },
+  { name: "ClearWave Inc.",    initials: "CW" },
+  { name: "Pinnacle Tech",     initials: "PT" },
+  { name: "Zenith Corp.",      initials: "ZC" },
+];
+const PAYMENT_METHODS = ["Visa","Mastercard","Wire Transfer","Apple Pay","PayPal"];
+const STATUSES = ["Paid","Pending","Overdue"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const CARDS = ["4242","9901","1234","5678","3344"];
+
+function generateInvoices(): Invoice[] {
+  return Array.from({ length: 48 }, (_, i) => {
+    i += 1;
+    const status = STATUSES[(i * 7 + 1) % STATUSES.length];
+    const client = CLIENTS[i % CLIENTS.length];
+    const pm = PAYMENT_METHODS[(i * 3) % PAYMENT_METHODS.length];
+    const month = MONTHS[(i * 5) % 12];
+    const day = String(((i * 7 + 1) % 28) + 1).padStart(2, "0");
+    return {
+      id: i,
+      invoiceNum: \`INV-\${8800 + i}\`,
+      clientInitials: client.initials,
+      clientName: client.name,
+      dateIssued: \`\${month} \${day}, \${i < 25 ? "2024" : "2023"}\`,
+      amount: parseFloat(((i * 317.5 + 800) % 9000 + 500).toFixed(2)),
+      status,
+      paymentMethod: pm,
+      cardLast4: (pm === "Visa" || pm === "Mastercard") ? CARDS[i % CARDS.length] : undefined,
+      daysOverdue: status === "Overdue" ? ((i * 3 + 2) % 28) + 1 : undefined,
+    };
+  });
+}
+
+const ALL_INVOICES: Invoice[] = generateInvoices();
+const PAGE_SIZE = 10;
+
+// ── Icons ────────────────────────────────────────────────────────────────────
+function IconDownload({ color, size = 16 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  );
+}
+function IconMoreVert({ color, size = 16 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <circle cx="12" cy="5"  r="1.5" />
+      <circle cx="12" cy="12" r="1.5" />
+      <circle cx="12" cy="19" r="1.5" />
+    </svg>
+  );
+}
+function IconSearch({ color, size = 15 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  );
+}
+function PaymentIcon({ method, color }: { method: string; color: string }) {
+  if (method === "Visa" || method === "Mastercard") return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" />
+    </svg>
+  );
+  if (method === "Wire Transfer") return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="22" x2="21" y2="22" /><line x1="6" y1="18" x2="6" y2="11" />
+      <line x1="10" y1="18" x2="10" y2="11" /><line x1="14" y1="18" x2="14" y2="11" />
+      <line x1="18" y1="18" x2="18" y2="11" /><polygon points="12 2 20 7 4 7" />
+    </svg>
+  );
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 12V22H4a2 2 0 0 1-2-2V6l4-2h14v8z" />
+    </svg>
+  );
+}
+
+function paymentLabel(inv: Invoice): string {
+  if (inv.paymentMethod === "Visa")       return \`Visa •••• \${inv.cardLast4}\`;
+  if (inv.paymentMethod === "Mastercard") return \`Mastercard •••• \${inv.cardLast4}\`;
+  return inv.paymentMethod;
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
+export default function InvoiceTable() {
+  const TABS = ["All", "Pending", "Paid", "Overdue"];
+  const [activeTab, setActiveTab]       = useState<string>("All");
+  const [searchQuery, setSearchQuery]   = useState<string>("");
+  const [selectedIds, setSelectedIds]   = useState<Set<number>>(new Set());
+  const [sortField, setSortField]       = useState<string | null>(null);
+  const [sortDir, setSortDir]           = useState<"asc" | "desc" | null>(null);
+  const [currentPage, setCurrentPage]   = useState<number>(1);
+
+  const tabCounts = useMemo(() => {
+    const c: Record<string, number> = { All: ALL_INVOICES.length, Pending: 0, Paid: 0, Overdue: 0 };
+    ALL_INVOICES.forEach(inv => c[inv.status]++);
+    return c;
+  }, []);
+
+  const filtered = useMemo(() => {
+    let list = [...ALL_INVOICES];
+    if (activeTab !== "All") list = list.filter(inv => inv.status === activeTab);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(inv =>
+        inv.invoiceNum.toLowerCase().includes(q) || inv.clientName.toLowerCase().includes(q)
+      );
+    }
+    if (sortField && sortDir) {
+      list.sort((a, b) => {
+        let av: string | number = (a as Record<string, string | number>)[sortField];
+        let bv: string | number = (b as Record<string, string | number>)[sortField];
+        if (typeof av === "string") { av = av.toLowerCase(); bv = (bv as string).toLowerCase(); }
+        if (av < bv) return sortDir === "asc" ? -1 : 1;
+        if (av > bv) return sortDir === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+    return list;
+  }, [activeTab, searchQuery, sortField, sortDir]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated  = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const allChecked = paginated.length > 0 && paginated.every(inv => selectedIds.has(inv.id));
+
+  function handleSort(field: string): void {
+    if (sortField === field) {
+      if (sortDir === "asc") setSortDir("desc");
+      else { setSortField(null); setSortDir(null); }
+    } else { setSortField(field); setSortDir("asc"); }
+    setCurrentPage(1);
+  }
+  function toggleAll(checked: boolean): void {
+    setSelectedIds(checked ? new Set(paginated.map(inv => inv.id)) : new Set());
+  }
+  function toggleRow(id: number): void {
+    const next = new Set(selectedIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setSelectedIds(next);
+  }
+  function statusClass(status: string): string {
+    switch (status) {
+      case "Paid":    return "inv__badge inv__badge--paid";
+      case "Pending": return "inv__badge inv__badge--pending";
+      case "Overdue": return "inv__badge inv__badge--overdue";
+      default:        return "inv__badge";
+    }
+  }
+
+  function pageNumbers(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    if (totalPages <= 7) { for (let i = 1; i <= totalPages; i++) pages.push(i); }
+    else {
+      pages.push(1);
+      if (currentPage > 3) pages.push("...");
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
+      if (currentPage < totalPages - 2) pages.push("...");
+      pages.push(totalPages);
+    }
+    return pages;
+  }
+
+  return (
+    <div className="inv-wrap">
+
+      {/* Toolbar */}
+      <div className="inv__toolbar">
+        ${
+          config.showStatusTabs
+            ? `<div className="inv__tabs">
+          {TABS.map(tab => (
+            <button
+              key={tab}
+              className={\`inv__tab \${tab === activeTab ? "inv__tab--active" : ""}\`}
+              onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
+            >
+              {tab}
+              {tab === "All" && <span className="inv__tab-badge">{tabCounts.All}</span>}
+            </button>
+          ))}
+        </div>`
+            : ""
+        }
+        ${
+          config.showSearch
+            ? `<div className="inv__search-wrap">
+          <span className="inv__search-icon"><IconSearch color="var(--inv-search-ph)" /></span>
+          <input
+            className="inv__search"
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+            placeholder="Filter by invoice # or client..."
+          />
+        </div>`
+            : ""
+        }
+      </div>
+
+      {/* Table */}
+      <div className="inv__scroll">
+        <table className="inv__table">
+          <thead className="inv__thead">
+            <tr>
+              ${
+                config.showBulkCheckboxes
+                  ? `<th className="inv__th inv__th--check">
+                <input type="checkbox" checked={allChecked} onChange={(e: React.ChangeEvent<HTMLInputElement>) => toggleAll(e.target.checked)} />
+              </th>`
+                  : ""
+              }
+              <th className="inv__th inv__th--sort" onClick={() => handleSort("invoiceNum")}>
+                Invoice # {sortField === "invoiceNum" ? (sortDir === "asc" ? "↑" : "↓") : <span className="inv__sort-dim">↕</span>}
+              </th>
+              <th className="inv__th inv__th--sort" onClick={() => handleSort("client")}>
+                Client {sortField === "client" ? (sortDir === "asc" ? "↑" : "↓") : <span className="inv__sort-dim">↕</span>}
+              </th>
+              <th className="inv__th">Date Issued</th>
+              <th className="inv__th inv__th--sort" onClick={() => handleSort("amount")}>
+                Amount {sortField === "amount" ? (sortDir === "asc" ? "↑" : "↓") : <span className="inv__sort-dim">↕</span>}
+              </th>
+              <th className="inv__th inv__th--sort" onClick={() => handleSort("status")}>
+                Status {sortField === "status" ? (sortDir === "asc" ? "↑" : "↓") : <span className="inv__sort-dim">↕</span>}
+              </th>
+              <th className="inv__th">Payment Method</th>
+              <th className="inv__th">Days Overdue</th>
+              <th className="inv__th inv__th--right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginated.map((inv, idx) => {
+              const isSelected = selectedIds.has(inv.id);
+              return (
+                <tr
+                  key={inv.id}
+                  className={\`inv__row \${isSelected ? "inv__row--selected" : ""} \${idx % 2 === 1 ? "inv__row--alt" : ""}\`}
+                  onClick={() => toggleRow(inv.id)}
+                >
+                  ${
+                    config.showBulkCheckboxes
+                      ? `<td className="inv__td inv__td--check" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                    <input type="checkbox" checked={isSelected} onChange={() => toggleRow(inv.id)} />
+                  </td>`
+                      : ""
+                  }
+                  <td className="inv__td">
+                    <span className="inv__num">{inv.invoiceNum}</span>
+                  </td>
+                  <td className="inv__td">
+                    <div className="inv__client">
+                      <div className="inv__avatar">{inv.clientInitials}</div>
+                      <span>{inv.clientName}</span>
+                    </div>
+                  </td>
+                  <td className="inv__td inv__td--muted">{inv.dateIssued}</td>
+                  <td className="inv__td">
+                    <span className="inv__amount">\${inv.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                  </td>
+                  <td className="inv__td">
+                    <span className={statusClass(inv.status)}>{inv.status}</span>
+                  </td>
+                  <td className="inv__td">
+                    <div className="inv__payment">
+                      <PaymentIcon method={inv.paymentMethod} color="var(--inv-payment-icon)" />
+                      <span>{paymentLabel(inv)}</span>
+                    </div>
+                  </td>
+                  <td className="inv__td">
+                    {inv.status === "Overdue" && inv.daysOverdue
+                      ? <span className="inv__overdue-days">{inv.daysOverdue} Days</span>
+                      : <span className="inv__td--muted">—</span>
+                    }
+                  </td>
+                  <td className="inv__td inv__td--actions" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                    ${
+                      config.showDownloadAction
+                        ? `<button className="inv__action-btn" title="Download Invoice">
+                      <IconDownload color="var(--inv-action-icon)" size={15} />
+                    </button>`
+                        : ""
+                    }
+                    ${
+                      config.showMoreAction
+                        ? `<button className="inv__action-btn" title="More options">
+                      <IconMoreVert color="var(--inv-action-icon)" size={15} />
+                    </button>`
+                        : ""
+                    }
+                  </td>
+                </tr>
+              );
+            })}
+            {paginated.length === 0 && (
+              <tr><td colSpan={9} className="inv__empty">No invoices match your filters.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="inv__footer">
+        <span className="inv__footer-info">
+          Showing <strong>{filtered.length === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)}</strong> of <strong>{filtered.length}</strong> invoices
+        </span>
+        <div className="inv__pagination">
+          <button className="inv__page-btn" onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>«</button>
+          <button className="inv__page-btn" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>‹</button>
+          {pageNumbers().map((pg, i) =>
+            pg === "..." ? <span key={\`e\${i}\`} className="inv__page-ellipsis">…</span>
+            : <button key={pg as number} className={\`inv__page-btn \${pg === currentPage ? "inv__page-btn--active" : ""}\`} onClick={() => setCurrentPage(pg as number)}>{pg}</button>
+          )}
+          <button className="inv__page-btn" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>›</button>
+          <button className="inv__page-btn" onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>»</button>
+        </div>
+      </div>
+    </div>
+  );
+}`;
+}
+
+// ─── TSX + Tailwind ───────────────────────────────────────────────────────────
+
+export function generateInvoiceTableTailwind(
+  config: InvoiceTableConfig,
+): string {
+  const shadow = config.showShadow ? "0 8px 40px rgba(0,0,0,0.45)" : "none";
+
+  const cellFs = config.cellFontSize;
+  const headerFs = config.headerFontSize;
+
+  return `import { useState, useMemo, CSSProperties } from "react";
+
+// ── Interfaces ───────────────────────────────────────────────────────────────
+interface Invoice {
+  id: number;
+  invoiceNum: string;
+  clientInitials: string;
+  clientName: string;
+  dateIssued: string;
+  amount: number;
+  status: string;
+  paymentMethod: string;
+  cardLast4?: string;
+  daysOverdue?: number;
+}
+
+interface Client {
+  name: string;
+  initials: string;
+}
+
+// ── Data ────────────────────────────────────────────────────────────────────
+const CLIENTS: Client[] = [
+  { name: "Apex Labs Inc.",    initials: "AL" },
+  { name: "NovaSoft Global",   initials: "NS" },
+  { name: "Blue Rocket Co.",   initials: "BR" },
+  { name: "Quantum Drive",     initials: "QD" },
+  { name: "Stellar Systems",   initials: "SS" },
+  { name: "Forge Digital",     initials: "FD" },
+  { name: "IronPeak Ltd.",     initials: "IP" },
+  { name: "ClearWave Inc.",    initials: "CW" },
+  { name: "Pinnacle Tech",     initials: "PT" },
+  { name: "Zenith Corp.",      initials: "ZC" },
+];
+const PAYMENT_METHODS = ["Visa","Mastercard","Wire Transfer","Apple Pay","PayPal"];
+const STATUSES = ["Paid","Pending","Overdue"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const CARDS = ["4242","9901","1234","5678","3344"];
+
+function generateInvoices(): Invoice[] {
+  return Array.from({ length: 48 }, (_, i) => {
+    i += 1;
+    const status = STATUSES[(i * 7 + 1) % STATUSES.length];
+    const client = CLIENTS[i % CLIENTS.length];
+    const pm = PAYMENT_METHODS[(i * 3) % PAYMENT_METHODS.length];
+    const month = MONTHS[(i * 5) % 12];
+    const day = String(((i * 7 + 1) % 28) + 1).padStart(2, "0");
+    return {
+      id: i,
+      invoiceNum: \`INV-\${8800 + i}\`,
+      clientInitials: client.initials,
+      clientName: client.name,
+      dateIssued: \`\${month} \${day}, \${i < 25 ? "2024" : "2023"}\`,
+      amount: parseFloat(((i * 317.5 + 800) % 9000 + 500).toFixed(2)),
+      status,
+      paymentMethod: pm,
+      cardLast4: (pm === "Visa" || pm === "Mastercard") ? CARDS[i % CARDS.length] : undefined,
+      daysOverdue: status === "Overdue" ? ((i * 3 + 2) % 28) + 1 : undefined,
+    };
+  });
+}
+
+const ALL_INVOICES: Invoice[] = generateInvoices();
+const PAGE_SIZE = 10;
+
+// ── Baked-in CSS variable tokens — update these to reskin the InvoiceTable
+const invVars: CSSProperties = {
+  "--inv-bg":             "${config.backgroundColor}",
+  "--inv-toolbar-bg":     "${config.toolbarBackgroundColor}",
+  "--inv-toolbar-border": "${config.toolbarBorderColor}",
+  "--inv-header-bg":      "${config.headerBackgroundColor}",
+  "--inv-header-text":    "${config.headerTextColor}",
+  "--inv-border":         "${config.borderColor}",
+  "--inv-divider":        "${config.dividerColor}",
+  "--inv-row-hover":      "${config.rowHoverColor}",
+  "--inv-row-selected":   "${config.selectedRowColor}",
+  "--inv-cell-text":      "${config.cellTextColor}",
+  "--inv-cell-muted":     "${config.cellMutedColor}",
+  "--inv-accent":         "${config.accentColor}",
+  "--inv-accent-text":    "${config.accentTextColor}",
+  "--inv-num-color":      "${config.invoiceNumColor}",
+  "--inv-avatar-bg":      "${config.avatarBackgroundColor}",
+  "--inv-avatar-text":    "${config.avatarTextColor}",
+  "--inv-tab-active-bg":  "${config.tabActiveBg}",
+  "--inv-tab-active":     "${config.tabActiveText}",
+  "--inv-tab-hover":      "${config.tabHoverBg}",
+  "--inv-tab-inactive":   "${config.tabInactiveText}",
+  "--inv-badge-bg":       "${config.tabBadgeBg}",
+  "--inv-badge-text":     "${config.tabBadgeText}",
+  "--inv-paid-bg":        "${config.paidBg}",
+  "--inv-paid-text":      "${config.paidText}",
+  "--inv-pending-bg":     "${config.pendingBg}",
+  "--inv-pending-text":   "${config.pendingText}",
+  "--inv-overdue-bg":     "${config.overdueBg}",
+  "--inv-overdue-text":   "${config.overdueText}",
+  "--inv-overdue-days":   "${config.overdueDaysColor}",
+  "--inv-payment-icon":   "${config.paymentIconColor}",
+  "--inv-payment-text":   "${config.paymentTextColor}",
+  "--inv-action-icon":    "${config.actionIconColor}",
+  "--inv-action-hover":   "${config.actionHoverBg}",
+  "--inv-footer-bg":      "${config.footerBackgroundColor}",
+  "--inv-footer-text":    "${config.footerTextColor}",
+  "--inv-pag-active-bg":  "${config.paginationActiveBg}",
+  "--inv-pag-active":     "${config.paginationActiveText}",
+  "--inv-pag-border":     "${config.paginationBorderColor}",
+  "--inv-search-bg":      "${config.searchBackgroundColor}",
+  "--inv-search-border":  "${config.searchBorderColor}",
+  "--inv-search-text":    "${config.searchTextColor}",
+  "--inv-search-ph":      "${config.searchPlaceholderColor}",
+  "--inv-radius":         "${config.borderRadius}px",
+  "--inv-shadow":         "${shadow}",
+  "--inv-max-w":          "${config.tableWidth}px",
+} as CSSProperties;
+
+// ── Icons ────────────────────────────────────────────────────────────────────
+function IconDownload({ color, size = 16 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  );
+}
+function IconMoreVert({ color, size = 16 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <circle cx="12" cy="5"  r="1.5" />
+      <circle cx="12" cy="12" r="1.5" />
+      <circle cx="12" cy="19" r="1.5" />
+    </svg>
+  );
+}
+function IconSearch({ color, size = 15 }: { color: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  );
+}
+function PaymentIcon({ method, color }: { method: string; color: string }) {
+  if (method === "Visa" || method === "Mastercard") return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" />
+    </svg>
+  );
+  if (method === "Wire Transfer") return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="22" x2="21" y2="22" /><line x1="6" y1="18" x2="6" y2="11" />
+      <line x1="10" y1="18" x2="10" y2="11" /><line x1="14" y1="18" x2="14" y2="11" />
+      <line x1="18" y1="18" x2="18" y2="11" /><polygon points="12 2 20 7 4 7" />
+    </svg>
+  );
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 12V22H4a2 2 0 0 1-2-2V6l4-2h14v8z" />
+    </svg>
+  );
+}
+
+function paymentLabel(inv: Invoice): string {
+  if (inv.paymentMethod === "Visa")       return \`Visa •••• \${inv.cardLast4}\`;
+  if (inv.paymentMethod === "Mastercard") return \`Mastercard •••• \${inv.cardLast4}\`;
+  return inv.paymentMethod;
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
+export default function InvoiceTable() {
+  const TABS = ["All", "Pending", "Paid", "Overdue"];
+  const [activeTab, setActiveTab]       = useState<string>("All");
+  const [searchQuery, setSearchQuery]   = useState<string>("");
+  const [selectedIds, setSelectedIds]   = useState<Set<number>>(new Set());
+  const [sortField, setSortField]       = useState<string | null>(null);
+  const [sortDir, setSortDir]           = useState<"asc" | "desc" | null>(null);
+  const [currentPage, setCurrentPage]   = useState<number>(1);
+
+  const tabCounts = useMemo(() => {
+    const c: Record<string, number> = { All: ALL_INVOICES.length, Pending: 0, Paid: 0, Overdue: 0 };
+    ALL_INVOICES.forEach(inv => c[inv.status]++);
+    return c;
+  }, []);
+
+  const filtered = useMemo(() => {
+    let list = [...ALL_INVOICES];
+    if (activeTab !== "All") list = list.filter(inv => inv.status === activeTab);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(inv =>
+        inv.invoiceNum.toLowerCase().includes(q) || inv.clientName.toLowerCase().includes(q)
+      );
+    }
+    if (sortField && sortDir) {
+      list.sort((a, b) => {
+        let av: string | number = (a as Record<string, string | number>)[sortField];
+        let bv: string | number = (b as Record<string, string | number>)[sortField];
+        if (typeof av === "string") { av = av.toLowerCase(); bv = (bv as string).toLowerCase(); }
+        if (av < bv) return sortDir === "asc" ? -1 : 1;
+        if (av > bv) return sortDir === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+    return list;
+  }, [activeTab, searchQuery, sortField, sortDir]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated  = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const allChecked = paginated.length > 0 && paginated.every(inv => selectedIds.has(inv.id));
+
+  function handleSort(field: string): void {
+    if (sortField === field) {
+      if (sortDir === "asc") setSortDir("desc");
+      else { setSortField(null); setSortDir(null); }
+    } else { setSortField(field); setSortDir("asc"); }
+    setCurrentPage(1);
+  }
+  function toggleAll(checked: boolean): void {
+    setSelectedIds(checked ? new Set(paginated.map(inv => inv.id)) : new Set());
+  }
+  function toggleRow(id: number): void {
+    const next = new Set(selectedIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setSelectedIds(next);
+  }
+
+  function pageNumbers(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    if (totalPages <= 7) { for (let i = 1; i <= totalPages; i++) pages.push(i); }
+    else {
+      pages.push(1);
+      if (currentPage > 3) pages.push("...");
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
+      if (currentPage < totalPages - 2) pages.push("...");
+      pages.push(totalPages);
+    }
+    return pages;
+  }
+
+  return (
+    <div
+      className="w-full flex flex-col bg-[var(--inv-bg)] border border-[var(--inv-border)] rounded-[var(--inv-radius)] overflow-hidden font-sans"
+      style={{ ...invVars, maxWidth: "var(--inv-max-w)", boxShadow: "var(--inv-shadow)" }}
+    >
+      ${
+        config.animateRows
+          ? `<style>{\`
+        @keyframes invFadeIn {
+          from { opacity: 0; transform: translateY(4px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      \`}</style>`
+          : ""
+      }
+
+      {/* Toolbar */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[var(--inv-toolbar-bg)] border-b border-[var(--inv-toolbar-border)] gap-3 flex-wrap shrink-0">
+        ${
+          config.showStatusTabs
+            ? `<div className="flex items-center gap-1 flex-wrap">
+          {TABS.map(tab => (
+            <button
+              key={tab}
+              className={\`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border-none text-[12px] font-bold cursor-pointer transition-all duration-[120ms] font-sans tracking-wide \${
+                tab === activeTab
+                  ? "bg-[var(--inv-tab-active-bg)] text-[var(--inv-tab-active)]"
+                  : "bg-transparent text-[var(--inv-tab-inactive)] hover:bg-[var(--inv-tab-hover)]"
+              }\`}
+              onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
+            >
+              {tab}
+              {tab === "All" && (
+                <span className="bg-[var(--inv-badge-bg)] text-[var(--inv-badge-text)] text-[10px] font-extrabold px-1.5 py-px rounded-full">
+                  {tabCounts.All}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>`
+            : ""
+        }
+        ${
+          config.showSearch
+            ? `<div className="relative flex items-center min-w-[200px]">
+          <span className="absolute left-2.5 pointer-events-none flex items-center">
+            <IconSearch color="var(--inv-search-ph)" />
+          </span>
+          <input
+            className="w-full bg-[var(--inv-search-bg)] border border-[var(--inv-search-border)] rounded-[calc(var(--inv-radius)*0.6)] py-1.5 pl-8 pr-3 text-[12px] text-[var(--inv-search-text)] outline-none font-sans transition-colors duration-[150ms] placeholder:text-[var(--inv-search-ph)] focus:border-[var(--inv-accent)]"
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+            placeholder="Filter by invoice # or client..."
+          />
+        </div>`
+            : ""
+        }
+      </div>
+
+      {/* Table */}
+      <div className="flex-1 overflow-x-auto overflow-y-auto">
+        <table className="w-full border-collapse min-w-[780px]">
+          <thead className="${config.stickyHeader ? "sticky top-0 z-10" : ""}">
+            <tr>
+              ${
+                config.showBulkCheckboxes
+                  ? `<th className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none w-12 text-center">
+                <input type="checkbox" checked={allChecked} onChange={(e: React.ChangeEvent<HTMLInputElement>) => toggleAll(e.target.checked)} />
+              </th>`
+                  : ""
+              }
+              <th
+                className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none cursor-pointer hover:text-[var(--inv-accent)] transition-colors duration-[120ms]"
+                onClick={() => handleSort("invoiceNum")}
+              >
+                Invoice # {sortField === "invoiceNum" ? (sortDir === "asc" ? "↑" : "↓") : <span className="opacity-35">↕</span>}
+              </th>
+              <th
+                className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none cursor-pointer hover:text-[var(--inv-accent)] transition-colors duration-[120ms]"
+                onClick={() => handleSort("client")}
+              >
+                Client {sortField === "client" ? (sortDir === "asc" ? "↑" : "↓") : <span className="opacity-35">↕</span>}
+              </th>
+              <th className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none">
+                Date Issued
+              </th>
+              <th
+                className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none cursor-pointer hover:text-[var(--inv-accent)] transition-colors duration-[120ms]"
+                onClick={() => handleSort("amount")}
+              >
+                Amount {sortField === "amount" ? (sortDir === "asc" ? "↑" : "↓") : <span className="opacity-35">↕</span>}
+              </th>
+              <th
+                className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none cursor-pointer hover:text-[var(--inv-accent)] transition-colors duration-[120ms]"
+                onClick={() => handleSort("status")}
+              >
+                Status {sortField === "status" ? (sortDir === "asc" ? "↑" : "↓") : <span className="opacity-35">↕</span>}
+              </th>
+              <th className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none">
+                Payment Method
+              </th>
+              <th className="px-4 h-11 text-left text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none">
+                Days Overdue
+              </th>
+              <th className="px-4 h-11 text-right pr-5 text-[${headerFs}px] font-bold tracking-widest uppercase text-[var(--inv-header-text)] bg-[var(--inv-header-bg)] border-b border-[var(--inv-border)] whitespace-nowrap select-none">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginated.map((inv, idx) => {
+              const isSelected = selectedIds.has(inv.id);
+              let rowCls = "border-b border-[var(--inv-divider)] cursor-pointer transition-colors duration-[100ms] hover:bg-[var(--inv-row-hover)]";
+              if (isSelected) rowCls += " bg-[var(--inv-row-selected)]";
+              else if (idx % 2 === 1) rowCls += " bg-[var(--inv-bg)]/95";
+              else rowCls += " bg-[var(--inv-bg)]";
+              ${config.animateRows ? `rowCls += " [animation:invFadeIn_0.18s_ease_both]";` : ""}
+              return (
+                <tr key={inv.id} className={rowCls} onClick={() => toggleRow(inv.id)}>
+                  ${
+                    config.showBulkCheckboxes
+                      ? `<td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap text-center w-12" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                    <input type="checkbox" checked={isSelected} onChange={() => toggleRow(inv.id)} />
+                  </td>`
+                      : ""
+                  }
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap">
+                    <span className="font-mono text-[12px] font-bold text-[var(--inv-num-color)]">{inv.invoiceNum}</span>
+                  </td>
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[var(--inv-avatar-bg)] text-[var(--inv-avatar-text)] flex items-center justify-center text-[10px] font-extrabold tracking-wide shrink-0">
+                        {inv.clientInitials}
+                      </div>
+                      <span>{inv.clientName}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-[${cellFs}px] whitespace-nowrap text-[var(--inv-cell-muted)]">{inv.dateIssued}</td>
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap">
+                    <span className="font-mono text-[13px] font-bold">\${inv.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                  </td>
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap">
+                    {inv.status === "Paid" && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap bg-[var(--inv-paid-bg)] text-[var(--inv-paid-text)]">
+                        Paid
+                      </span>
+                    )}
+                    {inv.status === "Pending" && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap bg-[var(--inv-pending-bg)] text-[var(--inv-pending-text)]">
+                        Pending
+                      </span>
+                    )}
+                    {inv.status === "Overdue" && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-widest uppercase whitespace-nowrap bg-[var(--inv-overdue-bg)] text-[var(--inv-overdue-text)]">
+                        Overdue
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap">
+                    <div className="flex items-center gap-1.5 text-[12px] text-[var(--inv-payment-text)]">
+                      <PaymentIcon method={inv.paymentMethod} color="var(--inv-payment-icon)" />
+                      <span>{paymentLabel(inv)}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap">
+                    {inv.status === "Overdue" && inv.daysOverdue
+                      ? <span className="font-mono font-bold text-[var(--inv-overdue-days)]">{inv.daysOverdue} Days</span>
+                      : <span className="text-[var(--inv-cell-muted)]">—</span>
+                    }
+                  </td>
+                  <td className="px-4 py-3 text-[${cellFs}px] text-[var(--inv-cell-text)] whitespace-nowrap text-right pr-3" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                    ${
+                      config.showDownloadAction
+                        ? `<button className="w-[30px] h-[30px] inline-flex items-center justify-center bg-transparent border-none rounded-[calc(var(--inv-radius)*0.5)] cursor-pointer transition-colors duration-[120ms] hover:bg-[var(--inv-action-hover)]" title="Download Invoice">
+                      <IconDownload color="var(--inv-action-icon)" size={15} />
+                    </button>`
+                        : ""
+                    }
+                    ${
+                      config.showMoreAction
+                        ? `<button className="w-[30px] h-[30px] inline-flex items-center justify-center bg-transparent border-none rounded-[calc(var(--inv-radius)*0.5)] cursor-pointer transition-colors duration-[120ms] hover:bg-[var(--inv-action-hover)]" title="More options">
+                      <IconMoreVert color="var(--inv-action-icon)" size={15} />
+                    </button>`
+                        : ""
+                    }
+                  </td>
+                </tr>
+              );
+            })}
+            {paginated.length === 0 && (
+              <tr>
+                <td colSpan={9} className="text-center py-12 px-5 text-[13px] text-[var(--inv-cell-muted)]">
+                  No invoices match your filters.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-t border-[var(--inv-border)] bg-[var(--inv-footer-bg)] shrink-0 flex-wrap gap-2">
+        <span className="text-[12px] text-[var(--inv-footer-text)]">
+          Showing{" "}
+          <strong className="text-[var(--inv-cell-text)]">
+            {filtered.length === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)}
+          </strong>
+          {" "}of{" "}
+          <strong className="text-[var(--inv-cell-text)]">{filtered.length}</strong> invoices
+        </span>
+        <div className="flex items-center gap-1">
+          <button className="w-[30px] h-[30px] flex items-center justify-center rounded-[calc(var(--inv-radius)*0.4)] border border-[var(--inv-pag-border)] bg-transparent text-[var(--inv-footer-text)] text-[13px] cursor-pointer transition-all duration-[120ms] hover:border-[var(--inv-accent)] hover:text-[var(--inv-accent)] disabled:opacity-35 disabled:cursor-not-allowed font-sans" onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>«</button>
+          <button className="w-[30px] h-[30px] flex items-center justify-center rounded-[calc(var(--inv-radius)*0.4)] border border-[var(--inv-pag-border)] bg-transparent text-[var(--inv-footer-text)] text-[13px] cursor-pointer transition-all duration-[120ms] hover:border-[var(--inv-accent)] hover:text-[var(--inv-accent)] disabled:opacity-35 disabled:cursor-not-allowed font-sans" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>‹</button>
+          {pageNumbers().map((pg, i) =>
+            pg === "..."
+              ? <span key={\`e\${i}\`} className="text-[12px] text-[var(--inv-footer-text)] px-1">…</span>
+              : <button
+                  key={pg as number}
+                  className={\`w-[30px] h-[30px] flex items-center justify-center rounded-[calc(var(--inv-radius)*0.4)] border text-[13px] cursor-pointer transition-all duration-[120ms] font-sans \${
+                    pg === currentPage
+                      ? "bg-[var(--inv-pag-active-bg)] text-[var(--inv-pag-active)] border-[var(--inv-pag-active-bg)] font-bold"
+                      : "border-[var(--inv-pag-border)] bg-transparent text-[var(--inv-footer-text)] hover:border-[var(--inv-accent)] hover:text-[var(--inv-accent)]"
+                  }\`}
+                  onClick={() => setCurrentPage(pg as number)}
+                >
+                  {pg}
+                </button>
+          )}
+          <button className="w-[30px] h-[30px] flex items-center justify-center rounded-[calc(var(--inv-radius)*0.4)] border border-[var(--inv-pag-border)] bg-transparent text-[var(--inv-footer-text)] text-[13px] cursor-pointer transition-all duration-[120ms] hover:border-[var(--inv-accent)] hover:text-[var(--inv-accent)] disabled:opacity-35 disabled:cursor-not-allowed font-sans" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>›</button>
+          <button className="w-[30px] h-[30px] flex items-center justify-center rounded-[calc(var(--inv-radius)*0.4)] border border-[var(--inv-pag-border)] bg-transparent text-[var(--inv-footer-text)] text-[13px] cursor-pointer transition-all duration-[120ms] hover:border-[var(--inv-accent)] hover:text-[var(--inv-accent)] disabled:opacity-35 disabled:cursor-not-allowed font-sans" onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>»</button>
+        </div>
+      </div>
+    </div>
+  );
+}`;
+}

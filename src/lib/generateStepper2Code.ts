@@ -659,3 +659,901 @@ export function generateStepperCSS(config: StepperConfig): string {
 
   return `${base}${variantCSS[variant] ?? "/* variant styles */"}`;
 }
+
+// ─── TSX + CSS ────────────────────────────────────────────────────────────────
+
+export function generateStepperTSX(config: StepperConfig): string {
+  const {
+    variant,
+    totalSteps,
+    activeStep,
+    step1Label,
+    step2Label,
+    step3Label,
+    step4Label,
+    color1,
+    color2,
+    color3,
+    color4,
+    inactiveColor,
+    inactiveTextColor,
+    activeColor,
+    activeTextColor,
+    completedColor,
+    completedTextColor,
+    stepTextColor,
+    labelColor,
+    height,
+    fontSize,
+    borderRadius,
+    connectorHeight,
+    showLabels,
+    showNumbers,
+    showCheckmarks,
+    animateDots,
+  } = config;
+
+  const allLabels = [step1Label, step2Label, step3Label, step4Label].slice(
+    0,
+    totalSteps,
+  );
+  const colors = [color1, color2, color3, color4];
+  const labelsArr = JSON.stringify(allLabels);
+  const colorsArr = JSON.stringify(colors.slice(0, totalSteps));
+
+  switch (variant) {
+    // ── Segmented Pill ───────────────────────────────────────────────────────
+    case "segmented-pill":
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${colorsArr};
+
+export default function SegmentedPillStepper(): JSX.Element {
+  return (
+    <div className="stp stp--pill">
+      {LABELS.map((label: string, i: number) => (
+        <div key={i} className="stp__segment" style={{ background: COLORS[i] }}>
+          {${showNumbers} ? \`STEP \${i + 1}\` : label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+
+    // ── Breadcrumb Gray ──────────────────────────────────────────────────────
+    case "breadcrumb-gray": {
+      const clipFirst =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%)";
+      const clipMid =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%, 14px 50%)";
+      const clipLast = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 14px 50%)";
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const CLIPS: string[] = [
+  "${clipFirst}",
+  "${clipMid}",
+  "${clipMid}",
+  "${clipLast}",
+];
+const ACTIVE_STEP: number = ${activeStep};
+
+export default function BreadcrumbStepper(): JSX.Element {
+  return (
+    <div className="stp stp--breadcrumb">
+      {LABELS.map((label: string, i: number) => (
+        <div
+          key={i}
+          className={\`stp__crumb\${i + 1 === ACTIVE_STEP ? " stp__crumb--active" : ""}\`}
+          style={{ clipPath: CLIPS[Math.min(i, CLIPS.length - 1)] }}
+        >
+          {label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+    }
+
+    // ── Breadcrumb Colorful ──────────────────────────────────────────────────
+    case "breadcrumb-colorful": {
+      const clipFirst =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%)";
+      const clipMid =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%, 14px 50%)";
+      const clipLast = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 14px 50%)";
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${colorsArr};
+const CLIPS: string[] = [
+  "${clipFirst}",
+  "${clipMid}",
+  "${clipMid}",
+  "${clipLast}",
+];
+
+export default function ColorfulBreadcrumbStepper(): JSX.Element {
+  return (
+    <div className="stp stp--colorful-crumb">
+      {LABELS.map((label: string, i: number) => (
+        <div
+          key={i}
+          className="stp__crumb"
+          style={{ background: COLORS[i], clipPath: CLIPS[Math.min(i, CLIPS.length - 1)] }}
+        >
+          {label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+    }
+
+    // ── Numbered Line ────────────────────────────────────────────────────────
+    case "numbered-line": {
+      const progressPct = Math.round(
+        ((activeStep - 1) / (totalSteps - 1)) * 100,
+      );
+      const stepColorsArr = JSON.stringify(colors.slice(0, totalSteps));
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${stepColorsArr};
+const ACTIVE: number = ${activeStep};
+
+export default function NumberedLineStepper(): JSX.Element {
+  return (
+    <div className="stp stp--line">
+      <div className="stp__track">
+        <div className="stp__track-fill" style={{ width: "${progressPct}%" }} />
+        {LABELS.map((_: string, i: number) => (
+          <div
+            key={i}
+            className={\`stp__node\${i + 1 <= ACTIVE ? " stp__node--done" : ""}\`}
+            style={i + 1 <= ACTIVE ? { background: COLORS[i] } : {}}
+          >
+            {i + 1}
+          </div>
+        ))}
+      </div>
+      ${
+        showLabels
+          ? `<div className="stp__labels">
+        {LABELS.map((l: string, i: number) => <span key={i} className="stp__label">{l}</span>)}
+      </div>`
+          : ""
+      }
+    </div>
+  );
+}`;
+    }
+
+    // ── Checkmark Horizontal ─────────────────────────────────────────────────
+    case "checkmark-horizontal": {
+      const progressPct = Math.round(
+        ((activeStep - 1) / (totalSteps - 1)) * 100,
+      );
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const ACTIVE: number = ${activeStep};
+
+function CheckIcon(): JSX.Element {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+export default function CheckmarkStepper(): JSX.Element {
+  return (
+    <div className="stp stp--check">
+      <div className="stp__track">
+        <div className="stp__track-fill" style={{ width: "${progressPct}%" }} />
+        {LABELS.map((_: string, i: number) => {
+          const done: boolean = i + 1 < ACTIVE;
+          const active: boolean = i + 1 === ACTIVE;
+          return (
+            <div key={i} className={\`stp__node\${done ? " stp__node--done" : active ? " stp__node--active" : ""}\`}>
+              {done && ${showCheckmarks} ? <CheckIcon /> : i + 1}
+            </div>
+          );
+        })}
+      </div>
+      ${
+        showLabels
+          ? `<div className="stp__labels">
+        {LABELS.map((l: string, i: number) => <span key={i} className="stp__label">{l}</span>)}
+      </div>`
+          : ""
+      }
+    </div>
+  );
+}`;
+    }
+
+    // ── Chevron Loading ──────────────────────────────────────────────────────
+    case "chevron-loading": {
+      const total = 11;
+      const filled = Math.round((activeStep / totalSteps) * total);
+      return `import React from "react";
+import "./Stepper.css";
+
+const TOTAL: number = ${total};
+const FILLED: number = ${filled};
+
+export default function ChevronLoadingStepper(): JSX.Element {
+  return (
+    <div className="stp stp--chevron-load">
+      <div className="stp__chevrons">
+        {Array.from({ length: TOTAL }).map((_: unknown, i: number) => (
+          <div key={i} className={\`stp__chevron\${i < FILLED ? " stp__chevron--filled" : ""}\`} />
+        ))}
+      </div>
+      <div className="stp__loading-label">Loading…</div>
+    </div>
+  );
+}`;
+    }
+
+    // ── Dot Loading ──────────────────────────────────────────────────────────
+    case "dot-loading": {
+      const total = 10;
+      const filled = Math.round((activeStep / totalSteps) * total);
+      return `import React from "react";
+import "./Stepper.css";
+
+const TOTAL: number = ${total};
+const FILLED: number = ${filled};
+
+export default function DotLoadingStepper(): JSX.Element {
+  return (
+    <div className="stp stp--dot-load">
+      <div className="stp__dots">
+        {Array.from({ length: TOTAL }).map((_: unknown, i: number) => (
+          <div key={i} className={\`stp__dot\${i < FILLED ? " stp__dot--filled" : ""}\`} />
+        ))}
+      </div>
+      <div className="stp__loading-label">Loading…</div>
+    </div>
+  );
+}`;
+    }
+
+    // ── Sharp Chevron ────────────────────────────────────────────────────────
+    case "sharp-chevron": {
+      const clipFirst =
+        "polygon(0% 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 0% 100%)";
+      const clipOthers =
+        "polygon(0% 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 0% 100%, 10px 50%)";
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${colorsArr};
+
+export default function SharpChevronStepper(): JSX.Element {
+  return (
+    <div className="stp stp--sharp">
+      {LABELS.map((label: string, i: number) => (
+        <div
+          key={i}
+          className="stp__sharp-step"
+          style={{
+            background: COLORS[i],
+            clipPath: i === 0 ? "${clipFirst}" : "${clipOthers}",
+          }}
+        >
+          {${showNumbers} ? \`Step \${i + 1}\` : label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+    }
+
+    // ── Dashed Confirmation ──────────────────────────────────────────────────
+    case "dashed-confirmation": {
+      const progressPct = Math.round(
+        ((activeStep - 1) / (totalSteps - 1)) * 100,
+      );
+      return `import React from "react";
+import "./Stepper.css";
+
+const LABELS: string[] = ${labelsArr};
+const ACTIVE: number = ${activeStep};
+
+function CheckIcon(): JSX.Element {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+export default function DashedConfirmationStepper(): JSX.Element {
+  return (
+    <div className="stp stp--dashed">
+      <div className="stp__track">
+        {LABELS.map((_: string, i: number) => {
+          const done: boolean = i + 1 < ACTIVE;
+          const active: boolean = i + 1 === ACTIVE;
+          return (
+            <div key={i} className={\`stp__node\${done ? " stp__node--done" : active ? " stp__node--active" : ""}\`}>
+              {done && ${showCheckmarks} ? <CheckIcon /> : i + 1}
+            </div>
+          );
+        })}
+      </div>
+      ${
+        showLabels
+          ? `<div className="stp__labels">
+        {LABELS.map((l: string, i: number) => <span key={i} className="stp__label">{l}</span>)}
+      </div>`
+          : ""
+      }
+    </div>
+  );
+}`;
+    }
+
+    default:
+      return "// Unknown variant";
+  }
+}
+
+// ─── TSX + Tailwind ───────────────────────────────────────────────────────────
+
+export function generateStepperTailwind(config: StepperConfig): string {
+  const {
+    variant,
+    totalSteps,
+    activeStep,
+    step1Label,
+    step2Label,
+    step3Label,
+    step4Label,
+    color1,
+    color2,
+    color3,
+    color4,
+    inactiveColor,
+    inactiveTextColor,
+    activeColor,
+    activeTextColor,
+    completedColor,
+    completedTextColor,
+    stepTextColor,
+    labelColor,
+    height,
+    fontSize,
+    borderRadius,
+    connectorHeight,
+    showLabels,
+    showNumbers,
+    showCheckmarks,
+    animateDots,
+  } = config;
+
+  const allLabels = [step1Label, step2Label, step3Label, step4Label].slice(
+    0,
+    totalSteps,
+  );
+  const colors = [color1, color2, color3, color4];
+  const labelsArr = JSON.stringify(allLabels);
+  const colorsArr = JSON.stringify(colors.slice(0, totalSteps));
+
+  // Pre-compute baked font sizes
+  const fs = fontSize;
+
+  switch (variant) {
+    // ── Segmented Pill ───────────────────────────────────────────────────────
+    case "segmented-pill": {
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${colorsArr};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-step-text":  "${stepTextColor}",
+  "--stp-height":     "${height}px",
+  "--stp-radius":     "${borderRadius}px",
+} as CSSProperties;
+
+export default function SegmentedPillStepper(): JSX.Element {
+  return (
+    <div
+      className="flex w-full overflow-hidden font-sans"
+      style={{ ...stpVars, height: "var(--stp-height)", borderRadius: "var(--stp-radius)" }}
+    >
+      {LABELS.map((label: string, i: number) => (
+        <div
+          key={i}
+          className="flex flex-1 items-center justify-center text-[${fs}px] font-bold uppercase tracking-[0.08em]"
+          style={{ background: COLORS[i], color: "var(--stp-step-text)" }}
+        >
+          {${showNumbers} ? \`STEP \${i + 1}\` : label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+    }
+
+    // ── Breadcrumb Gray ──────────────────────────────────────────────────────
+    case "breadcrumb-gray": {
+      const clipFirst =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%)";
+      const clipMid =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%, 14px 50%)";
+      const clipLast = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 14px 50%)";
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const CLIPS: string[] = [
+  "${clipFirst}",
+  "${clipMid}",
+  "${clipMid}",
+  "${clipLast}",
+];
+const ACTIVE_STEP: number = ${activeStep};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-inactive-bg":    "${inactiveColor}",
+  "--stp-inactive-text":  "${inactiveTextColor}",
+  "--stp-active-bg":      "${activeColor}",
+  "--stp-active-text":    "${activeTextColor}",
+  "--stp-height":         "${height}px",
+} as CSSProperties;
+
+export default function BreadcrumbStepper(): JSX.Element {
+  return (
+    <div
+      className="flex w-full font-sans"
+      style={{ ...stpVars, height: "var(--stp-height)" }}
+    >
+      {LABELS.map((label: string, i: number) => {
+        const isActive: boolean = i + 1 === ACTIVE_STEP;
+        return (
+          <div
+            key={i}
+            className="flex flex-1 items-center justify-center text-[${fs}px] font-bold uppercase tracking-[0.05em] transition-colors -ml-3 first:ml-0"
+            style={{
+              background: isActive ? "var(--stp-active-bg)" : "var(--stp-inactive-bg)",
+              color: isActive ? "var(--stp-active-text)" : "var(--stp-inactive-text)",
+              clipPath: CLIPS[Math.min(i, CLIPS.length - 1)],
+              zIndex: isActive ? 10 : undefined,
+            }}
+          >
+            {label}
+          </div>
+        );
+      })}
+    </div>
+  );
+}`;
+    }
+
+    // ── Breadcrumb Colorful ──────────────────────────────────────────────────
+    case "breadcrumb-colorful": {
+      const clipFirst =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%)";
+      const clipMid =
+        "polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%, 14px 50%)";
+      const clipLast = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 14px 50%)";
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${colorsArr};
+const CLIPS: string[] = [
+  "${clipFirst}",
+  "${clipMid}",
+  "${clipMid}",
+  "${clipLast}",
+];
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-step-text": "${stepTextColor}",
+  "--stp-height":    "${height}px",
+  "--stp-radius":    "${borderRadius}px",
+} as CSSProperties;
+
+export default function ColorfulBreadcrumbStepper(): JSX.Element {
+  return (
+    <div
+      className="flex w-full overflow-hidden font-sans"
+      style={{ ...stpVars, height: "var(--stp-height)", borderRadius: "var(--stp-radius)" }}
+    >
+      {LABELS.map((label: string, i: number) => (
+        <div
+          key={i}
+          className="flex flex-1 items-center justify-center text-[${fs}px] font-bold uppercase tracking-[0.06em] -ml-3 first:ml-0"
+          style={{
+            background: COLORS[i],
+            color: "var(--stp-step-text)",
+            clipPath: CLIPS[Math.min(i, CLIPS.length - 1)],
+          }}
+        >
+          {label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+    }
+
+    // ── Numbered Line ────────────────────────────────────────────────────────
+    case "numbered-line": {
+      const progressPct = Math.round(
+        ((activeStep - 1) / (totalSteps - 1)) * 100,
+      );
+      const stepColorsArr = JSON.stringify(colors.slice(0, totalSteps));
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${stepColorsArr};
+const ACTIVE: number = ${activeStep};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-inactive-bg":    "${inactiveColor}",
+  "--stp-inactive-text":  "${inactiveTextColor}",
+  "--stp-fill":           "${color3}",
+  "--stp-label-color":    "${labelColor}",
+  "--stp-connector-h":    "${connectorHeight}px",
+} as CSSProperties;
+
+export default function NumberedLineStepper(): JSX.Element {
+  return (
+    <div className="w-full font-sans" style={stpVars}>
+      <div className="relative flex items-center justify-between px-0.5">
+        {/* Track background */}
+        <div
+          className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-0"
+          style={{ height: "var(--stp-connector-h)", background: "var(--stp-inactive-bg)" }}
+        />
+        {/* Track fill */}
+        <div
+          className="absolute top-1/2 left-0 -translate-y-1/2 z-0 transition-[width] duration-300"
+          style={{ height: "var(--stp-connector-h)", width: "${progressPct}%", background: "var(--stp-fill)" }}
+        />
+        {LABELS.map((_: string, i: number) => (
+          <div
+            key={i}
+            className="relative z-10 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors duration-200"
+            style={{
+              background: i + 1 <= ACTIVE ? COLORS[i] : "var(--stp-inactive-bg)",
+              color: i + 1 <= ACTIVE ? "#fff" : "var(--stp-inactive-text)",
+            }}
+          >
+            {i + 1}
+          </div>
+        ))}
+      </div>
+      ${
+        showLabels
+          ? `<div className="flex justify-between mt-2">
+        {LABELS.map((l: string, i: number) => (
+          <span key={i} className="text-[9px] font-bold uppercase tracking-[0.1em]" style={{ color: "var(--stp-label-color)" }}>{l}</span>
+        ))}
+      </div>`
+          : ""
+      }
+    </div>
+  );
+}`;
+    }
+
+    // ── Checkmark Horizontal ─────────────────────────────────────────────────
+    case "checkmark-horizontal": {
+      const progressPct = Math.round(
+        ((activeStep - 1) / (totalSteps - 1)) * 100,
+      );
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const ACTIVE: number = ${activeStep};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-inactive-bg":       "${inactiveColor}",
+  "--stp-inactive-text":     "${inactiveTextColor}",
+  "--stp-active-bg":         "${activeColor}",
+  "--stp-active-text":       "${activeTextColor}",
+  "--stp-completed-bg":      "${completedColor}",
+  "--stp-completed-text":    "${completedTextColor}",
+  "--stp-label-color":       "${labelColor}",
+  "--stp-connector-h":       "${connectorHeight}px",
+} as CSSProperties;
+
+function CheckIcon(): JSX.Element {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+export default function CheckmarkStepper(): JSX.Element {
+  return (
+    <div className="w-full font-sans" style={stpVars}>
+      <div className="relative flex items-center justify-between">
+        {/* Track background */}
+        <div
+          className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-0"
+          style={{ height: "var(--stp-connector-h)", background: "var(--stp-inactive-bg)" }}
+        />
+        {/* Track fill */}
+        <div
+          className="absolute top-1/2 left-0 -translate-y-1/2 z-0 transition-[width] duration-300"
+          style={{ height: "var(--stp-connector-h)", width: "${progressPct}%", background: "var(--stp-completed-bg)" }}
+        />
+        {LABELS.map((_: string, i: number) => {
+          const done: boolean = i + 1 < ACTIVE;
+          const active: boolean = i + 1 === ACTIVE;
+          let cls = "relative z-10 w-[26px] h-[26px] rounded-full flex items-center justify-center text-[10px] font-bold";
+          if (done) {
+            cls += " border-0";
+          } else if (active) {
+            cls += " border-0";
+          } else {
+            cls += " bg-transparent border-2";
+          }
+          return (
+            <div
+              key={i}
+              className={cls}
+              style={{
+                background: done ? "var(--stp-completed-bg)" : active ? "var(--stp-active-bg)" : "transparent",
+                color: done ? "var(--stp-completed-text)" : active ? "var(--stp-active-text)" : "var(--stp-inactive-text)",
+                borderColor: (!done && !active) ? "var(--stp-inactive-bg)" : undefined,
+              }}
+            >
+              {done && ${showCheckmarks} ? <CheckIcon /> : i + 1}
+            </div>
+          );
+        })}
+      </div>
+      ${
+        showLabels
+          ? `<div className="flex justify-between mt-2 px-0.5">
+        {LABELS.map((l: string, i: number) => (
+          <span key={i} className="text-[9px] font-bold uppercase tracking-[0.08em]" style={{ color: "var(--stp-label-color)" }}>{l}</span>
+        ))}
+      </div>`
+          : ""
+      }
+    </div>
+  );
+}`;
+    }
+
+    // ── Chevron Loading ──────────────────────────────────────────────────────
+    case "chevron-loading": {
+      const total = 11;
+      const filled = Math.round((activeStep / totalSteps) * total);
+      return `import { CSSProperties } from "react";
+
+const TOTAL: number = ${total};
+const FILLED: number = ${filled};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-inactive-bg":  "${inactiveColor}",
+  "--stp-color1":       "${color1}",
+  "--stp-color2":       "${color2}",
+  "--stp-color3":       "${color3}",
+  "--stp-label-color":  "${labelColor}",
+} as CSSProperties;
+
+export default function ChevronLoadingStepper(): JSX.Element {
+  return (
+    <div className="font-sans" style={stpVars}>
+      <div className="flex gap-[3px]">
+        {Array.from({ length: TOTAL }).map((_: unknown, i: number) => {
+          const isFilled: boolean = i < FILLED;
+          // First 3 use color1, last 3 filled use color3, rest color2
+          const bg = !isFilled
+            ? "var(--stp-inactive-bg)"
+            : i < 3
+            ? "var(--stp-color1)"
+            : i >= TOTAL - 3
+            ? "var(--stp-color3)"
+            : "var(--stp-color2)";
+          return (
+            <div
+              key={i}
+              className="w-4 h-6 transition-colors duration-200"
+              style={{
+                background: bg,
+                clipPath: "polygon(0% 0%, 50% 0%, 100% 50%, 50% 100%, 0% 100%, 50% 50%)",
+              }}
+            />
+          );
+        })}
+      </div>
+      <div className="mt-[6px] text-[9px] font-bold uppercase tracking-[0.15em]" style={{ color: "var(--stp-label-color)" }}>
+        Loading…
+      </div>
+    </div>
+  );
+}`;
+    }
+
+    // ── Dot Loading ──────────────────────────────────────────────────────────
+    case "dot-loading": {
+      const total = 10;
+      const filled = Math.round((activeStep / totalSteps) * total);
+      return `import { CSSProperties } from "react";
+
+const TOTAL: number = ${total};
+const FILLED: number = ${filled};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-inactive-bg":    "${inactiveColor}",
+  "--stp-completed-bg":   "${completedColor}",
+  "--stp-label-color":    "${labelColor}",
+} as CSSProperties;
+
+export default function DotLoadingStepper(): JSX.Element {
+  return (
+    <div className="font-sans" style={stpVars}>
+      ${
+        animateDots
+          ? `<style>{\`
+  @keyframes dotPulse {
+    from { transform: scale(1); opacity: 0.7; }
+    to   { transform: scale(1.15); opacity: 1; }
+  }
+\`}</style>`
+          : ""
+      }
+      <div className="flex items-center gap-[6px]">
+        {Array.from({ length: TOTAL }).map((_: unknown, i: number) => {
+          const isFilled: boolean = i < FILLED;
+          return (
+            <div
+              key={i}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: isFilled ? "12px" : "8px",
+                height: isFilled ? "12px" : "8px",
+                background: isFilled ? "var(--stp-completed-bg)" : "var(--stp-inactive-bg)",
+                ${animateDots ? 'animation: "dotPulse 1.2s ease-in-out infinite alternate",' : ""}
+              }}
+            />
+          );
+        })}
+      </div>
+      <div className="mt-2 text-[9px] font-bold uppercase tracking-[0.15em]" style={{ color: "var(--stp-label-color)" }}>
+        Loading…
+      </div>
+    </div>
+  );
+}`;
+    }
+
+    // ── Sharp Chevron ────────────────────────────────────────────────────────
+    case "sharp-chevron": {
+      const clipFirst =
+        "polygon(0% 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 0% 100%)";
+      const clipOthers =
+        "polygon(0% 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 0% 100%, 10px 50%)";
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const COLORS: string[] = ${colorsArr};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-step-text": "${stepTextColor}",
+  "--stp-height":    "${height}px",
+} as CSSProperties;
+
+export default function SharpChevronStepper(): JSX.Element {
+  return (
+    <div
+      className="flex w-full font-sans"
+      style={{ ...stpVars, height: "var(--stp-height)" }}
+    >
+      {LABELS.map((label: string, i: number) => (
+        <div
+          key={i}
+          className="flex flex-1 items-center justify-center text-[${fs}px] font-bold uppercase tracking-[0.05em] -ml-2 first:ml-0 hover:brightness-110 transition-[filter] duration-200"
+          style={{
+            background: COLORS[i],
+            color: "var(--stp-step-text)",
+            clipPath: i === 0 ? "${clipFirst}" : "${clipOthers}",
+          }}
+        >
+          {${showNumbers} ? \`Step \${i + 1}\` : label}
+        </div>
+      ))}
+    </div>
+  );
+}`;
+    }
+
+    // ── Dashed Confirmation ──────────────────────────────────────────────────
+    case "dashed-confirmation": {
+      return `import { CSSProperties } from "react";
+
+const LABELS: string[] = ${labelsArr};
+const ACTIVE: number = ${activeStep};
+
+// Baked-in CSS variable tokens — update these to reskin the Stepper
+const stpVars: CSSProperties = {
+  "--stp-inactive-bg":      "${inactiveColor}",
+  "--stp-inactive-text":    "${inactiveTextColor}",
+  "--stp-active-bg":        "${activeColor}",
+  "--stp-active-text":      "${activeTextColor}",
+  "--stp-completed-bg":     "${completedColor}",
+  "--stp-completed-text":   "${completedTextColor}",
+  "--stp-label-color":      "${labelColor}",
+} as CSSProperties;
+
+function CheckIcon(): JSX.Element {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+export default function DashedConfirmationStepper(): JSX.Element {
+  return (
+    <div className="w-full font-sans" style={stpVars}>
+      <div className="relative flex items-center justify-between">
+        {/* Dashed connector line */}
+        <div
+          className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-0 h-0"
+          style={{ borderTop: "1px dashed var(--stp-inactive-text)" }}
+        />
+        {LABELS.map((_: string, i: number) => {
+          const done: boolean = i + 1 < ACTIVE;
+          const active: boolean = i + 1 === ACTIVE;
+          return (
+            <div
+              key={i}
+              className="relative z-10 w-[26px] h-[26px] rounded-full flex items-center justify-center text-[10px] font-bold"
+              style={{
+                background: done ? "var(--stp-completed-bg)" : active ? "var(--stp-active-bg)" : "transparent",
+                color: done ? "var(--stp-completed-text)" : active ? "var(--stp-active-text)" : "var(--stp-inactive-text)",
+                border: (!done && !active) ? "1px solid var(--stp-inactive-bg)" : "none",
+              }}
+            >
+              {done && ${showCheckmarks} ? <CheckIcon /> : i + 1}
+            </div>
+          );
+        })}
+      </div>
+      ${
+        showLabels
+          ? `<div className="flex justify-between mt-2 px-0.5">
+        {LABELS.map((l: string, i: number) => (
+          <span key={i} className="text-[9px] font-bold uppercase tracking-[0.1em]" style={{ color: "var(--stp-label-color)" }}>{l}</span>
+        ))}
+      </div>`
+          : ""
+      }
+    </div>
+  );
+}`;
+    }
+
+    default:
+      return "// Unknown variant";
+  }
+}

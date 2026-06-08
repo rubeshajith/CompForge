@@ -335,3 +335,448 @@ export function generateKanbanCSS(config: KanbanConfig): string {
 }
 `;
 }
+
+// ─── TSX + CSS ────────────────────────
+
+export function generateKanbanTSX(config: KanbanConfig): string {
+  const visibleCols = ALL_COLUMNS.slice(0, config.columnCount);
+
+  return `import { useState, useRef } from "react";
+import "./KanbanBoard.css";
+
+interface CardData {
+  id: string;
+  columnId: string;
+  title: string;
+  desc: string;
+  priority: "high" | "medium" | "low";
+  tag: string;
+  progress: number;
+  attachments: number;
+  comments: number;
+}
+
+interface ColumnData {
+  id: string;
+  label: string;
+}
+
+interface PriorityBadgeProps {
+  priority: "high" | "medium" | "low";
+}
+
+interface TagBadgeProps {
+  label: string;
+}
+
+interface KanbanCardProps {
+  card: CardData;
+  onDragStart: () => void;
+  isDragging: boolean;
+}
+
+interface KanbanColumnProps {
+  col: ColumnData;
+  cards: CardData[];
+  draggingId: string | null;
+  onDragStart: (id: string) => void;
+  onDrop: (colId: string) => void;
+}
+
+interface KanbanBoardProps {
+  onCardMove?: (info: { cardId: string; newColumnId: string }) => void;
+}
+
+const COLUMNS: ColumnData[] = [
+${visibleCols.map((c) => `  { id: "${c.id}", label: "${c.label}" }`).join(",\n")}
+];
+
+const INITIAL_CARDS: CardData[] = [
+${DEFAULT_CARDS.filter((c) => visibleCols.some((col) => col.id === c.columnId))
+  .map(
+    (c) =>
+      `  { id: "${c.id}", columnId: "${c.columnId}", title: "${c.title}", desc: "${c.desc}", priority: "${c.priority}", tag: "${c.tag}", progress: ${c.progress}, attachments: ${c.attachments}, comments: ${c.comments} }`,
+  )
+  .join(",\n")}
+];
+
+function PriorityBadge({ priority }: PriorityBadgeProps) {
+  const styles: Record<string, { background: string; color: string }> = {
+    high:   { background: "${config.priorityHighBg}",   color: "${config.priorityHighText}" },
+    medium: { background: "${config.priorityMediumBg}", color: "${config.priorityMediumText}" },
+    low:    { background: "${config.priorityLowBg}",    color: "${config.priorityLowText}" },
+  };
+  return <span className="kb__badge" style={styles[priority]}>{priority}</span>;
+}
+
+function TagBadge({ label }: TagBadgeProps) {
+  return (
+    <span className="kb__badge" style={{ background: "${config.tagBg}", color: "${config.tagText}" }}>
+      {label}
+    </span>
+  );
+}
+
+function KanbanCard({ card, onDragStart, isDragging }: KanbanCardProps) {
+  const isDone = card.progress === 100;
+  return (
+    <article
+      className={\`kb__card\${isDragging ? " kb__card--dragging" : ""}\`}
+      draggable
+      onDragStart={(e: React.DragEvent<HTMLElement>) => { e.dataTransfer.effectAllowed = "move"; onDragStart(); }}
+    >
+      <div className="kb__card-badges">
+        <PriorityBadge priority={card.priority} />
+        <TagBadge label={card.tag} />
+      </div>
+      <h3 className="kb__card-title">{card.title}</h3>
+      <p className="kb__card-desc">{card.desc}</p>
+      <div className="kb__progress">
+        <div className="kb__progress-header">
+          <span>{isDone ? "Done ✓" : "Progress"}</span>
+          <span>{card.progress}%</span>
+        </div>
+        <div className="kb__progress-track">
+          <div
+            className="kb__progress-fill"
+            style={{
+              width: card.progress + "%",
+              background: isDone ? "${config.progressFillColorDone}" : "${config.progressFillColor}"
+            }}
+          />
+        </div>
+      </div>
+      <div className="kb__card-footer">
+        <div className="kb__meta">
+          <span>📎 {card.attachments}</span>
+          <span>💬 {card.comments}</span>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function KanbanColumn({ col, cards, draggingId, onDragStart, onDrop }: KanbanColumnProps) {
+  const [isOver, setIsOver] = useState<boolean>(false);
+  const enterCount = useRef<number>(0);
+
+  return (
+    <section
+      className={\`kb__col\${isOver ? " kb__col--over" : ""}\`}
+      onDragOver={(e: React.DragEvent<HTMLElement>) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
+      onDragEnter={() => { enterCount.current++; setIsOver(true); }}
+      onDragLeave={() => { enterCount.current--; if (enterCount.current <= 0) { enterCount.current = 0; setIsOver(false); } }}
+      onDrop={(e: React.DragEvent<HTMLElement>) => { e.preventDefault(); enterCount.current = 0; setIsOver(false); onDrop(col.id); }}
+    >
+      <header className="kb__col-header">
+        <span className="kb__col-label">{col.label}</span>
+        <span className="kb__col-count">{cards.length}</span>
+      </header>
+      <div className="kb__col-body">
+        {cards.map((card) => (
+          <KanbanCard
+            key={card.id}
+            card={card}
+            isDragging={draggingId === card.id}
+            onDragStart={() => onDragStart(card.id)}
+          />
+        ))}
+      </div>
+      <button className="kb__add-btn">+ Add task</button>
+    </section>
+  );
+}
+
+export function KanbanBoard({ onCardMove }: KanbanBoardProps = {}) {
+  const [cards, setCards] = useState<CardData[]>(INITIAL_CARDS);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+
+  function handleDrop(targetColId: string): void {
+    if (!draggingId) return;
+    setCards((prev) =>
+      prev.map((c) => c.id === draggingId ? { ...c, columnId: targetColId } : c)
+    );
+    onCardMove?.({ cardId: draggingId, newColumnId: targetColId });
+    setDraggingId(null);
+  }
+
+  return (
+    <div className="kb" onDragEnd={() => setDraggingId(null)}>
+      {COLUMNS.map((col) => (
+        <KanbanColumn
+          key={col.id}
+          col={col}
+          cards={cards.filter((c) => c.columnId === col.id)}
+          draggingId={draggingId}
+          onDragStart={setDraggingId}
+          onDrop={handleDrop}
+        />
+      ))}
+    </div>
+  );
+}
+`;
+}
+
+// ─── TSX + Tailwind ───────────────────
+
+export function generateKanbanTailwind(config: KanbanConfig): string {
+  const visibleCols = ALL_COLUMNS.slice(0, config.columnCount);
+
+  const cardShadow = config.cardShadow ? "0 2px 8px rgba(0,0,0,0.25)" : "none";
+  const cardDraggingShadow = config.cardShadow
+    ? "0 20px 40px rgba(0,0,0,0.4)"
+    : "none";
+  const cardDragTransform = config.cardDragRotation
+    ? "rotate(2deg) scale(1.03)"
+    : "scale(1.03)";
+
+  const colHeaderFs = config.columnHeaderFontSize;
+  const cardTitleFs = config.cardTitleFontSize;
+  const cardDescFs = config.cardDescFontSize;
+
+  return `import { useState, useRef, CSSProperties } from "react";
+
+interface CardData {
+  id: string;
+  columnId: string;
+  title: string;
+  desc: string;
+  priority: "high" | "medium" | "low";
+  tag: string;
+  progress: number;
+  attachments: number;
+  comments: number;
+}
+
+interface ColumnData {
+  id: string;
+  label: string;
+}
+
+interface PriorityBadgeProps {
+  priority: "high" | "medium" | "low";
+}
+
+interface TagBadgeProps {
+  label: string;
+}
+
+interface KanbanCardProps {
+  card: CardData;
+  onDragStart: () => void;
+  isDragging: boolean;
+}
+
+interface KanbanColumnProps {
+  col: ColumnData;
+  cards: CardData[];
+  draggingId: string | null;
+  onDragStart: (id: string) => void;
+  onDrop: (colId: string) => void;
+}
+
+interface KanbanBoardProps {
+  onCardMove?: (info: { cardId: string; newColumnId: string }) => void;
+}
+
+const COLUMNS: ColumnData[] = [
+${visibleCols.map((c) => `  { id: "${c.id}", label: "${c.label}" }`).join(",\n")}
+];
+
+const INITIAL_CARDS: CardData[] = [
+${DEFAULT_CARDS.filter((c) => visibleCols.some((col) => col.id === c.columnId))
+  .map(
+    (c) =>
+      `  { id: "${c.id}", columnId: "${c.columnId}", title: "${c.title}", desc: "${c.desc}", priority: "${c.priority}", tag: "${c.tag}", progress: ${c.progress}, attachments: ${c.attachments}, comments: ${c.comments} }`,
+  )
+  .join(",\n")}
+];
+
+// Baked-in CSS variable tokens — update these to reskin the KanbanBoard
+const kbVars: CSSProperties = {
+  "--kb-board-bg":              "${config.boardBackground}",
+  "--kb-board-gap":             "${config.boardGap}px",
+  "--kb-col-bg":                "${config.columnBackground}",
+  "--kb-col-border":            "${config.columnBorderColor}",
+  "--kb-col-radius":            "${config.columnBorderRadius}px",
+  "--kb-col-width":             "${config.columnWidth}px",
+  "--kb-col-header-color":      "${config.columnHeaderTextColor}",
+  "--kb-col-count-bg":          "${config.columnCountBadgeBackground}",
+  "--kb-col-count-color":       "${config.columnCountBadgeColor}",
+  "--kb-card-bg":               "${config.cardBackground}",
+  "--kb-card-border":           "${config.cardBorderColor}",
+  "--kb-card-radius":           "${config.cardBorderRadius}px",
+  "--kb-card-padding":          "${config.cardPadding}px",
+  "--kb-card-gap":              "${config.cardGap}px",
+  "--kb-card-hover-border":     "${config.cardHoverBorderColor}",
+  "--kb-card-shadow":           "${cardShadow}",
+  "--kb-card-dragging-shadow":  "${cardDraggingShadow}",
+  "--kb-card-title-color":      "${config.cardTitleColor}",
+  "--kb-card-desc-color":       "${config.cardDescColor}",
+  "--kb-priority-high-bg":      "${config.priorityHighBg}",
+  "--kb-priority-high-text":    "${config.priorityHighText}",
+  "--kb-priority-medium-bg":    "${config.priorityMediumBg}",
+  "--kb-priority-medium-text":  "${config.priorityMediumText}",
+  "--kb-priority-low-bg":       "${config.priorityLowBg}",
+  "--kb-priority-low-text":     "${config.priorityLowText}",
+  "--kb-tag-bg":                "${config.tagBg}",
+  "--kb-tag-text":              "${config.tagText}",
+  "--kb-progress-track":        "${config.progressTrackColor}",
+  "--kb-progress-fill":         "${config.progressFillColor}",
+  "--kb-progress-fill-done":    "${config.progressFillColorDone}",
+  "--kb-meta-color":            "${config.metaTextColor}",
+  "--kb-add-btn-border":        "${config.addBtnBorderColor}",
+  "--kb-add-btn-color":         "${config.addBtnTextColor}",
+  "--kb-add-btn-hover-bg":      "${config.addBtnHoverBg}",
+} as CSSProperties;
+
+function PriorityBadge({ priority }: PriorityBadgeProps) {
+  let cls = "text-[9px] font-mono font-bold uppercase tracking-[0.06em] px-[7px] py-[3px] rounded-[5px]";
+  if (priority === "high") {
+    cls += " bg-[var(--kb-priority-high-bg)] text-[var(--kb-priority-high-text)]";
+  } else if (priority === "medium") {
+    cls += " bg-[var(--kb-priority-medium-bg)] text-[var(--kb-priority-medium-text)]";
+  } else {
+    cls += " bg-[var(--kb-priority-low-bg)] text-[var(--kb-priority-low-text)]";
+  }
+  return <span className={cls}>{priority}</span>;
+}
+
+function TagBadge({ label }: TagBadgeProps) {
+  return (
+    <span className="text-[9px] font-mono font-bold uppercase tracking-[0.06em] px-[7px] py-[3px] rounded-[5px] bg-[var(--kb-tag-bg)] text-[var(--kb-tag-text)]">
+      {label}
+    </span>
+  );
+}
+
+function KanbanCard({ card, onDragStart, isDragging }: KanbanCardProps) {
+  const isDone = card.progress === 100;
+
+  let cardCls = "bg-[var(--kb-card-bg)] border border-[var(--kb-card-border)] rounded-[var(--kb-card-radius)] p-[var(--kb-card-padding)] cursor-grab select-none transition-[border-color,box-shadow,transform] duration-[150ms] hover:border-[var(--kb-card-hover-border)]";
+  if (isDragging) {
+    cardCls += " opacity-50";
+  }
+
+  return (
+    <article
+      className={cardCls}
+      style={isDragging
+        ? { transform: "${cardDragTransform}", boxShadow: "var(--kb-card-dragging-shadow)" }
+        : { boxShadow: "var(--kb-card-shadow)" }
+      }
+      draggable
+      onDragStart={(e: React.DragEvent<HTMLElement>) => { e.dataTransfer.effectAllowed = "move"; onDragStart(); }}
+    >
+      <div className="flex items-center gap-[5px] mb-[10px]">
+        <PriorityBadge priority={card.priority} />
+        <TagBadge label={card.tag} />
+      </div>
+      <h3 className="m-0 mb-1 text-[${cardTitleFs}px] font-['Instrument_Sans',sans-serif] font-semibold text-[var(--kb-card-title-color)] leading-[1.4]">
+        {card.title}
+      </h3>
+      <p className="m-0 mb-3 text-[${cardDescFs}px] font-['Instrument_Sans',sans-serif] text-[var(--kb-card-desc-color)] leading-[1.5] overflow-hidden [-webkit-line-clamp:2] [display:-webkit-box] [-webkit-box-orient:vertical]">
+        {card.desc}
+      </p>
+      <div className="mb-3">
+        <div className="flex justify-between text-[9px] font-mono text-[var(--kb-meta-color)] mb-[5px]">
+          <span>{isDone ? "Done ✓" : "Progress"}</span>
+          <span>{card.progress}%</span>
+        </div>
+        <div className="h-1 rounded-full bg-[var(--kb-progress-track)] overflow-hidden">
+          <div
+            className="h-full rounded-full transition-[width] duration-300"
+            style={{
+              width: card.progress + "%",
+              background: isDone ? "var(--kb-progress-fill-done)" : "var(--kb-progress-fill)"
+            }}
+          />
+        </div>
+      </div>
+      <div className="flex items-center justify-end">
+        <div className="flex items-center gap-[10px] text-[10px] font-mono text-[var(--kb-meta-color)]">
+          <span>📎 {card.attachments}</span>
+          <span>💬 {card.comments}</span>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function KanbanColumn({ col, cards, draggingId, onDragStart, onDrop }: KanbanColumnProps) {
+  const [isOver, setIsOver] = useState<boolean>(false);
+  const enterCount = useRef<number>(0);
+
+  let colCls = "w-[var(--kb-col-width)] shrink-0 flex flex-col bg-[var(--kb-col-bg)] border border-[var(--kb-col-border)] rounded-[var(--kb-col-radius)] px-3 py-[14px] transition-[border-color] duration-[150ms]";
+  if (isOver) {
+    colCls += " border-[var(--kb-card-hover-border)]";
+  }
+
+  return (
+    <section
+      className={colCls}
+      onDragOver={(e: React.DragEvent<HTMLElement>) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
+      onDragEnter={() => { enterCount.current++; setIsOver(true); }}
+      onDragLeave={() => { enterCount.current--; if (enterCount.current <= 0) { enterCount.current = 0; setIsOver(false); } }}
+      onDrop={(e: React.DragEvent<HTMLElement>) => { e.preventDefault(); enterCount.current = 0; setIsOver(false); onDrop(col.id); }}
+    >
+      <header className="flex items-center justify-between mb-[14px]">
+        <span className="text-[${colHeaderFs}px] font-['Syne',sans-serif] font-bold text-[var(--kb-col-header-color)] tracking-[0.01em]">
+          {col.label}
+        </span>
+        <span className="bg-[var(--kb-col-count-bg)] text-[var(--kb-col-count-color)] text-[10px] font-mono font-bold px-2 py-[2px] rounded-full">
+          {cards.length}
+        </span>
+      </header>
+      <div className="flex-1 flex flex-col gap-[var(--kb-card-gap)] min-h-[40px]">
+        {cards.map((card) => (
+          <KanbanCard
+            key={card.id}
+            card={card}
+            isDragging={draggingId === card.id}
+            onDragStart={() => onDragStart(card.id)}
+          />
+        ))}
+      </div>
+      <button className="mt-3 w-full py-[9px] bg-transparent border-[1.5px] border-dashed border-[var(--kb-add-btn-border)] rounded-lg text-[var(--kb-add-btn-color)] text-[11px] font-['Instrument_Sans',sans-serif] font-medium cursor-pointer transition-[background,border-color] duration-[150ms] hover:bg-[var(--kb-add-btn-hover-bg)] hover:border-[var(--kb-card-hover-border)]">
+        + Add task
+      </button>
+    </section>
+  );
+}
+
+export function KanbanBoard({ onCardMove }: KanbanBoardProps = {}) {
+  const [cards, setCards] = useState<CardData[]>(INITIAL_CARDS);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+
+  function handleDrop(targetColId: string): void {
+    if (!draggingId) return;
+    setCards((prev) =>
+      prev.map((c) => c.id === draggingId ? { ...c, columnId: targetColId } : c)
+    );
+    onCardMove?.({ cardId: draggingId, newColumnId: targetColId });
+    setDraggingId(null);
+  }
+
+  return (
+    <div
+      className="flex gap-[var(--kb-board-gap)] p-6 bg-[var(--kb-board-bg)] min-h-full items-start box-border overflow-x-auto font-sans"
+      style={kbVars}
+      onDragEnd={() => setDraggingId(null)}
+    >
+      {COLUMNS.map((col) => (
+        <KanbanColumn
+          key={col.id}
+          col={col}
+          cards={cards.filter((c) => c.columnId === col.id)}
+          draggingId={draggingId}
+          onDragStart={setDraggingId}
+          onDrop={handleDrop}
+        />
+      ))}
+    </div>
+  );
+}
+`;
+}

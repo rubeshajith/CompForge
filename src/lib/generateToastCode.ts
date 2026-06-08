@@ -570,3 +570,539 @@ ${
 }
 `;
 }
+
+// ─── TSX + CSS code generator ──────────────────────────────────────
+export function generateToastTSX(config: ToastConfig): string {
+  const {
+    variant,
+    position,
+    title,
+    message,
+    actionLabel,
+    iconColor,
+    accentColor,
+    backgroundColor,
+    borderColor,
+    titleColor,
+    messageColor,
+    borderRadius,
+    showProgressBar,
+    autoDismissDuration,
+    showCloseButton,
+  } = config;
+
+  const isGradient = variant === "gradient";
+  const hasTopBorder = variant === "success" || variant === "error";
+
+  const progressBarSection =
+    showProgressBar &&
+    (variant === "progress" || variant === "success" || variant === "action")
+      ? `
+  {/* Progress bar */}
+  <div className="toast__progress">
+    <div className="toast__progress-bar" />
+  </div>`
+      : "";
+
+  const closeSection = showCloseButton
+    ? `
+  <button className="toast__close" onClick={dismiss} aria-label="Close">
+    <XIcon />
+  </button>`
+    : "";
+
+  const actionSection =
+    variant === "action"
+      ? `
+  <button className="toast__action" onClick={dismiss}>${actionLabel}</button>`
+      : "";
+
+  // Build variant-specific content section
+  let contentBody = "";
+
+  switch (variant) {
+    case "countdown":
+      contentBody = `
+        <p className="toast__title">{countdownDone ? "Limit Reset" : "${title}"}</p>
+        <p className="toast__message">
+          {countdownDone
+            ? "Ready — send your request."
+            : <>Retry in <strong style={{ color: "#f97316" }}>{countdown}s</strong>...</>
+          }
+        </p>`;
+      break;
+
+    case "multistep":
+      contentBody = `
+        <p className="toast__title">{pipelineDone ? "Pipeline Complete" : "${title}"}</p>
+        <div className="toast__steps">
+          {STEPS.map((step: string, i: number) => (
+            <span key={step} className={\`toast__step \${stepsDone.includes(i) ? "done" : activeStep === i ? "active" : ""}\`}>
+              <span className="toast__step-dot" />
+              {step}
+            </span>
+          ))}
+        </div>`;
+      break;
+
+    case "streaming":
+      contentBody = `
+        <p className="toast__title">{streamDone ? "Response Complete" : "${title}"}</p>
+        <p className={\`toast__message \${streamDone ? "" : "toast__message--streaming"}\`}>
+          <span className="toast__typed">{streamedText}</span>
+        </p>`;
+      break;
+
+    case "promise":
+      contentBody = `
+        <p className="toast__title">{resolved ? "Scan Passed" : "${title}"}</p>
+        <p className="toast__message" style={{ color: resolved ? "#4ade80" : undefined }}>
+          {resolved ? "No hallucinations detected. Output verified." : "${message}"}
+        </p>`;
+      break;
+
+    default:
+      contentBody = `
+        <p className="toast__title">${title}</p>
+        <p className="toast__message">${message}</p>`;
+  }
+
+  // Build hooks section per variant
+  let hooksSection = "";
+  switch (variant) {
+    case "countdown":
+      hooksSection = `
+  const [countdown, setCountdown] = useState<number>(5);
+  const [countdownDone, setCountdownDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (countdownDone) return;
+    const iv = setInterval(() => {
+      setCountdown((c: number) => {
+        if (c <= 1) { setCountdownDone(true); return 0; }
+        return c - 1;
+      });
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [countdownDone]);`;
+      break;
+
+    case "multistep":
+      hooksSection = `
+  const STEPS: string[] = ["Tokenize", "Embed", "Classify"];
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [stepsDone, setStepsDone] = useState<number[]>([]);
+  const [pipelineDone, setPipelineDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pipelineDone) return;
+    const iv = setInterval(() => {
+      setStepsDone((prev: number[]) => [...prev, activeStep]);
+      setActiveStep((i: number) => {
+        const next = i + 1;
+        if (next >= STEPS.length) setPipelineDone(true);
+        return next;
+      });
+    }, 1100);
+    return () => clearInterval(iv);
+  }, [activeStep, pipelineDone]);`;
+      break;
+
+    case "promise":
+      hooksSection = `
+  const [resolved, setResolved] = useState<boolean>(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setResolved(true), 2200);
+    return () => clearTimeout(t);
+  }, []);`;
+      break;
+
+    case "streaming":
+      hooksSection = `
+  const FULL_TEXT = "Attention is all you need.";
+  const [streamedText, setStreamedText] = useState<string>("");
+  const [streamDone, setStreamDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    let idx = 0;
+    const iv = setInterval(() => {
+      idx++;
+      setStreamedText(FULL_TEXT.slice(0, idx));
+      if (idx >= FULL_TEXT.length) { clearInterval(iv); setStreamDone(true); }
+    }, 38);
+    return () => clearInterval(iv);
+  }, []);`;
+      break;
+
+    default:
+      hooksSection = "";
+  }
+
+  return `import { useState, useEffect } from "react";
+import "./Toast.css";
+
+// Duration before auto-dismiss (ms)
+const DISMISS_AFTER = ${autoDismissDuration};
+
+interface ToastProps {
+  onDismiss?: () => void;
+}
+
+export default function Toast({ onDismiss }: ToastProps) {
+  const [visible, setVisible] = useState<boolean>(true);${hooksSection}
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(false), DISMISS_AFTER);
+    return () => clearTimeout(t);
+  }, []);
+
+  function dismiss(): void { setVisible(false); }
+
+  if (!visible) return null;
+
+  return (
+    <div className="toast__wrapper">
+      <div className="toast${isGradient ? " toast--gradient" : ""}${hasTopBorder ? ` toast--border-${variant}` : ""}">
+        {/* Icon */}
+        <div className="toast__icon">
+          {/* Replace with your icon */}
+          <span>✦</span>
+        </div>
+
+        {/* Content */}
+        <div className="toast__content">${contentBody}
+        </div>
+${actionSection}${closeSection}${progressBarSection}
+      </div>
+    </div>
+  );
+}`;
+}
+
+// ─── TSX + Tailwind code generator ────────────────────────────────
+export function generateToastTailwind(config: ToastConfig): string {
+  const {
+    variant,
+    position,
+    title,
+    message,
+    actionLabel,
+    iconColor,
+    accentColor,
+    backgroundColor,
+    borderColor,
+    titleColor,
+    messageColor,
+    borderRadius,
+    showProgressBar,
+    autoDismissDuration,
+    showCloseButton,
+  } = config;
+
+  const isGradient = variant === "gradient";
+  const hasTopBorder = variant === "success" || variant === "error";
+  const topBorderColor = variant === "success" ? "#4ade80" : "#f87171";
+  const anim = variantAnimation(variant);
+
+  // Position as Tailwind classes
+  const positionClass = {
+    "top-right": "top-4 right-4",
+    "top-left": "top-4 left-4",
+    "bottom-right": "bottom-4 right-4",
+    "bottom-left": "bottom-4 left-4",
+  }[position];
+
+  // Build hooks section per variant
+  let hooksSection = "";
+  switch (variant) {
+    case "countdown":
+      hooksSection = `
+  const [countdown, setCountdown] = useState<number>(5);
+  const [countdownDone, setCountdownDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (countdownDone) return;
+    const iv = setInterval(() => {
+      setCountdown((c: number) => {
+        if (c <= 1) { setCountdownDone(true); return 0; }
+        return c - 1;
+      });
+    }, 1000);
+    return () => clearInterval(iv);
+  }, [countdownDone]);`;
+      break;
+
+    case "multistep":
+      hooksSection = `
+  const STEPS: string[] = ["Tokenize", "Embed", "Classify"];
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [stepsDone, setStepsDone] = useState<number[]>([]);
+  const [pipelineDone, setPipelineDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pipelineDone) return;
+    const iv = setInterval(() => {
+      setStepsDone((prev: number[]) => [...prev, activeStep]);
+      setActiveStep((i: number) => {
+        const next = i + 1;
+        if (next >= STEPS.length) setPipelineDone(true);
+        return next;
+      });
+    }, 1100);
+    return () => clearInterval(iv);
+  }, [activeStep, pipelineDone]);`;
+      break;
+
+    case "promise":
+      hooksSection = `
+  const [resolved, setResolved] = useState<boolean>(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setResolved(true), 2200);
+    return () => clearTimeout(t);
+  }, []);`;
+      break;
+
+    case "streaming":
+      hooksSection = `
+  const FULL_TEXT = "Attention is all you need.";
+  const [streamedText, setStreamedText] = useState<string>("");
+  const [streamDone, setStreamDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    let idx = 0;
+    const iv = setInterval(() => {
+      idx++;
+      setStreamedText(FULL_TEXT.slice(0, idx));
+      if (idx >= FULL_TEXT.length) { clearInterval(iv); setStreamDone(true); }
+    }, 38);
+    return () => clearInterval(iv);
+  }, []);`;
+      break;
+
+    default:
+      hooksSection = "";
+  }
+
+  // Build variant-specific content section
+  let contentBody = "";
+  switch (variant) {
+    case "countdown":
+      contentBody = `
+        <p className="text-[13px] font-semibold text-[var(--toast-title)] leading-tight mb-0.5">{countdownDone ? "Limit Reset" : "${title}"}</p>
+        <p className="text-[12px] text-[var(--toast-message)] leading-relaxed">
+          {countdownDone
+            ? "Ready — send your request."
+            : <>Retry in <strong style={{ color: "#f97316" }}>{countdown}s</strong>...</>
+          }
+        </p>`;
+      break;
+
+    case "multistep":
+      contentBody = `
+        <p className="text-[13px] font-semibold text-[var(--toast-title)] leading-tight mb-0.5">{pipelineDone ? "Pipeline Complete" : "${title}"}</p>
+        <div className="flex items-center gap-1 mt-0.5">
+          {STEPS.map((step: string, i: number) => {
+            let cls = "inline-flex items-center gap-1 text-[11px] font-mono text-[var(--toast-message)]";
+            if (stepsDone.includes(i)) cls += " !text-[#10b981]";
+            return (
+              <span key={step} className={cls}>
+                <span className={\`w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-300 \${stepsDone.includes(i) ? "bg-[#10b981]" : activeStep === i ? "bg-[#06b6d4] shadow-[0_0_8px_rgba(6,182,212,0.6)] [animation:toast-dot-pulse_0.8s_ease_infinite]" : "bg-[var(--toast-border)]"}\`} />
+                {step}
+              </span>
+            );
+          })}
+        </div>`;
+      break;
+
+    case "streaming":
+      contentBody = `
+        <p className="text-[13px] font-semibold text-[var(--toast-title)] leading-tight mb-0.5">{streamDone ? "Response Complete" : "${title}"}</p>
+        <p className="text-[12px] text-[var(--toast-message)] leading-relaxed">
+          <span className={streamDone ? "" : "[&::after]:content-['|'] [&::after]:[animation:toast-cursor-blink_0.6s_step-end_infinite] [&::after]:text-[#8b5cf6] [&::after]:font-bold [&::after]:ml-px"}>{streamedText}</span>
+        </p>`;
+      break;
+
+    case "promise":
+      contentBody = `
+        <p className="text-[13px] font-semibold text-[var(--toast-title)] leading-tight mb-0.5">{resolved ? "Scan Passed" : "${title}"}</p>
+        <p className="text-[12px] leading-relaxed" style={{ color: resolved ? "#4ade80" : "var(--toast-message)" }}>
+          {resolved ? "No hallucinations detected. Output verified." : "${message}"}
+        </p>`;
+      break;
+
+    default:
+      contentBody = `
+        <p className="text-[13px] font-semibold text-[var(--toast-title)] leading-tight mb-0.5">${title}</p>
+        <p className="text-[12px] text-[var(--toast-message)] leading-relaxed">${message}</p>`;
+  }
+
+  const progressBarSection =
+    showProgressBar &&
+    (variant === "progress" || variant === "success" || variant === "action")
+      ? `
+  {/* Progress bar */}
+  <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[var(--toast-accent)]/10 overflow-hidden rounded-b-[var(--toast-radius)]">
+    <div className="h-full w-full bg-[var(--toast-accent)] origin-left [animation:toast-progress-shrink_${autoDismissDuration}ms_linear_forwards] rounded-b-[var(--toast-radius)]" />
+  </div>`
+      : "";
+
+  const closeSection = showCloseButton
+    ? `
+  <button className="shrink-0 bg-transparent border-none text-[var(--toast-message)] cursor-pointer p-1 rounded flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-200" onClick={dismiss} aria-label="Close">
+    <XIcon />
+  </button>`
+    : "";
+
+  const actionSection =
+    variant === "action"
+      ? `
+  <button className="shrink-0 px-3 py-1 rounded-md border-none bg-gradient-to-br from-[var(--toast-accent)] to-[var(--toast-accent)]/80 text-white text-[11px] font-semibold cursor-pointer whitespace-nowrap font-mono tracking-[0.04em] hover:opacity-85 active:scale-95 transition-opacity duration-150" onClick={dismiss}>${actionLabel}</button>`
+      : "";
+
+  // Toast container classes
+  let toastClasses =
+    "flex items-center gap-3 px-4 py-3.5 bg-[var(--toast-bg)] border border-[var(--toast-border)] rounded-[var(--toast-radius)] relative overflow-hidden font-sans";
+  if (isGradient) {
+    // gradient border handled via inline style — Tailwind can't do conic-gradient border
+    toastClasses =
+      "flex items-center gap-3 px-4 py-3.5 rounded-[var(--toast-radius)] relative overflow-hidden font-sans border-2 border-transparent";
+  }
+  if (hasTopBorder) {
+    toastClasses += ` border-t-2 border-t-[${topBorderColor}]`;
+  }
+
+  const gradientStyle = isGradient
+    ? ` style={{ background: \`linear-gradient(${backgroundColor}, ${backgroundColor}) padding-box, conic-gradient(from var(--sweep-angle, 0deg), #a855f7, #06b6d4, #10b981, #a855f7) border-box\`, boxShadow: "var(--toast-shadow)" }}`
+    : ` style={{ boxShadow: "var(--toast-shadow)" }}`;
+
+  return `import { useState, useEffect, CSSProperties } from "react";
+
+// Duration before auto-dismiss (ms)
+const DISMISS_AFTER = ${autoDismissDuration};
+
+interface ToastProps {
+  onDismiss?: () => void;
+}
+
+// Baked-in CSS variable tokens — update these to reskin the Toast
+const toastVars: CSSProperties = {
+  "--toast-bg":      "${backgroundColor}",
+  "--toast-border":  "${borderColor}",
+  "--toast-radius":  "${borderRadius}px",
+  "--toast-icon":    "${iconColor}",
+  "--toast-accent":  "${accentColor}",
+  "--toast-title":   "${titleColor}",
+  "--toast-message": "${messageColor}",
+  "--toast-shadow":  "0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)",
+} as CSSProperties;
+
+export default function Toast({ onDismiss }: ToastProps) {
+  const [visible, setVisible] = useState<boolean>(true);${hooksSection}
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(false), DISMISS_AFTER);
+    return () => clearTimeout(t);
+  }, []);
+
+  function dismiss(): void { setVisible(false); }
+
+  if (!visible) return null;
+
+  return (
+    <div
+      className="fixed ${positionClass} z-[9999] w-[360px] max-w-[calc(100vw-2rem)]"
+      style={toastVars}
+    >
+      <style>{\`
+        @property --sweep-angle {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
+        @keyframes sweep-rotate {
+          from { --sweep-angle: 0deg; }
+          to   { --sweep-angle: 360deg; }
+        }
+        @keyframes toast-dot-pulse {
+          0%, 100% { box-shadow: 0 0 4px rgba(6,182,212,0.3); }
+          50%       { box-shadow: 0 0 10px rgba(6,182,212,0.7); }
+        }
+        @keyframes toast-cursor-blink {
+          0%, 100% { opacity: 1; } 50% { opacity: 0; }
+        }
+        @keyframes toast-progress-shrink {
+          from { transform: scaleX(1); }
+          to   { transform: scaleX(0); }
+        }
+        @keyframes toast-slide-right {
+          from { opacity: 0; transform: translateX(60px) scale(0.96); }
+          to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toast-slide-left {
+          from { opacity: 0; transform: translateX(-60px) scale(0.96); }
+          to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toast-slide-up {
+          from { opacity: 0; transform: translateY(40px) scale(0.96); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes toast-glow-in {
+          0%   { opacity: 0; transform: scale(0.92); }
+          50%  { opacity: 1; box-shadow: 0 0 24px 4px rgba(99,102,241,0.25); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes toast-pulse-in {
+          0%   { opacity: 0; transform: scale(0.8); }
+          50%  { opacity: 1; transform: scale(1.04); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes toast-cascade {
+          0%   { opacity: 0; transform: translateY(-16px) scaleY(0.9); }
+          60%  { opacity: 1; transform: translateY(3px) scaleY(1.01); }
+          100% { opacity: 1; transform: translateY(0) scaleY(1); }
+        }
+        @keyframes toast-sweep-in {
+          0%   { opacity: 0; transform: translateX(-30px) scale(0.96); filter: blur(4px); }
+          60%  { opacity: 1; filter: blur(0); }
+          100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toast-morph {
+          from { opacity: 0; transform: translateY(12px) scale(0.95); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes toast-shake {
+          0%   { opacity: 0; transform: translateX(0) scale(0.95); }
+          20%  { opacity: 1; transform: translateX(-5px) scale(1); }
+          40%  { transform: translateX(4px); }
+          60%  { transform: translateX(-3px); }
+          80%  { transform: translateX(2px); }
+          100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toast-flip-in {
+          0%   { opacity: 0; transform: perspective(600px) rotateX(-15deg) translateY(-20px) scale(0.95); }
+          60%  { opacity: 1; transform: perspective(600px) rotateX(3deg) translateY(2px) scale(1.01); }
+          100% { opacity: 1; transform: perspective(600px) rotateX(0) translateY(0) scale(1); }
+        }
+      \`}</style>
+
+      <div
+        className="${toastClasses} [animation:${anim}]${isGradient ? " [animation:${anim},sweep-rotate_3s_linear_infinite]" : ""}"
+        ${gradientStyle}
+      >
+        {/* Icon */}
+        <div className="shrink-0 w-[34px] h-[34px] flex items-center justify-center rounded-lg bg-[var(--toast-icon)]/10 text-[var(--toast-icon)]">
+          {/* Replace with your icon */}
+          <span>✦</span>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">${contentBody}
+        </div>
+${actionSection}${closeSection}${progressBarSection}
+      </div>
+    </div>
+  );
+}`;
+}
