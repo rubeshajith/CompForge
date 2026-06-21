@@ -16,6 +16,7 @@ interface Props {
   config: JobApplicationFormConfig;
   onChange: (patch: Partial<JobApplicationFormConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const JOB_TYPES = [
@@ -32,6 +33,7 @@ export function JobApplicationFormControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: Props) {
   const [localConfig, setLocalConfig] =
     useState<JobApplicationFormConfig>(config);
@@ -296,37 +298,44 @@ export function JobApplicationFormControlPanel({
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => set("backgroundColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => set("borderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header BG"
           value={localConfig.headerBackground}
           onChange={(v) => set("headerBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Text"
           value={localConfig.headerTextColor}
           onChange={(v) => set("headerTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Company Tag"
           value={localConfig.companyTagColor}
           onChange={(v) => set("companyTagColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Badge BG"
           value={localConfig.jobTypeBadgeBackground}
           onChange={(v) => set("jobTypeBadgeBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Badge Text"
           value={localConfig.jobTypeBadgeTextColor}
           onChange={(v) => set("jobTypeBadgeTextColor", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Input Fields ──────────────────────────────────── */}
@@ -335,32 +344,38 @@ export function JobApplicationFormControlPanel({
           label="Input BG"
           value={localConfig.inputBackground}
           onChange={(v) => set("inputBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Input Border"
           value={localConfig.inputBorderColor}
           onChange={(v) => set("inputBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Focus Border"
           value={localConfig.inputFocusBorderColor}
           onChange={(v) => set("inputFocusBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Input Text"
           value={localConfig.inputTextColor}
           onChange={(v) => set("inputTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={localConfig.inputPlaceholderColor}
           onChange={(v) => set("inputPlaceholderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Label"
           value={localConfig.labelColor}
           onChange={(v) => set("labelColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Input Radius"
           value={localConfig.inputBorderRadius}
@@ -374,17 +389,20 @@ export function JobApplicationFormControlPanel({
           label="Section Title"
           value={localConfig.sectionTitleColor}
           onChange={(v) => set("sectionTitleColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Divider"
           value={localConfig.dividerColor}
           onChange={(v) => set("dividerColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Required *"
           value={localConfig.requiredColor}
           onChange={(v) => set("requiredColor", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Button ────────────────────────────────────────── */}
@@ -422,17 +440,20 @@ export function JobApplicationFormControlPanel({
           label="Button BG"
           value={localConfig.buttonBackground}
           onChange={(v) => set("buttonBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover BG"
           value={localConfig.buttonHoverBackground}
           onChange={(v) => set("buttonHoverBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Button Text"
           value={localConfig.buttonTextColor}
           onChange={(v) => set("buttonTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Button Radius"
           value={localConfig.buttonBorderRadius}

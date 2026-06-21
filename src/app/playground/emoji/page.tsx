@@ -7,7 +7,12 @@ import {
   emojiModePresets,
   darkEmojiConfig,
 } from "@/lib/emojiConfig";
-import { generateEmojiJSX, generateEmojiCSS } from "@/lib/generateEmojiCode";
+import {
+  generateEmojiJSX,
+  generateEmojiCSS,
+  generateEmojiTSX,
+  generateEmojiTailwind,
+} from "@/lib/generateEmojiCode";
 import { EmojiPreview } from "@/components/playground/EmojiPreview";
 import { EmojiControlPanel } from "@/components/playground/EmojiControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -47,7 +52,8 @@ export default function EmojiPlayground() {
 
   const jsxCode = useMemo(() => generateEmojiJSX(config), [config]);
   const cssCode = useMemo(() => generateEmojiCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateEmojiTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateEmojiTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -72,9 +78,17 @@ export default function EmojiPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

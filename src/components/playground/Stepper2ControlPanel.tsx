@@ -22,6 +22,7 @@ interface StepperControlPanelProps {
   config: StepperConfig;
   onChange: (patch: Partial<StepperConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const ALL_VARIANTS: StepperVariant[] = [
@@ -40,6 +41,7 @@ export function StepperControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: StepperControlPanelProps) {
   const [local, setLocal] = useState(config);
 
@@ -161,23 +163,27 @@ export function StepperControlPanel({
             label="Color 1"
             value={local.color1}
             onChange={(v) => handleImmediate("color1", v)}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Color 2"
             value={local.color2}
             onChange={(v) => handleImmediate("color2", v)}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Color 3"
             value={local.color3}
             onChange={(v) => handleImmediate("color3", v)}
-          />
+            isDark={isDark}
+/>
           {config.totalSteps >= 4 && (
             <ColorRow
               label="Color 4"
               value={local.color4}
               onChange={(v) => handleImmediate("color4", v)}
-            />
+              isDark={isDark}
+/>
           )}
         </Section>
       )}
@@ -188,22 +194,26 @@ export function StepperControlPanel({
             label="Active"
             value={local.activeColor}
             onChange={(v) => handleImmediate("activeColor", v)}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Completed"
             value={local.completedColor}
             onChange={(v) => handleImmediate("completedColor", v)}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Inactive"
             value={local.inactiveColor}
             onChange={(v) => handleImmediate("inactiveColor", v)}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Inactive Text"
             value={local.inactiveTextColor}
             onChange={(v) => handleImmediate("inactiveTextColor", v)}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -213,13 +223,15 @@ export function StepperControlPanel({
           label="Step Text"
           value={local.stepTextColor}
           onChange={(v) => handleImmediate("stepTextColor", v)}
-        />
+          isDark={isDark}
+/>
         {isLine && (
           <ColorRow
             label="Labels"
             value={local.labelColor}
             onChange={(v) => handleImmediate("labelColor", v)}
-          />
+            isDark={isDark}
+/>
         )}
       </Section>
 

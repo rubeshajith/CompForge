@@ -18,12 +18,14 @@ interface AIChatControlPanelProps {
   config: AIChatConfig;
   onChange: (patch: Partial<AIChatConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function AIChatControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: AIChatControlPanelProps) {
   const [localConfig, setLocalConfig] = useState<AIChatConfig>(config);
 
@@ -93,12 +95,14 @@ export function AIChatControlPanel({
           label="Background"
           value={localConfig.containerBackground}
           onChange={(v) => handleImmediate("containerBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.containerBorderColor}
           onChange={(v) => handleImmediate("containerBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Shadow"
           value={localConfig.showShadow}
@@ -112,32 +116,38 @@ export function AIChatControlPanel({
           label="Background"
           value={localConfig.headerBackground}
           onChange={(v) => handleImmediate("headerBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Color"
           value={localConfig.headerTextColor}
           onChange={(v) => handleImmediate("headerTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.headerBorderColor}
           onChange={(v) => handleImmediate("headerBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Avatar BG"
           value={localConfig.avatarBackground}
           onChange={(v) => handleImmediate("avatarBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Avatar Icon"
           value={localConfig.avatarColor}
           onChange={(v) => handleImmediate("avatarColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Status Dot"
           value={localConfig.statusDotColor}
           onChange={(v) => handleImmediate("statusDotColor", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Chat Bubbles ── */}
@@ -196,29 +206,34 @@ export function AIChatControlPanel({
           label="User BG"
           value={localConfig.userBubbleBackground}
           onChange={(v) => handleImmediate("userBubbleBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="User Text"
           value={localConfig.userBubbleTextColor}
           onChange={(v) => handleImmediate("userBubbleTextColor", v)}
-        />
+          isDark={isDark}
+/>
 
         {/* AI bubble */}
         <ColorRow
           label="AI BG"
           value={localConfig.aiBubbleBackground}
           onChange={(v) => handleImmediate("aiBubbleBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="AI Text"
           value={localConfig.aiBubbleTextColor}
           onChange={(v) => handleImmediate("aiBubbleTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="AI Border"
           value={localConfig.aiBubbleBorderColor}
           onChange={(v) => handleImmediate("aiBubbleBorderColor", v)}
-        />
+          isDark={isDark}
+/>
 
         <ToggleRow
           label="Timestamps"
@@ -261,12 +276,14 @@ export function AIChatControlPanel({
           label="Dot Color"
           value={localConfig.typingDotColor}
           onChange={(v) => handleImmediate("typingDotColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Background"
           value={localConfig.typingBackground}
           onChange={(v) => handleImmediate("typingBackground", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Streaming ── */}
@@ -275,12 +292,14 @@ export function AIChatControlPanel({
           label="Text Color"
           value={localConfig.streamingTextColor}
           onChange={(v) => handleImmediate("streamingTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Cursor"
           value={localConfig.streamingCursorColor}
           onChange={(v) => handleImmediate("streamingCursorColor", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Response Card ── */}
@@ -289,27 +308,32 @@ export function AIChatControlPanel({
           label="Background"
           value={localConfig.cardBackground}
           onChange={(v) => handleImmediate("cardBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.cardBorderColor}
           onChange={(v) => handleImmediate("cardBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Bar"
           value={localConfig.cardAccentColor}
           onChange={(v) => handleImmediate("cardAccentColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={localConfig.cardTextColor}
           onChange={(v) => handleImmediate("cardTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Label"
           value={localConfig.cardLabelColor}
           onChange={(v) => handleImmediate("cardLabelColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.cardBorderRadius}
@@ -327,22 +351,26 @@ export function AIChatControlPanel({
           label="Background"
           value={localConfig.suggestionBackground}
           onChange={(v) => handleImmediate("suggestionBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.suggestionBorderColor}
           onChange={(v) => handleImmediate("suggestionBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={localConfig.suggestionTextColor}
           onChange={(v) => handleImmediate("suggestionTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover BG"
           value={localConfig.suggestionHoverBackground}
           onChange={(v) => handleImmediate("suggestionHoverBackground", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Pill Radius"
           value={localConfig.suggestionBorderRadius}
@@ -360,32 +388,38 @@ export function AIChatControlPanel({
           label="Background"
           value={localConfig.inputBackground}
           onChange={(v) => handleImmediate("inputBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.inputBorderColor}
           onChange={(v) => handleImmediate("inputBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={localConfig.inputTextColor}
           onChange={(v) => handleImmediate("inputTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={localConfig.inputPlaceholderColor}
           onChange={(v) => handleImmediate("inputPlaceholderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Send Button"
           value={localConfig.sendButtonBackground}
           onChange={(v) => handleImmediate("sendButtonBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Send Icon"
           value={localConfig.sendButtonColor}
           onChange={(v) => handleImmediate("sendButtonColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Send Radius"
           value={localConfig.sendButtonBorderRadius}
@@ -403,7 +437,8 @@ export function AIChatControlPanel({
           label="Accent"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate("accentColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="UI Font Size"
           value={localConfig.fontSize}

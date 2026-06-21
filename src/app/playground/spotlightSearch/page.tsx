@@ -10,6 +10,8 @@ import {
 import {
   generateSpotlightSearchJSX,
   generateSpotlightSearchCSS,
+  generateSpotlightSearchTSX,
+  generateSpotlightSearchTailwind,
 } from "@/lib/generateSpotlightSearchCode";
 import { SpotlightSearchPreview } from "@/components/playground/SpotlightSearchPreview";
 import { SpotlightSearchControlPanel } from "@/components/playground/SpotlightSearchControlPanel";
@@ -48,7 +50,11 @@ export default function SpotlightSearchPlayground() {
 
   const jsxCode = useMemo(() => generateSpotlightSearchJSX(config), [config]);
   const cssCode = useMemo(() => generateSpotlightSearchCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateSpotlightSearchTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateSpotlightSearchTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -73,9 +79,17 @@ export default function SpotlightSearchPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

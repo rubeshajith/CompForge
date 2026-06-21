@@ -11,6 +11,8 @@ import {
 import {
   generateDropdownJSX,
   generateDropdownCSS,
+  generateDropdownTSX,
+  generateDropdownTailwind,
 } from "@/lib/generateDropdownCode";
 import { DropdownPreview } from "@/components/playground/DropdownPreview";
 import { ControlPanel } from "@/components/playground/ControlPanel";
@@ -39,7 +41,11 @@ export default function DropdownPlayground() {
 
   const jsxCode = useMemo(() => generateDropdownJSX(config), [config]);
   const cssCode = useMemo(() => generateDropdownCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateDropdownTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateDropdownTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -64,9 +70,17 @@ export default function DropdownPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

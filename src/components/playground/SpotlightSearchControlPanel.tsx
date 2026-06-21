@@ -15,12 +15,14 @@ interface Props {
   config: SpotlightConfig;
   onChange: (patch: Partial<SpotlightConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function SpotlightSearchControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: Props) {
   const [localConfig, setLocalConfig] = useState<SpotlightConfig>(config);
 
@@ -47,12 +49,14 @@ export function SpotlightSearchControlPanel({
           label="Panel Background"
           value={localConfig.panelBackground}
           onChange={(v) => handleImmediate({ panelBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Border"
           value={localConfig.panelBorderColor}
           onChange={(v) => handleImmediate({ panelBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.panelBorderRadius}
@@ -84,27 +88,32 @@ export function SpotlightSearchControlPanel({
           label="Input Background"
           value={localConfig.inputBackground}
           onChange={(v) => handleImmediate({ inputBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Input Border"
           value={localConfig.inputBorderColor}
           onChange={(v) => handleImmediate({ inputBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Input Text"
           value={localConfig.inputTextColor}
           onChange={(v) => handleImmediate({ inputTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={localConfig.inputPlaceholderColor}
           onChange={(v) => handleImmediate({ inputPlaceholderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Icon"
           value={localConfig.inputIconColor}
           onChange={(v) => handleImmediate({ inputIconColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Input Radius"
           value={localConfig.inputBorderRadius}
@@ -122,22 +131,26 @@ export function SpotlightSearchControlPanel({
           label="Item Hover BG"
           value={localConfig.itemHoverBackground}
           onChange={(v) => handleImmediate({ itemHoverBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Item Text"
           value={localConfig.itemTextColor}
           onChange={(v) => handleImmediate({ itemTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Subtext"
           value={localConfig.itemSubtextColor}
           onChange={(v) => handleImmediate({ itemSubtextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Icon Color"
           value={localConfig.itemIconColor}
           onChange={(v) => handleImmediate({ itemIconColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Item Radius"
           value={localConfig.itemBorderRadius}
@@ -155,17 +168,20 @@ export function SpotlightSearchControlPanel({
           label="Active Background"
           value={localConfig.activeItemBackground}
           onChange={(v) => handleImmediate({ activeItemBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={localConfig.activeItemTextColor}
           onChange={(v) => handleImmediate({ activeItemTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Icon"
           value={localConfig.activeItemIconColor}
           onChange={(v) => handleImmediate({ activeItemIconColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Keyboard Badges */}
@@ -174,17 +190,20 @@ export function SpotlightSearchControlPanel({
           label="KBD Background"
           value={localConfig.kbdBackground}
           onChange={(v) => handleImmediate({ kbdBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="KBD Border"
           value={localConfig.kbdBorderColor}
           onChange={(v) => handleImmediate({ kbdBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="KBD Text"
           value={localConfig.kbdTextColor}
           onChange={(v) => handleImmediate({ kbdTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Footer */}
@@ -193,22 +212,26 @@ export function SpotlightSearchControlPanel({
           label="Footer Background"
           value={localConfig.footerBackground}
           onChange={(v) => handleImmediate({ footerBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer Border"
           value={localConfig.footerBorderColor}
           onChange={(v) => handleImmediate({ footerBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer Text"
           value={localConfig.footerTextColor}
           onChange={(v) => handleImmediate({ footerTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer KBD BG"
           value={localConfig.footerKbdBackground}
           onChange={(v) => handleImmediate({ footerKbdBackground: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Section Labels */}
@@ -217,7 +240,8 @@ export function SpotlightSearchControlPanel({
           label="Label Color"
           value={localConfig.sectionLabelColor}
           onChange={(v) => handleImmediate({ sectionLabelColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Typography */}

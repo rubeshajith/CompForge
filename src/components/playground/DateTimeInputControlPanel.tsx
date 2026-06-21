@@ -17,12 +17,14 @@ interface Props {
   config: DateTimeInputConfig;
   onChange: (patch: Partial<DateTimeInputConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function DateTimeInputControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: Props) {
   const [localConfig, setLocalConfig] = useState<DateTimeInputConfig>(config);
 
@@ -103,32 +105,38 @@ export function DateTimeInputControlPanel({
           label="Background"
           value={localConfig.inputBackground}
           onChange={(v) => handleColor("inputBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.inputBorderColor}
           onChange={(v) => handleColor("inputBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Focus border"
           value={localConfig.inputFocusBorderColor}
           onChange={(v) => handleColor("inputFocusBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={localConfig.inputTextColor}
           onChange={(v) => handleColor("inputTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={localConfig.inputPlaceholderColor}
           onChange={(v) => handleColor("inputPlaceholderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Icon"
           value={localConfig.inputIconColor}
           onChange={(v) => handleColor("inputIconColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border radius"
           value={localConfig.inputBorderRadius}
@@ -142,7 +150,8 @@ export function DateTimeInputControlPanel({
           label="Label color"
           value={localConfig.labelTextColor}
           onChange={(v) => handleColor("labelTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Label size"
           value={localConfig.labelFontSize}
@@ -160,12 +169,14 @@ export function DateTimeInputControlPanel({
           label="Background"
           value={localConfig.popoverBackground}
           onChange={(v) => handleColor("popoverBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.popoverBorderColor}
           onChange={(v) => handleColor("popoverBorderColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border radius"
           value={localConfig.popoverBorderRadius}
@@ -188,32 +199,38 @@ export function DateTimeInputControlPanel({
           label="Header text"
           value={localConfig.calHeaderTextColor}
           onChange={(v) => handleColor("calHeaderTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Nav arrows"
           value={localConfig.calNavButtonColor}
           onChange={(v) => handleColor("calNavButtonColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Day names"
           value={localConfig.dayNameColor}
           onChange={(v) => handleColor("dayNameColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Day text"
           value={localConfig.dayTextColor}
           onChange={(v) => handleColor("dayTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Day hover bg"
           value={localConfig.dayHoverBackground}
           onChange={(v) => handleColor("dayHoverBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Today text"
           value={localConfig.todayTextColor}
           onChange={(v) => handleColor("todayTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Day cell size"
           value={localConfig.dayCellSize}
@@ -240,12 +257,14 @@ export function DateTimeInputControlPanel({
           label="Accent color"
           value={localConfig.accentColor}
           onChange={(v) => handleColor("accentColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent text"
           value={localConfig.accentTextColor}
           onChange={(v) => handleColor("accentTextColor", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Clock */}
@@ -254,27 +273,32 @@ export function DateTimeInputControlPanel({
           label="Face background"
           value={localConfig.clockFaceBackground}
           onChange={(v) => handleColor("clockFaceBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hand color"
           value={localConfig.clockHandColor}
           onChange={(v) => handleColor("clockHandColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Number color"
           value={localConfig.clockNumberColor}
           onChange={(v) => handleColor("clockNumberColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Display bg"
           value={localConfig.clockDisplayBackground}
           onChange={(v) => handleColor("clockDisplayBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Display text"
           value={localConfig.clockDisplayTextColor}
           onChange={(v) => handleColor("clockDisplayTextColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="AM/PM active"
           value={localConfig.clockAmPmActiveBackground}
@@ -288,17 +312,20 @@ export function DateTimeInputControlPanel({
           label="Cancel text"
           value={localConfig.cancelButtonColor}
           onChange={(v) => handleColor("cancelButtonColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="OK background"
           value={localConfig.okButtonBackground}
           onChange={(v) => handleColor("okButtonBackground", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="OK text"
           value={localConfig.okButtonTextColor}
           onChange={(v) => handleColor("okButtonTextColor", v)}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Typography */}

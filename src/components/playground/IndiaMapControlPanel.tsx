@@ -17,6 +17,7 @@ interface IndiaMapControlPanelProps {
   config: IndiaMapConfig;
   onChange: (patch: Partial<IndiaMapConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const METRIC_OPTIONS: { value: MapMetric; label: string }[] = [
@@ -36,6 +37,7 @@ export function IndiaMapControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: IndiaMapControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -154,7 +156,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, mapBackground: v }));
             onChange({ mapBackground: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="State Default Fill"
           value={localConfig.stateDefaultFill}
@@ -162,7 +165,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, stateDefaultFill: v }));
             onChange({ stateDefaultFill: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="State Hover Fill"
           value={localConfig.stateHoverFill}
@@ -170,7 +174,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, stateHoverFill: v }));
             onChange({ stateHoverFill: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="State Selected"
           value={localConfig.stateSelectedFill}
@@ -178,7 +183,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, stateSelectedFill: v }));
             onChange({ stateSelectedFill: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="State Borders"
           value={localConfig.stateBorderColor}
@@ -186,7 +192,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, stateBorderColor: v }));
             onChange({ stateBorderColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Width"
           value={localConfig.stateBorderWidth}
@@ -207,7 +214,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, choroplethLow: v }));
             onChange({ choroplethLow: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="High Value Color"
           value={localConfig.choroplethHigh}
@@ -215,7 +223,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, choroplethHigh: v }));
             onChange({ choroplethHigh: v });
           }}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Chart Panel ── */}
@@ -227,7 +236,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, chartBackground: v }));
             onChange({ chartBackground: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Border"
           value={localConfig.chartBorderColor}
@@ -235,7 +245,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, chartBorderColor: v }));
             onChange({ chartBorderColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Color"
           value={localConfig.chartAccentColor}
@@ -243,7 +254,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, chartAccentColor: v }));
             onChange({ chartAccentColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Secondary Color"
           value={localConfig.chartSecondaryColor}
@@ -251,7 +263,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, chartSecondaryColor: v }));
             onChange({ chartSecondaryColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Grid Color"
           value={localConfig.chartGridColor}
@@ -259,7 +272,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, chartGridColor: v }));
             onChange({ chartGridColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.chartBorderRadius}
@@ -289,7 +303,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, tooltipBackground: v }));
             onChange({ tooltipBackground: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Color"
           value={localConfig.tooltipTextColor}
@@ -297,7 +312,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, tooltipTextColor: v }));
             onChange({ tooltipTextColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border Color"
           value={localConfig.tooltipBorderColor}
@@ -305,7 +321,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, tooltipBorderColor: v }));
             onChange({ tooltipBorderColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.tooltipBorderRadius}
@@ -326,7 +343,8 @@ export function IndiaMapControlPanel({
             setLocalConfig((p) => ({ ...p, stateLabelColor: v }));
             onChange({ stateLabelColor: v });
           }}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Label Size"
           value={localConfig.stateLabelSize}

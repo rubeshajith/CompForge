@@ -10,6 +10,8 @@ import {
 import {
   generateProgressJSX,
   generateProgressCSS,
+  generateProgressTSX,
+  generateProgressTailwind,
 } from "@/lib/generateProgressCode";
 import { ProgressPreview } from "@/components/playground/ProgressPreview";
 import { ProgressControlPanel } from "@/components/playground/ProgressControlPanel";
@@ -48,7 +50,11 @@ export default function ProgressPlayground() {
 
   const jsxCode = useMemo(() => generateProgressJSX(config), [config]);
   const cssCode = useMemo(() => generateProgressCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateProgressTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateProgressTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -73,9 +79,17 @@ export default function ProgressPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

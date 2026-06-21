@@ -12,6 +12,8 @@ import {
 import {
   generateSignupModalJSX,
   generateSignupModalCSS,
+  generateSignupModalTSX,
+  generateSignupModalTailwind,
 } from "@/lib/generateSignupModalCode";
 import { SignupModalPreview } from "@/components/playground/SignupModalPreview";
 import { SignupModalControlPanel } from "@/components/playground/SignupModalControlPanel";
@@ -57,7 +59,11 @@ export default function SignupModalPlayground() {
 
   const jsxCode = useMemo(() => generateSignupModalJSX(config), [config]);
   const cssCode = useMemo(() => generateSignupModalCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateSignupModalTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateSignupModalTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -82,9 +88,17 @@ export default function SignupModalPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

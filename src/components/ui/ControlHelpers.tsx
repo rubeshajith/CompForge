@@ -1,7 +1,8 @@
 "use client";
 
+import { debounce, throttle } from "@/utils/debounce";
 import styles from "./ControlHelpers.module.css";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 // ── Section wrapper ──────────────────────────────────────────────────────────
 export function Section({
   title,
@@ -417,7 +418,7 @@ export function ColorRow({
             color: hexTextColor,
           }}
         >
-          {value}
+          {value.toUpperCase()}
         </span>
       </div>
 
@@ -426,9 +427,7 @@ export function ColorRow({
         <ColorPopover
           value={value}
           isDark={isDark}
-          onChange={(hex) => {
-            onChange(hex);
-          }}
+          onChange={onChange}
           onClose={handleClose}
         />
       )}
@@ -454,24 +453,96 @@ export function SliderRow({
   onChange: (v: number) => void;
   onChangeEnd?: (v: number) => void;
 }) {
+  const [localValue, setLocalValue] = useState(value);
+  const isDragging = useRef(false);
+  const [editing, setEditing] = useState(false);
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+  const debouncedOnChange = useMemo(
+    () => debounce((v: number) => onChangeRef.current(v), 50),
+    [],
+  );
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const v = Number(e.target.value);
+    setLocalValue(v);
+    debouncedOnChange(v); // debounced for drag smoothness
+  }
+
+  const dragStartX = useRef<number | null>(null);
+
+  function handleMouseDown(e: React.MouseEvent) {
+    dragStartX.current = e.clientX;
+    isDragging.current = false;
+  }
+
+  function handleMouseMove(e: React.MouseEvent) {
+    if (
+      dragStartX.current !== null &&
+      Math.abs(e.clientX - dragStartX.current) > 3
+    ) {
+      isDragging.current = true; // only real movement counts
+    }
+  }
+
+  function handleMouseUp(e: React.MouseEvent) {
+    const v = Number((e.target as HTMLInputElement).value);
+    if (!isDragging.current) {
+      // It was a click — flush immediately, cancel pending debounce
+      debouncedOnChange.cancel?.();
+      onChange(v);
+    }
+    onChangeEnd?.(v);
+    isDragging.current = false;
+  }
+
   return (
     <div className={styles.sliderRow}>
       <div className={styles.sliderTop}>
         <span className={styles.label}>{label}</span>
-        <span className={styles.sliderValue}>
-          {value}
-          {unit}
-        </span>
+
+        {editing ? (
+          <div className={styles.sliderValueInputWrap}>
+            <input
+              type="number"
+              defaultValue={localValue}
+              min={min}
+              max={max}
+              autoFocus
+              onBlur={(e) => {
+                const v = Math.min(max, Math.max(min, Number(e.target.value)));
+                setLocalValue(v);
+                onChange(v);
+                setEditing(false);
+              }}
+              onKeyDown={(e) =>
+                e.key === "Enter" && (e.target as HTMLInputElement).blur()
+              }
+              className={styles.sliderValueInput}
+            />
+            <span className={styles.sliderValueUnit}>{unit}</span>
+          </div>
+        ) : (
+          <span className={styles.sliderValue} onClick={() => setEditing(true)}>
+            {localValue}
+            {unit}
+          </span>
+        )}
       </div>
       <input
         type="range"
         min={min}
         max={max}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        onMouseUp={(e) =>
-          onChangeEnd?.(Number((e.target as HTMLInputElement).value))
-        }
+        value={localValue}
+        onChange={handleChange}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
         onTouchEnd={(e) =>
           onChangeEnd?.(Number((e.target as HTMLInputElement).value))
         }
@@ -486,14 +557,18 @@ export function ToggleRow({
   label,
   value,
   onChange,
+  hint,
 }: {
   label: string;
   value: boolean;
   onChange: (v: boolean) => void;
+  hint?: string;
 }) {
   return (
     <div className={styles.row}>
-      <span className={styles.label}>{label}</span>
+      <span className={styles.label} title={hint}>
+        {label}
+      </span>
       <button
         className={`${styles.toggle} ${value ? styles.toggleOn : ""}`}
         onClick={() => onChange(!value)}

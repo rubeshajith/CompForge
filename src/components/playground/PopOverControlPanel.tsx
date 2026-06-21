@@ -19,6 +19,7 @@ interface Props {
   onVariantChange: (id: PopoverVariantId) => void;
   onChange: (patch: Partial<PopoverConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 // ── Pill ───────────────────────────────────────────────────────────────────
@@ -176,7 +177,8 @@ function BasicControls({
         label="Icon background"
         value={local.basicIconBg}
         onChange={(v) => update("basicIconBg", v)}
-      />
+        isDark={isDark}
+/>
     </Section>
   );
 }
@@ -428,7 +430,8 @@ function NotifControls({
         label="Dot color"
         value={local.notifDotColor}
         onChange={(v) => update("notifDotColor", v)}
-      />
+        isDark={isDark}
+/>
       {local.notifications.map((n, i) => (
         <div key={i}>
           <Divider />
@@ -554,27 +557,32 @@ function TokenControls({
         label="System bar"
         value={local.tokSystemColor}
         onChange={(v) => update("tokSystemColor", v)}
-      />
+        isDark={isDark}
+/>
       <ColorRow
         label="Prompt bar start"
         value={local.tokPromptColorStart}
         onChange={(v) => update("tokPromptColorStart", v)}
-      />
+        isDark={isDark}
+/>
       <ColorRow
         label="Prompt bar end"
         value={local.tokPromptColorEnd}
         onChange={(v) => update("tokPromptColorEnd", v)}
-      />
+        isDark={isDark}
+/>
       <ColorRow
         label="Completion bar start"
         value={local.tokCompletionColorStart}
         onChange={(v) => update("tokCompletionColorStart", v)}
-      />
+        isDark={isDark}
+/>
       <ColorRow
         label="Completion bar end"
         value={local.tokCompletionColorEnd}
         onChange={(v) => update("tokCompletionColorEnd", v)}
-      />
+        isDark={isDark}
+/>
       <ToggleRow
         label="Animate bars on open"
         value={local.tokAnimateBars}
@@ -592,6 +600,7 @@ export function PopoverControlPanel({
   onVariantChange,
   onChange,
   onReset,
+  isDark = true,
 }: Props) {
   const [local, setLocal] = useState(config);
   useMemo(() => setLocal(config), [config]);
@@ -738,37 +747,44 @@ export function PopoverControlPanel({
           label="Accent color"
           value={local.accentColor}
           onChange={(v) => update("accentColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Gradient start"
           value={local.gradStart}
           onChange={(v) => update("gradStart", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Gradient end"
           value={local.gradEnd}
           onChange={(v) => update("gradEnd", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Surface"
           value={local.surfaceColor}
           onChange={(v) => update("surfaceColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={local.borderColor}
           onChange={(v) => update("borderColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={local.textColor}
           onChange={(v) => update("textColor", v)}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text muted"
           value={local.textMutedColor}
           onChange={(v) => update("textMutedColor", v)}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border radius"
           value={local.borderRadius}

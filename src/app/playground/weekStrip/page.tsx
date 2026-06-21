@@ -16,7 +16,11 @@ import { CalendarPreview } from "@/components/playground/CalendarPreview";
 import { CalendarControlPanel } from "@/components/playground/CalendarControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
 import { ResizablePlayground } from "@/components/playground/ResizablePlayground";
-import { generateWeekStripCSS } from "@/lib/generateWeekStripCode";
+import {
+  generateWeekStripCSS,
+  generateWeekStripTailwind,
+  generateWeekStripTSX,
+} from "@/lib/generateWeekStripCode";
 import { generateWeekStripJSX } from "@/lib/generateWeekStripCode";
 import { WeekStripPreview } from "@/components/playground/WeekStripPreview";
 import { WeekStripControlPanel } from "@/components/playground/WeekStripControlPanel";
@@ -47,7 +51,11 @@ export default function WeekStripPlayground() {
 
   const jsxCode = useMemo(() => generateWeekStripJSX(config), [config]);
   const cssCode = useMemo(() => generateWeekStripCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateWeekStripTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateWeekStripTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -73,9 +81,17 @@ export default function WeekStripPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

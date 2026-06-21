@@ -7,7 +7,12 @@ import {
   kanbanModePresets,
   darkKanbanConfig,
 } from "@/lib/kanbanConfig";
-import { generateKanbanJSX, generateKanbanCSS } from "@/lib/generateKanbanCode";
+import {
+  generateKanbanJSX,
+  generateKanbanCSS,
+  generateKanbanTSX,
+  generateKanbanTailwind,
+} from "@/lib/generateKanbanCode";
 import { KanbanPreview } from "@/components/playground/KanbanPreview";
 import { KanbanControlPanel } from "@/components/playground/KanbanControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -60,7 +65,8 @@ export default function KanbanPlayground() {
 
   const jsxCode = useMemo(() => generateKanbanJSX(config), [config]);
   const cssCode = useMemo(() => generateKanbanCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateKanbanTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateKanbanTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -86,9 +92,17 @@ export default function KanbanPlayground() {
           mode={mode}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

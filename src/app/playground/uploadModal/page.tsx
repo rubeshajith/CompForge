@@ -10,6 +10,8 @@ import {
 import {
   generateUploadModalCSS,
   generateUploadModalJSX,
+  generateUploadModalTailwind,
+  generateUploadModalTSX,
 } from "@/lib/generateUploadModalCode";
 import { UploadModalPreview } from "@/components/playground/UploadModalPreview";
 import { UploadModalControlPanel } from "@/components/playground/UploadModalControlPanel";
@@ -51,7 +53,11 @@ export default function UploadModalPlayground() {
 
   const jsxCode = useMemo(() => generateUploadModalJSX(config), [config]);
   const cssCode = useMemo(() => generateUploadModalCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateUploadModalTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateUploadModalTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -77,9 +83,17 @@ export default function UploadModalPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

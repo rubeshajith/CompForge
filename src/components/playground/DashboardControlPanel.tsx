@@ -12,12 +12,14 @@ interface DashboardControlPanelProps {
   config: DashboardConfig;
   onChange: (patch: Partial<DashboardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function DashboardControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: DashboardControlPanelProps) {
   return (
     <ControlPanelShell onReset={onReset}>
@@ -95,7 +97,8 @@ export function DashboardControlPanel({
           label="Custom Color"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

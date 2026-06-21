@@ -10,6 +10,8 @@ import {
 import {
   generateSkeletonJSX,
   generateSkeletonCSS,
+  generateSkeletonTSX,
+  generateSkeletonTailwind,
 } from "@/lib/generateSkeletonCode";
 import { SkeletonPreview } from "@/components/playground/SkeletonPreview";
 import { SkeletonControlPanel } from "@/components/playground/SkeletonControlPanel";
@@ -37,7 +39,11 @@ export default function SkeletonPlayground() {
 
   const jsxCode = useMemo(() => generateSkeletonJSX(config), [config]);
   const cssCode = useMemo(() => generateSkeletonCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateSkeletonTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateSkeletonTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -69,11 +75,19 @@ export default function SkeletonPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
           selectedBoxId={selectedBoxId}
           onSelectBox={setSelectedBoxId}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

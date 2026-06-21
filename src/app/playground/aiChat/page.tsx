@@ -9,7 +9,12 @@ import {
   aiChatModePresets,
   darkAIChatConfig,
 } from "@/lib/aiChatConfig";
-import { generateAIChatJSX, generateAIChatCSS } from "@/lib/generateAiChatCode";
+import {
+  generateAIChatJSX,
+  generateAIChatCSS,
+  generateAIChatTSX,
+  generateAIChatTailwind,
+} from "@/lib/generateAiChatCode";
 import { AIChatPreview } from "@/components/playground/AiChatPreview";
 import { AIChatControlPanel } from "@/components/playground/AiChatControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -51,7 +56,8 @@ export default function AIChatPlayground() {
 
   const jsxCode = useMemo(() => generateAIChatJSX(config), [config]);
   const cssCode = useMemo(() => generateAIChatCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateAIChatTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateAIChatTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -76,9 +82,17 @@ export default function AIChatPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

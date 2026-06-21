@@ -9,6 +9,7 @@ interface OrderTableControlPanelProps {
   config: OrderTableConfig;
   onChange: (patch: Partial<OrderTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function OrderTableControlPanel({ config, onChange, onReset }: OrderTableControlPanelProps) {
@@ -43,23 +44,37 @@ export function OrderTableControlPanel({ config, onChange, onReset }: OrderTable
       </Section>
 
       <Section title="Surfaces">
-        <ColorRow label="Page background" value={localConfig.backgroundColor} onChange={(v) => update("backgroundColor", v)} />
-        <ColorRow label="Table surface" value={localConfig.surfaceColor} onChange={(v) => update("surfaceColor", v)} />
-        <ColorRow label="Filters" value={localConfig.filterBackground} onChange={(v) => update("filterBackground", v)} />
-        <ColorRow label="Expanded row" value={localConfig.expandedBackground} onChange={(v) => update("expandedBackground", v)} />
-        <ColorRow label="Header" value={localConfig.headerBackground} onChange={(v) => update("headerBackground", v)} />
-        <ColorRow label="Inputs" value={localConfig.inputBackground} onChange={(v) => update("inputBackground", v)} />
-        <ColorRow label="Border" value={localConfig.borderColor} onChange={(v) => update("borderColor", v)} />
+        <ColorRow label="Page background" value={localConfig.backgroundColor} onChange={(v) => update("backgroundColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Table surface" value={localConfig.surfaceColor} onChange={(v) => update("surfaceColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Filters" value={localConfig.filterBackground} onChange={(v) => update("filterBackground", v)}   isDark={isDark}
+/>
+        <ColorRow label="Expanded row" value={localConfig.expandedBackground} onChange={(v) => update("expandedBackground", v)}   isDark={isDark}
+/>
+        <ColorRow label="Header" value={localConfig.headerBackground} onChange={(v) => update("headerBackground", v)}   isDark={isDark}
+/>
+        <ColorRow label="Inputs" value={localConfig.inputBackground} onChange={(v) => update("inputBackground", v)}   isDark={isDark}
+/>
+        <ColorRow label="Border" value={localConfig.borderColor} onChange={(v) => update("borderColor", v)}   isDark={isDark}
+/>
       </Section>
 
       <Section title="Text & Accent">
-        <ColorRow label="Text" value={localConfig.textColor} onChange={(v) => update("textColor", v)} />
-        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(v) => update("mutedTextColor", v)} />
-        <ColorRow label="Header text" value={localConfig.headerTextColor} onChange={(v) => update("headerTextColor", v)} />
-        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(v) => update("accentColor", v)} />
-        <ColorRow label="Accent text" value={localConfig.accentTextColor} onChange={(v) => update("accentTextColor", v)} />
-        <ColorRow label="Hover" value={localConfig.hoverBackground} onChange={(v) => update("hoverBackground", v)} />
-        <ColorRow label="Selected" value={localConfig.selectedBackground} onChange={(v) => update("selectedBackground", v)} />
+        <ColorRow label="Text" value={localConfig.textColor} onChange={(v) => update("textColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(v) => update("mutedTextColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Header text" value={localConfig.headerTextColor} onChange={(v) => update("headerTextColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(v) => update("accentColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Accent text" value={localConfig.accentTextColor} onChange={(v) => update("accentTextColor", v)}   isDark={isDark}
+/>
+        <ColorRow label="Hover" value={localConfig.hoverBackground} onChange={(v) => update("hoverBackground", v)}   isDark={isDark}
+/>
+        <ColorRow label="Selected" value={localConfig.selectedBackground} onChange={(v) => update("selectedBackground", v)}   isDark={isDark}
+/>
       </Section>
 
       <Section title="Behavior">

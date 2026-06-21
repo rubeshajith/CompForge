@@ -20,6 +20,7 @@ interface KanbanControlPanelProps {
   mode: KanbanMode;
   onChange: (patch: Partial<KanbanConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 // Small inline select for column count
@@ -82,6 +83,7 @@ export function KanbanControlPanel({
   mode,
   onChange,
   onReset,
+  isDark = true,
 }: KanbanControlPanelProps) {
   const [local, setLocal] = useState(config);
 
@@ -111,7 +113,8 @@ export function KanbanControlPanel({
           label="Background"
           value={config.boardBackground}
           onChange={(v) => onChange({ boardBackground: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Column gap"
           value={local.boardGap}
@@ -134,17 +137,20 @@ export function KanbanControlPanel({
           label="Background"
           value={config.columnBackground}
           onChange={(v) => onChange({ columnBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.columnBorderColor}
           onChange={(v) => onChange({ columnBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header text"
           value={config.columnHeaderTextColor}
           onChange={(v) => onChange({ columnHeaderTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Corner radius"
           value={local.columnBorderRadius}
@@ -171,27 +177,32 @@ export function KanbanControlPanel({
           label="Background"
           value={config.cardBackground}
           onChange={(v) => onChange({ cardBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.cardBorderColor}
           onChange={(v) => onChange({ cardBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover border"
           value={config.cardHoverBorderColor}
           onChange={(v) => onChange({ cardHoverBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Title color"
           value={config.cardTitleColor}
           onChange={(v) => onChange({ cardTitleColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Desc color"
           value={config.cardDescColor}
           onChange={(v) => onChange({ cardDescColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Corner radius"
           value={local.cardBorderRadius}
@@ -246,17 +257,20 @@ export function KanbanControlPanel({
           label="Track"
           value={config.progressTrackColor}
           onChange={(v) => onChange({ progressTrackColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Fill"
           value={config.progressFillColor}
           onChange={(v) => onChange({ progressFillColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Done color"
           value={config.progressFillColorDone}
           onChange={(v) => onChange({ progressFillColorDone: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Priority ── */}
@@ -265,32 +279,38 @@ export function KanbanControlPanel({
           label="High bg"
           value={config.priorityHighBg}
           onChange={(v) => onChange({ priorityHighBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="High text"
           value={config.priorityHighText}
           onChange={(v) => onChange({ priorityHighText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Medium bg"
           value={config.priorityMediumBg}
           onChange={(v) => onChange({ priorityMediumBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Medium text"
           value={config.priorityMediumText}
           onChange={(v) => onChange({ priorityMediumText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Low bg"
           value={config.priorityLowBg}
           onChange={(v) => onChange({ priorityLowBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Low text"
           value={config.priorityLowText}
           onChange={(v) => onChange({ priorityLowText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Tags ── */}
@@ -299,12 +319,14 @@ export function KanbanControlPanel({
           label="Background"
           value={config.tagBg}
           onChange={(v) => onChange({ tagBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.tagText}
           onChange={(v) => onChange({ tagText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

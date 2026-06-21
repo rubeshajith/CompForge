@@ -16,20 +16,26 @@ interface Props {
   config: CalendarConfig;
   onChange: (patch: Partial<CalendarConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
-export function CalendarControlPanel({ config, onChange, onReset }: Props) {
-  const [localConfig, setLocalConfig] = useState(config);
-  useEffect(() => {
-    setLocalConfig(config);
-  }, [config]);
-  const debouncedOnChange = useMemo(
-    () =>
-      debounce((patch: Partial<CalendarConfig>) => {
-        onChange(patch);
-      }, 80), // try 80–150ms
-    [onChange],
-  );
+export function CalendarControlPanel({
+  config,
+  onChange,
+  onReset,
+  isDark = true,
+}: Props) {
+  // const [localConfig, setLocalConfig] = useState(config);
+  // useEffect(() => {
+  //   setLocalConfig(config);
+  // }, [config]);
+  // const debouncedOnChange = useMemo(
+  //   () =>
+  //     debounce((patch: Partial<CalendarConfig>) => {
+  //       onChange(patch);
+  //     }, 80), // try 80–150ms
+  //   [onChange],
+  // );
   return (
     <ControlPanelShell onReset={onReset}>
       <Section title="Selection Mode">
@@ -66,15 +72,11 @@ export function CalendarControlPanel({ config, onChange, onReset }: Props) {
       <Section title="Size & Layout">
         <SliderRow
           label="Calendar Width"
-          value={localConfig.calendarWidth}
+          value={config.calendarWidth}
           min={220}
           max={420}
           unit="px"
-          onChange={(v) => {
-            setLocalConfig((prev) => ({ ...prev, calendarWidth: v }));
-            debouncedOnChange({ calendarWidth: v });
-          }}
-          onChangeEnd={(v) => onChange({ calendarWidth: v })}
+          onChange={(v) => onChange({ calendarWidth: v })}
         />
         <SliderRow
           label="Day Cell Size"
@@ -90,11 +92,13 @@ export function CalendarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.backgroundColor}
           onChange={(v) => onChange({ backgroundColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={config.borderColor}
           onChange={(v) => onChange({ borderColor: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Radius"
@@ -111,11 +115,13 @@ export function CalendarControlPanel({ config, onChange, onReset }: Props) {
           label="Text"
           value={config.headerTextColor}
           onChange={(v) => onChange({ headerTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Arrows"
           value={config.chevronColor}
           onChange={(v) => onChange({ chevronColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -124,21 +130,25 @@ export function CalendarControlPanel({ config, onChange, onReset }: Props) {
           label="Day Names"
           value={config.dayNameColor}
           onChange={(v) => onChange({ dayNameColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Date Text"
           value={config.dayTextColor}
           onChange={(v) => onChange({ dayTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover BG"
           value={config.dayHoverBackground}
           onChange={(v) => onChange({ dayHoverBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover Text"
           value={config.dayHoverTextColor}
           onChange={(v) => onChange({ dayHoverTextColor: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Cell Radius"
@@ -155,21 +165,25 @@ export function CalendarControlPanel({ config, onChange, onReset }: Props) {
           label="Accent BG"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Accent Text"
           value={config.accentTextColor}
           onChange={(v) => onChange({ accentTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Range BG"
           value={config.rangeBackground}
           onChange={(v) => onChange({ rangeBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Range Text"
           value={config.rangeTextColor}
           onChange={(v) => onChange({ rangeTextColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -178,16 +192,19 @@ export function CalendarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.pickerBackground}
           onChange={(v) => onChange({ pickerBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={config.pickerBorderColor}
           onChange={(v) => onChange({ pickerBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover"
           value={config.pickerOptionHover}
           onChange={(v) => onChange({ pickerOptionHover: v })}
+          isDark={isDark}
         />
       </Section>
 

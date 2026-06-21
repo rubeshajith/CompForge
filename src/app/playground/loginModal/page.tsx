@@ -12,6 +12,8 @@ import {
 import {
   generateLoginModalJSX,
   generateLoginModalCSS,
+  generateLoginModalTSX,
+  generateLoginModalTailwind,
 } from "@/lib/generateLoginModalCode";
 import { LoginModalPreview } from "@/components/playground/LoginModalPreview";
 import { LoginModalControlPanel } from "@/components/playground/LoginModalControlPanel";
@@ -58,7 +60,11 @@ export default function LoginModalPlayground() {
 
   const jsxCode = useMemo(() => generateLoginModalJSX(config), [config]);
   const cssCode = useMemo(() => generateLoginModalCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateLoginModalTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateLoginModalTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -83,9 +89,17 @@ export default function LoginModalPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

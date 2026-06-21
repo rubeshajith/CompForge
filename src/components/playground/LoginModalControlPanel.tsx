@@ -17,6 +17,7 @@ interface Props {
   config: LoginModalConfig;
   onChange: (patch: Partial<LoginModalConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
@@ -48,12 +49,14 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.modalBackground}
           onChange={(v) => onChange({ modalBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.modalBorderColor}
           onChange={(v) => onChange({ modalBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Show Shadow"
           value={config.showShadow}
@@ -72,22 +75,26 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Accent Color"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Icon Color"
           value={config.accentIconColor}
           onChange={(v) => onChange({ accentIconColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Heading"
           value={config.headingColor}
           onChange={(v) => onChange({ headingColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Subheading"
           value={config.subheadingColor}
           onChange={(v) => onChange({ subheadingColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Social Buttons ───────────────────────────────────── */}
@@ -101,17 +108,20 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.socialButtonBackground}
           onChange={(v) => onChange({ socialButtonBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.socialButtonBorderColor}
           onChange={(v) => onChange({ socialButtonBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.socialButtonTextColor}
           onChange={(v) => onChange({ socialButtonTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Input Styling ────────────────────────────────────── */}
@@ -120,32 +130,38 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Input Background"
           value={config.inputBackground}
           onChange={(v) => onChange({ inputBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.inputBorderColor}
           onChange={(v) => onChange({ inputBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Focus Border"
           value={config.inputFocusBorderColor}
           onChange={(v) => onChange({ inputFocusBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.inputTextColor}
           onChange={(v) => onChange({ inputTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={config.inputPlaceholderColor}
           onChange={(v) => onChange({ inputPlaceholderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Label"
           value={config.labelColor}
           onChange={(v) => onChange({ labelColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Input Radius"
           value={config.inputBorderRadius}
@@ -168,7 +184,8 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Forgot Password Color"
           value={config.forgotPasswordColor}
           onChange={(v) => onChange({ forgotPasswordColor: v })}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Remember Me"
           value={config.showRememberMe}
@@ -178,7 +195,8 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Remember Me Text"
           value={config.rememberMeColor}
           onChange={(v) => onChange({ rememberMeColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── CTA Button ──────────────────────────────────────── */}
@@ -187,12 +205,14 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.ctaBackground}
           onChange={(v) => onChange({ ctaBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Color"
           value={config.ctaTextColor}
           onChange={(v) => onChange({ ctaTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Radius"
           value={config.ctaBorderRadius}
@@ -210,12 +230,14 @@ export function LoginModalControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.footerBackground}
           onChange={(v) => onChange({ footerBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Color"
           value={config.footerTextColor}
           onChange={(v) => onChange({ footerTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Typography ───────────────────────────────────────── */}

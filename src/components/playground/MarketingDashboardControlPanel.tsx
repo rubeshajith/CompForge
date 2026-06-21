@@ -11,6 +11,7 @@ interface MarketingDashboardControlPanelProps {
   config: MarketingDashboardConfig;
   onChange: (patch: Partial<MarketingDashboardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const themeOptions: MarketingDashboardTheme[] = [
@@ -25,6 +26,7 @@ export function MarketingDashboardControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: MarketingDashboardControlPanelProps) {
   return (
     <ControlPanelShell onReset={onReset}>
@@ -76,7 +78,8 @@ export function MarketingDashboardControlPanel({
           label="Custom accent"
           value={config.customAccent}
           onChange={(customAccent) => onChange({ theme: "custom", customAccent })}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

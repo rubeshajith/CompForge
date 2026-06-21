@@ -26,6 +26,7 @@ interface EmailTemplateControlPanelProps {
   config: EmailTemplateConfig;
   onChange: (patch: Partial<EmailTemplateConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const VARIANTS: { value: EmailTemplateVariant; label: string; icon: string }[] =
@@ -42,6 +43,7 @@ export function EmailTemplateControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: EmailTemplateControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -156,32 +158,38 @@ export function EmailTemplateControlPanel({
           label="Email BG"
           value={localConfig.emailBackground}
           onChange={(v) => handleImmediate({ emailBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Card BG"
           value={localConfig.cardBackground}
           onChange={(v) => handleImmediate({ cardBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header BG"
           value={localConfig.headerBackground}
           onChange={(v) => handleImmediate({ headerBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row BG"
           value={localConfig.tableRowBackground}
           onChange={(v) => handleImmediate({ tableRowBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Alt Row BG"
           value={localConfig.tableAltRowBackground}
           onChange={(v) => handleImmediate({ tableAltRowBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer BG"
           value={localConfig.footerBackground}
           onChange={(v) => handleImmediate({ footerBackground: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Colors: Typography ─────────────────────────────────────────── */}
@@ -190,27 +198,32 @@ export function EmailTemplateControlPanel({
           label="Heading"
           value={localConfig.headingTextColor}
           onChange={(v) => handleImmediate({ headingTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Body Text"
           value={localConfig.bodyTextColor}
           onChange={(v) => handleImmediate({ bodyTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Muted Text"
           value={localConfig.mutedTextColor}
           onChange={(v) => handleImmediate({ mutedTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Logo"
           value={localConfig.logoTextColor}
           onChange={(v) => handleImmediate({ logoTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer Text"
           value={localConfig.footerTextColor}
           onChange={(v) => handleImmediate({ footerTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Colors: Accent ─────────────────────────────────────────────── */}
@@ -219,22 +232,26 @@ export function EmailTemplateControlPanel({
           label="Accent"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Button Text"
           value={localConfig.accentTextColor}
           onChange={(v) => handleImmediate({ accentTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Card Border"
           value={localConfig.cardBorderColor}
           onChange={(v) => handleImmediate({ cardBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Divider"
           value={localConfig.dividerColor}
           onChange={(v) => handleImmediate({ dividerColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Template-specific ──────────────────────────────────────────── */}
@@ -244,12 +261,14 @@ export function EmailTemplateControlPanel({
             label="Filled Star"
             value={localConfig.starFilledColor}
             onChange={(v) => handleImmediate({ starFilledColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Empty Star"
             value={localConfig.starEmptyColor}
             onChange={(v) => handleImmediate({ starEmptyColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -259,12 +278,14 @@ export function EmailTemplateControlPanel({
             label="Badge BG"
             value={localConfig.trackingBadgeBackground}
             onChange={(v) => handleImmediate({ trackingBadgeBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Badge Text"
             value={localConfig.trackingBadgeTextColor}
             onChange={(v) => handleImmediate({ trackingBadgeTextColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -274,12 +295,14 @@ export function EmailTemplateControlPanel({
             label="Pill BG"
             value={localConfig.featurePillBackground}
             onChange={(v) => handleImmediate({ featurePillBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Pill Text"
             value={localConfig.featurePillTextColor}
             onChange={(v) => handleImmediate({ featurePillTextColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -289,27 +312,32 @@ export function EmailTemplateControlPanel({
             label="Sale Badge BG"
             value={localConfig.saleBadgeBackground}
             onChange={(v) => handleImmediate({ saleBadgeBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Sale Badge Text"
             value={localConfig.saleBadgeTextColor}
             onChange={(v) => handleImmediate({ saleBadgeTextColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Coupon BG"
             value={localConfig.couponBlockBackground}
             onChange={(v) => handleImmediate({ couponBlockBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Coupon Border"
             value={localConfig.couponBorderColor}
             onChange={(v) => handleImmediate({ couponBorderColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Coupon Text"
             value={localConfig.couponTextColor}
             onChange={(v) => handleImmediate({ couponTextColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -319,12 +347,14 @@ export function EmailTemplateControlPanel({
             label="Status BG"
             value={localConfig.refundStatusBackground}
             onChange={(v) => handleImmediate({ refundStatusBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Status Text"
             value={localConfig.refundStatusTextColor}
             onChange={(v) => handleImmediate({ refundStatusTextColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
     </ControlPanelShell>

@@ -76,6 +76,7 @@ export default function CalendarPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
       code={

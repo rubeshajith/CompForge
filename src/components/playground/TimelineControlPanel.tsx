@@ -15,14 +15,14 @@ interface TimelineControlPanelProps {
   config: TimelineConfig;
   onChange: (patch: Partial<TimelineConfig>) => void;
   onReset: () => void;
-  mode: "dark" | "light";
+  isDark: boolean;
 }
 
 export function TimelineControlPanel({
   config,
   onChange,
   onReset,
-  mode,
+  isDark = true,
 }: TimelineControlPanelProps) {
   const [localConfig, setLocalConfig] = useState<TimelineConfig>(config);
 
@@ -60,11 +60,13 @@ export function TimelineControlPanel({
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => handleImmediate("backgroundColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleImmediate("borderColor", v)}
+          isDark={isDark}
         />
         <SliderRow
           label="Border radius"
@@ -88,21 +90,25 @@ export function TimelineControlPanel({
           label="Row background"
           value={localConfig.rowBackground}
           onChange={(v) => handleImmediate("rowBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover border"
           value={localConfig.rowHoverBorderColor}
           onChange={(v) => handleImmediate("rowHoverBorderColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Expanded bg"
           value={localConfig.expandedRowBackground}
           onChange={(v) => handleImmediate("expandedRowBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Header strip"
           value={localConfig.headerStripBackground}
           onChange={(v) => handleImmediate("headerStripBackground", v)}
+          isDark={isDark}
         />
         <ToggleRow
           label="Animate expand"
@@ -117,31 +123,37 @@ export function TimelineControlPanel({
           label="Connector line"
           value={localConfig.pathConnectorColor}
           onChange={(v) => handleImmediate("pathConnectorColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon active bg"
           value={localConfig.iconActiveBackground}
           onChange={(v) => handleImmediate("iconActiveBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon active color"
           value={localConfig.iconActiveColor}
           onChange={(v) => handleImmediate("iconActiveColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon idle bg"
           value={localConfig.iconIdleBackground}
           onChange={(v) => handleImmediate("iconIdleBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon idle border"
           value={localConfig.iconIdleBorderColor}
           onChange={(v) => handleImmediate("iconIdleBorderColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon idle color"
           value={localConfig.iconIdleColor}
           onChange={(v) => handleImmediate("iconIdleColor", v)}
+          isDark={isDark}
         />
         <SliderRow
           label="Icon radius"
@@ -160,26 +172,31 @@ export function TimelineControlPanel({
           label="Title color"
           value={localConfig.titleColor}
           onChange={(v) => handleImmediate("titleColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Subtitle color"
           value={localConfig.subtitleColor}
           onChange={(v) => handleImmediate("subtitleColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Date active"
           value={localConfig.dateActiveColor}
           onChange={(v) => handleImmediate("dateActiveColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Date idle"
           value={localConfig.dateIdleColor}
           onChange={(v) => handleImmediate("dateIdleColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Year color"
           value={localConfig.yearColor}
           onChange={(v) => handleImmediate("yearColor", v)}
+          isDark={isDark}
         />
         <SliderRow
           label="Body font size"
@@ -207,16 +224,19 @@ export function TimelineControlPanel({
           label="Volatility"
           value={localConfig.volatilityColor}
           onChange={(v) => handleImmediate("volatilityColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Delta positive"
           value={localConfig.deltaPositiveColor}
           onChange={(v) => handleImmediate("deltaPositiveColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Delta negative"
           value={localConfig.deltaNegativeColor}
           onChange={(v) => handleImmediate("deltaNegativeColor", v)}
+          isDark={isDark}
         />
       </Section>
 
@@ -226,51 +246,61 @@ export function TimelineControlPanel({
           label="Low — bg"
           value={localConfig.riskLowBackground}
           onChange={(v) => handleImmediate("riskLowBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Low — text"
           value={localConfig.riskLowColor}
           onChange={(v) => handleImmediate("riskLowColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Minimal — bg"
           value={localConfig.riskMinimalBackground}
           onChange={(v) => handleImmediate("riskMinimalBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Minimal — text"
           value={localConfig.riskMinimalColor}
           onChange={(v) => handleImmediate("riskMinimalColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Moderate — bg"
           value={localConfig.riskModerateBackground}
           onChange={(v) => handleImmediate("riskModerateBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Moderate — text"
           value={localConfig.riskModerateColor}
           onChange={(v) => handleImmediate("riskModerateColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="High — bg"
           value={localConfig.riskHighBackground}
           onChange={(v) => handleImmediate("riskHighBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="High — text"
           value={localConfig.riskHighColor}
           onChange={(v) => handleImmediate("riskHighColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Critical — bg"
           value={localConfig.riskCriticalBackground}
           onChange={(v) => handleImmediate("riskCriticalBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Critical — text"
           value={localConfig.riskCriticalColor}
           onChange={(v) => handleImmediate("riskCriticalColor", v)}
+          isDark={isDark}
         />
       </Section>
 
@@ -280,41 +310,49 @@ export function TimelineControlPanel({
           label="Section label"
           value={localConfig.sectionLabelColor}
           onChange={(v) => handleImmediate("sectionLabelColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Narrative text"
           value={localConfig.narrativeTextColor}
           onChange={(v) => handleImmediate("narrativeTextColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Impact card bg"
           value={localConfig.impactCardBackground}
           onChange={(v) => handleImmediate("impactCardBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Bar track"
           value={localConfig.impactBarTrackColor}
           onChange={(v) => handleImmediate("impactBarTrackColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Bar fill"
           value={localConfig.impactBarFillColor}
           onChange={(v) => handleImmediate("impactBarFillColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Impact label"
           value={localConfig.impactLabelColor}
           onChange={(v) => handleImmediate("impactLabelColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Impact value"
           value={localConfig.impactValueColor}
           onChange={(v) => handleImmediate("impactValueColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Divider"
           value={localConfig.expandedDividerColor}
           onChange={(v) => handleImmediate("expandedDividerColor", v)}
+          isDark={isDark}
         />
       </Section>
     </ControlPanelShell>

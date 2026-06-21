@@ -8,6 +8,8 @@ import {
 import {
   generateMarketingDashboardCSS,
   generateMarketingDashboardJSX,
+  generateMarketingDashboardTailwind,
+  generateMarketingDashboardTSX,
 } from "@/lib/generateMarketingDashboardCode";
 import { MarketingDashboardControlPanel } from "@/components/playground/MarketingDashboardControlPanel";
 import { MarketingDashboardPreview } from "@/components/playground/MarketingDashboardPreview";
@@ -15,7 +17,9 @@ import { CodePanel } from "@/components/playground/CodePanel";
 import { ResizablePlayground } from "@/components/playground/ResizablePlayground";
 
 export default function MarketingDashboardPlayground() {
-  const [config, setConfig] = useState<MarketingDashboardConfig>(darkMarketingDashboardConfig);
+  const [config, setConfig] = useState<MarketingDashboardConfig>(
+    darkMarketingDashboardConfig,
+  );
 
   function handleChange(patch: Partial<MarketingDashboardConfig>) {
     setConfig((prev) => ({ ...prev, ...patch }));
@@ -25,9 +29,22 @@ export default function MarketingDashboardPlayground() {
     setConfig(darkMarketingDashboardConfig);
   }
 
-  const jsxCode = useMemo(() => generateMarketingDashboardJSX(config), [config]);
-  const cssCode = useMemo(() => generateMarketingDashboardCSS(config), [config]);
-
+  const jsxCode = useMemo(
+    () => generateMarketingDashboardJSX(config),
+    [config],
+  );
+  const cssCode = useMemo(
+    () => generateMarketingDashboardCSS(config),
+    [config],
+  );
+  const tsxCode = useMemo(
+    () => generateMarketingDashboardTSX(config),
+    [config],
+  );
+  const tailwindCode = useMemo(
+    () => generateMarketingDashboardTailwind(config),
+    [config],
+  );
   return (
     <ResizablePlayground
       componentName="Marketing Dashboard"
@@ -42,7 +59,14 @@ export default function MarketingDashboardPlayground() {
           onReset={handleReset}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

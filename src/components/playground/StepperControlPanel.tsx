@@ -20,6 +20,7 @@ interface StepperControlPanelProps {
   config: StepperConfig;
   onChange: (patch: Partial<StepperConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const ALL_VARIANTS: StepperVariant[] = [
@@ -34,6 +35,7 @@ export function StepperControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: StepperControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -118,22 +120,26 @@ export function StepperControlPanel({
           label="Accent"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent 2nd"
           value={localConfig.accentColorSecondary}
           onChange={(v) => handleImmediate({ accentColorSecondary: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Track"
           value={localConfig.trackColor}
           onChange={(v) => handleImmediate({ trackColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => handleImmediate({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Gradient"
           value={localConfig.useGradient}
@@ -186,7 +192,8 @@ export function StepperControlPanel({
             label="Pin Color"
             value={localConfig.pinColor}
             onChange={(v) => handleImmediate({ pinColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -197,7 +204,8 @@ export function StepperControlPanel({
             label="Thumb Color"
             value={localConfig.thumbColor}
             onChange={(v) => handleImmediate({ thumbColor: v })}
-          />
+            isDark={isDark}
+/>
           <SliderRow
             label="Width"
             value={localConfig.thumbWidth}
@@ -347,12 +355,14 @@ export function StepperControlPanel({
           label="Label Color"
           value={localConfig.labelColor}
           onChange={(v) => handleImmediate({ labelColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Label"
           value={localConfig.activeLabelColor}
           onChange={(v) => handleImmediate({ activeLabelColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={localConfig.fontSize}

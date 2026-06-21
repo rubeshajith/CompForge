@@ -271,7 +271,7 @@ ${msgIn}
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: 'Instrument Sans', sans-serif;
+  font-family: inherit;
 }
 
 /* ── Header ─────────────────────────────────────── */
@@ -360,7 +360,7 @@ ${msgIn}
   padding: 10px 14px;
   max-width: 80%;
   font-size: ${config.messageFontSize}px;
-  font-family: 'Instrument Sans', sans-serif;
+  font-family: inherit;
   line-height: 1.5;
   word-break: break-word;
 }
@@ -368,7 +368,7 @@ ${msgIn}
 .ac-bubble--user {
   background: ${config.userBubbleBackground};
   color: ${config.userBubbleTextColor};
-  border-radius: ${bubbleRadius}px ${bubbleRadius}px 4px ${bubbleRadius}px;
+  border-radius: ${config.userBubbleBorderRadius}px ${config.userBubbleBorderRadius}px 4px ${config.userBubbleBorderRadius}px;
   ${config.showShadow ? "box-shadow: 0 2px 8px rgba(0,0,0,0.3);" : ""}
 }
 
@@ -514,7 +514,7 @@ ${msgIn}
 
 .ac-card__text {
   font-size: ${config.fontSize}px;
-  font-family: 'Instrument Sans', sans-serif;
+  font-family: inherit;
   color: ${config.cardTextColor};
   opacity: 0.75;
   line-height: 1.55;
@@ -534,8 +534,7 @@ ${msgIn}
   border-radius: ${config.suggestionBorderRadius}px;
   color: ${config.suggestionTextColor};
   font-size: ${config.fontSize}px;
-  font-family: 'Instrument Sans', sans-serif;
-  padding: 5px 12px;
+  font-family: inherit;  padding: 5px 12px;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
@@ -569,7 +568,7 @@ ${msgIn}
   outline: none;
   color: ${config.inputTextColor};
   font-size: ${config.fontSize + 1}px;
-  font-family: 'Instrument Sans', sans-serif;
+  font-family: inherit;
 }
 
 .ac-input::placeholder {
@@ -938,6 +937,7 @@ const acVars: CSSProperties = {
   "--ac-ai-bubble-text":      "${config.aiBubbleTextColor}",
   "--ac-ai-bubble-border":    "${config.aiBubbleBorderColor}",
   "--ac-bubble-radius":       "${bubbleRadius}px",
+  "--ac-user-bubble-radius":  "${config.userBubbleBorderRadius}px",
   "--ac-typing-bg":           "${config.typingBackground}",
   "--ac-typing-dot":          "${config.typingDotColor}",
   "--ac-cursor-color":        "${config.streamingCursorColor}",
@@ -959,6 +959,7 @@ const acVars: CSSProperties = {
   "--ac-send-bg":             "${config.sendButtonBackground}",
   "--ac-send-color":          "${config.sendButtonColor}",
   "--ac-send-radius":         "${config.sendButtonBorderRadius}px",
+  "--ac-shadow":              "${config.showShadow ? "0 8px 48px rgba(0,0,0,0.6)" : "none"}",
 } as CSSProperties;
 
 function formatTime(date: Date): string {
@@ -972,7 +973,7 @@ function ChatBubble({ message }: ChatBubbleProps) {
       <div
         className={\`px-[14px] py-[10px] max-w-[80%] text-[${fsMsgBase}px] font-sans leading-[1.5] break-words\${
           isUser
-            ? " bg-[var(--ac-user-bubble-bg)] text-[var(--ac-user-bubble-text)] rounded-[var(--ac-bubble-radius)] rounded-br-[4px]${config.showShadow ? " [box-shadow:0_2px_8px_rgba(0,0,0,0.3)]" : ""}"
+                      ? " bg-[var(--ac-user-bubble-bg)] text-[var(--ac-user-bubble-text)] rounded-[var(--ac-user-bubble-radius)] rounded-br-[4px]${config.showShadow ? " [box-shadow:0_2px_8px_rgba(0,0,0,0.3)]" : ""}"
             : " bg-[var(--ac-ai-bubble-bg)] text-[var(--ac-ai-bubble-text)] border border-[var(--ac-ai-bubble-border)] rounded-[var(--ac-bubble-radius)] rounded-bl-[4px]${config.showShadow ? " [box-shadow:0_2px_8px_rgba(0,0,0,0.2)]" : ""}"
         }\`}
       >
@@ -1116,8 +1117,8 @@ export default function AIChat({ onMessageSend }: AIChatProps) {
 
   return (
     <div
-      className="flex flex-col overflow-hidden font-sans"
-      style={{ ...acVars as React.CSSProperties, width: "${config.containerWidth}px", height: "${config.containerHeight}px", borderRadius: "var(--ac-radius)", background: "var(--ac-bg)", border: "1px solid var(--ac-border)", boxShadow: "${shadow}" }}
+      className="flex flex-col overflow-hidden  font-[inherit]"
+      style={{ ...acVars as React.CSSProperties, width: "${config.containerWidth}px", height: "${config.containerHeight}px", borderRadius: "var(--ac-radius)", background: "var(--ac-bg)", border: "1px solid var(--ac-border)", boxShadow: "var(--ac-shadow)" }}
     >
       ${
         config.animateMessages

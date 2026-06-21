@@ -12,7 +12,11 @@ import {
 
 import { CodePanel } from "@/components/playground/CodePanel";
 import { ResizablePlayground } from "@/components/playground/ResizablePlayground";
-import { generateProductTableCSS } from "@/lib/generateProductTableCode";
+import {
+  generateProductTableCSS,
+  generateProductTableTailwind,
+  generateProductTableTSX,
+} from "@/lib/generateProductTableCode";
 import { generateProductTableJSX } from "@/lib/generateProductTableCode";
 import { ProductTablePreview } from "@/components/playground/ProductTablePreview";
 import { ProductTableControlPanel } from "@/components/playground/ProductTableControlPanel";
@@ -71,7 +75,11 @@ export default function DataTablePlayground() {
 
   const jsxCode = useMemo(() => generateProductTableJSX(config), [config]);
   const cssCode = useMemo(() => generateProductTableCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateProductTableTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateProductTableTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -96,9 +104,17 @@ export default function DataTablePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

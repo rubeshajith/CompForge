@@ -10,6 +10,8 @@ import {
 import {
   generateDashboardJSX,
   generateDashboardCSS,
+  generateDashboardTSX,
+  generateDashboardTailwind,
 } from "@/lib/generateDashboardCode";
 import { DashboardPreview } from "@/components/playground/DashboardPreview";
 import { DashboardControlPanel } from "@/components/playground/DashboardControlPanel";
@@ -30,7 +32,11 @@ export default function DashboardPlayground() {
 
   const jsxCode = useMemo(() => generateDashboardJSX(config), [config]);
   const cssCode = useMemo(() => generateDashboardCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateDashboardTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateDashboardTailwind(config),
+    [config],
+  );
   return (
     <ResizablePlayground
       componentName="Dashboard"
@@ -43,9 +49,17 @@ export default function DashboardPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

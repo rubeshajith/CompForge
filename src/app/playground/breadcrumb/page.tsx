@@ -10,6 +10,8 @@ import {
 import {
   generateBreadcrumbJSX,
   generateBreadcrumbCSS,
+  generateBreadcrumbTSX,
+  generateBreadcrumbTailwind,
 } from "@/lib/generateBreadcrumbCode";
 import { BreadcrumbPreview } from "@/components/playground/BreadcrumbsPreview";
 import { BreadcrumbControlPanel } from "@/components/playground/BreadcrumbControlPanel";
@@ -46,6 +48,11 @@ export default function BreadcrumbPlayground() {
 
   const jsxCode = useMemo(() => generateBreadcrumbJSX(config), [config]);
   const cssCode = useMemo(() => generateBreadcrumbCSS(config), [config]);
+  const tsxCode = useMemo(() => generateBreadcrumbTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateBreadcrumbTailwind(config),
+    [config],
+  );
 
   const stageStyle =
     mode === "light"
@@ -71,9 +78,17 @@ export default function BreadcrumbPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

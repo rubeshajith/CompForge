@@ -8,7 +8,12 @@ import {
   darkTimelineConfig,
   defaultMilestones,
 } from "@/lib/timelineConfig";
-import { generateTimelineJSX, generateTimelineCSS } from "@/lib/generateTimelineCode";
+import {
+  generateTimelineJSX,
+  generateTimelineCSS,
+  generateTimelineTSX,
+  generateTimelineTailwind,
+} from "@/lib/generateTimelineCode";
 import { TimelinePreview } from "@/components/playground/TimelinePreview";
 import { TimelineControlPanel } from "@/components/playground/TimelineControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -42,10 +47,17 @@ export default function TimelinePlayground() {
 
   const jsxCode = useMemo(
     () => generateTimelineJSX(config, defaultMilestones),
-    [config]
+    [config],
   );
   const cssCode = useMemo(() => generateTimelineCSS(config), [config]);
-
+  const tsxCode = useMemo(
+    () => generateTimelineTSX(config, defaultMilestones),
+    [config],
+  );
+  const tailwindCode = useMemo(
+    () => generateTimelineTailwind(config, defaultMilestones),
+    [config],
+  );
   // Light mode: subtle crosshatch stage
   const stageStyle =
     mode === "light"
@@ -65,17 +77,25 @@ export default function TimelinePlayground() {
       mode={mode}
       onModeToggle={handleModeToggle}
       modeHint="Switching resets colors · animate & shadow preserved"
-      
-      preview={<TimelinePreview config={config} milestones={defaultMilestones} />}
+      preview={
+        <TimelinePreview config={config} milestones={defaultMilestones} />
+      }
       controls={
         <TimelineControlPanel
           config={config}
           onChange={handleChange}
           onReset={handleReset}
-            mode={mode}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

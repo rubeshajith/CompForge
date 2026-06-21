@@ -19,6 +19,7 @@ interface AccordionControlPanelProps {
   config: AccordionConfig;
   onChange: (patch: Partial<AccordionConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const VARIANTS: AccordionVariant[] = [
@@ -32,6 +33,7 @@ export function AccordionControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: AccordionControlPanelProps) {
   const [localConfig, setLocalConfig] = useState<AccordionConfig>(config);
 
@@ -155,16 +157,19 @@ export function AccordionControlPanel({
           label="Background"
           value={localConfig.headerBackground}
           onChange={(v) => handleColor("headerBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover BG"
           value={localConfig.headerHoverBackground}
           onChange={(v) => handleColor("headerHoverBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Text"
           value={localConfig.headerTextColor}
           onChange={(v) => handleColor("headerTextColor", v)}
+          isDark={isDark}
         />
         <SliderRow
           label="Font Size"
@@ -210,11 +215,13 @@ export function AccordionControlPanel({
           label="Background"
           value={localConfig.contentBackground}
           onChange={(v) => handleColor("contentBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Text"
           value={localConfig.contentTextColor}
           onChange={(v) => handleColor("contentTextColor", v)}
+          isDark={isDark}
         />
         <SliderRow
           label="Font Size"
@@ -233,21 +240,25 @@ export function AccordionControlPanel({
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleColor("borderColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Separator"
           value={localConfig.separatorColor}
           onChange={(v) => handleColor("separatorColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Accent"
           value={localConfig.accentColor}
           onChange={(v) => handleColor("accentColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon"
           value={localConfig.iconColor}
           onChange={(v) => handleColor("iconColor", v)}
+          isDark={isDark}
         />
         <SliderRow
           label="Icon Size"
@@ -266,16 +277,19 @@ export function AccordionControlPanel({
           label="Nested Header BG"
           value={localConfig.nestedHeaderBackground}
           onChange={(v) => handleColor("nestedHeaderBackground", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Nested Text"
           value={localConfig.nestedHeaderTextColor}
           onChange={(v) => handleColor("nestedHeaderTextColor", v)}
+          isDark={isDark}
         />
         <ColorRow
           label="Nested Accent"
           value={localConfig.nestedAccentColor}
           onChange={(v) => handleColor("nestedAccentColor", v)}
+          isDark={isDark}
         />
       </Section>
 
@@ -309,6 +323,7 @@ export function AccordionControlPanel({
             label="Shadow Color"
             value={localConfig.shadowColor}
             onChange={(v) => handleColor("shadowColor", v)}
+            isDark={isDark}
           />
         )}
       </Section>

@@ -12,6 +12,8 @@ import {
 import {
   generateDataTableJSX,
   generateDataTableCSS,
+  generateDataTableTSX,
+  generateDataTableTailwind,
 } from "@/lib/generateDataTableCode";
 import { DataTablePreview } from "@/components/playground/DataTablePreview";
 import { DataTableControlPanel } from "@/components/playground/DataTableControlPanel";
@@ -62,7 +64,11 @@ export default function DataTablePlayground() {
 
   const jsxCode = useMemo(() => generateDataTableJSX(config), [config]);
   const cssCode = useMemo(() => generateDataTableCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateDataTableTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateDataTableTailwind(config),
+    [config],
+  );
   // Light mode stage: crosshatch grid
   const stageStyle =
     mode === "light"
@@ -88,9 +94,17 @@ export default function DataTablePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

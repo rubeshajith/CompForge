@@ -18,6 +18,7 @@ interface Props {
   config: KpiCardConfig;
   onChange: (patch: Partial<KpiCardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const CHART_VARIANTS: { value: KpiChartVariant; label: string }[] = [
@@ -204,12 +205,14 @@ export function KpiCardControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.cardBackground}
           onChange={(v) => handleImmediate({ cardBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.cardBorderColor}
           onChange={(v) => handleImmediate({ cardBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.cardBorderRadius}
@@ -246,17 +249,20 @@ export function KpiCardControlPanel({ config, onChange, onReset }: Props) {
           label="Value Color"
           value={localConfig.valueColor}
           onChange={(v) => handleImmediate({ valueColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Label Color"
           value={localConfig.labelColor}
           onChange={(v) => handleImmediate({ labelColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Sub-text Color"
           value={localConfig.subTextColor}
           onChange={(v) => handleImmediate({ subTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={localConfig.fontSize}
@@ -274,12 +280,14 @@ export function KpiCardControlPanel({ config, onChange, onReset }: Props) {
           label="Accent"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Dim"
           value={localConfig.accentColorDim}
           onChange={(v) => handleImmediate({ accentColorDim: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Track / Empty"
           value={localConfig.chartTrackColor}
@@ -298,12 +306,14 @@ export function KpiCardControlPanel({ config, onChange, onReset }: Props) {
           label="Badge BG"
           value={localConfig.badgeColor}
           onChange={(v) => handleImmediate({ badgeColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Badge Text"
           value={localConfig.badgeTextColor}
           onChange={(v) => handleImmediate({ badgeTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Animation */}

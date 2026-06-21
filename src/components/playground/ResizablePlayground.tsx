@@ -83,6 +83,9 @@ export function ResizablePlayground({
             <span className={styles.logoMark}>⬡</span>
             <span className={styles.logoText}>CompForge</span>
           </Link>
+          {/* <BackButton />
+          <span className={styles.logoMark}>⬡</span>
+          <span className={styles.logoText}>CompForge</span> */}
           <span className={styles.separator}>/</span>
           <span className={styles.componentName}>{componentName}</span>
         </div>
@@ -122,7 +125,9 @@ export function ResizablePlayground({
           <div
             className={`${styles.previewStage} ${mode === "light" ? styles.previewStageLight : ""}`}
           >
-            <div className={styles.previewScroll}>{preview}</div>
+            <div className={styles.previewScroll}>
+              <div className={styles.previewContent}>{preview}</div>
+            </div>
           </div>
 
           {/* Drag handle */}

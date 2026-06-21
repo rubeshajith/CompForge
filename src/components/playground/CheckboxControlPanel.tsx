@@ -22,9 +22,15 @@ interface Props {
   config: CheckboxConfig;
   onChange: (patch: Partial<CheckboxConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
-export function CheckboxControlPanel({ config, onChange, onReset }: Props) {
+export function CheckboxControlPanel({
+  config,
+  onChange,
+  onReset,
+  isDark,
+}: Props) {
   const [localConfig, setLocalConfig] = useState(config);
 
   const debouncedOnChange = useMemo(() => debounce(onChange, 80), [onChange]);
@@ -140,11 +146,13 @@ export function CheckboxControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.uncheckedBackground}
           onChange={(v) => onChange({ uncheckedBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={config.uncheckedBorderColor}
           onChange={(v) => onChange({ uncheckedBorderColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -154,16 +162,19 @@ export function CheckboxControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.checkedBackground}
           onChange={(v) => onChange({ checkedBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={config.checkedBorderColor}
           onChange={(v) => onChange({ checkedBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Checkmark"
           value={config.checkmarkColor}
           onChange={(v) => onChange({ checkmarkColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -173,11 +184,13 @@ export function CheckboxControlPanel({ config, onChange, onReset }: Props) {
           label="Primary"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Secondary"
           value={config.accentSecondary}
           onChange={(v) => onChange({ accentSecondary: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -187,6 +200,7 @@ export function CheckboxControlPanel({ config, onChange, onReset }: Props) {
           label="Color"
           value={config.labelColor}
           onChange={(v) => onChange({ labelColor: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Font Size"

@@ -11,6 +11,8 @@ import {
 import {
   generateStepProgressJSX,
   generateStepProgressCSS,
+  generateStepProgressTSX,
+  generateStepProgressTailwind,
 } from "@/lib/generateStepProgressCode";
 import { StepProgressPreview } from "@/components/playground/StepProgressPreview";
 import { StepProgressControlPanel } from "@/components/playground/StepProgressControlPanel";
@@ -62,7 +64,11 @@ export default function StepProgressPlayground() {
 
   const jsxCode = useMemo(() => generateStepProgressJSX(config), [config]);
   const cssCode = useMemo(() => generateStepProgressCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateStepProgressTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateStepProgressTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -87,9 +93,17 @@ export default function StepProgressPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

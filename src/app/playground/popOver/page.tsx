@@ -10,6 +10,8 @@ import {
 import {
   generatePopoverJSX,
   generatePopoverCSS,
+  generatePopoverTSX,
+  generatePopoverTailwind,
 } from "@/lib/generatePopOverCode";
 
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -89,7 +91,14 @@ export default function PopoverPlayground() {
     () => generatePopoverCSS(config, selectedVariant),
     [config, selectedVariant],
   );
-
+  const tsxCode = useMemo(
+    () => generatePopoverTSX(config, selectedVariant),
+    [config, selectedVariant],
+  );
+  const tailwindCode = useMemo(
+    () => generatePopoverTailwind(config, selectedVariant),
+    [config, selectedVariant],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -118,9 +127,17 @@ export default function PopoverPlayground() {
           onVariantChange={setSelectedVariant}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

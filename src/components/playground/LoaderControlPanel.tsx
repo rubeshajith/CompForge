@@ -16,6 +16,7 @@ interface Props {
   config: LoaderConfig;
   onChange: (patch: Partial<LoaderConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function LoaderControlPanel({ config, onChange, onReset }: Props) {
@@ -74,17 +75,20 @@ export function LoaderControlPanel({ config, onChange, onReset }: Props) {
           label="Primary"
           value={config.primaryColor}
           onChange={(v) => onChange({ primaryColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Secondary"
           value={config.secondaryColor}
           onChange={(v) => onChange({ secondaryColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Background"
           value={config.backgroundColor}
           onChange={(v) => onChange({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Sizing ── */}
@@ -155,7 +159,8 @@ export function LoaderControlPanel({ config, onChange, onReset }: Props) {
               label="Label color"
               value={config.labelColor}
               onChange={(v) => onChange({ labelColor: v })}
-            />
+              isDark={isDark}
+/>
           </>
         )}
       </Section>

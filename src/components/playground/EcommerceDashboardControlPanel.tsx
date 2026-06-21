@@ -11,6 +11,7 @@ interface EcommerceDashboardControlPanelProps {
   config: EcommerceDashboardConfig;
   onChange: (patch: Partial<EcommerceDashboardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const themes = Object.entries(ecommerceDashboardThemePresets);
@@ -28,6 +29,7 @@ export function EcommerceDashboardControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: EcommerceDashboardControlPanelProps) {
   return (
     <ControlPanelShell onReset={onReset}>
@@ -74,7 +76,8 @@ export function EcommerceDashboardControlPanel({
           label="Custom accent"
           value={config.accentColor}
           onChange={(value) => onChange(customAccentPatch(value))}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

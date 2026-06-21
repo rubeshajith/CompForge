@@ -9,6 +9,7 @@ interface ManufacturingDashboardControlPanelProps {
   config: ManufacturingDashboardConfig;
   onChange: (patch: Partial<ManufacturingDashboardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function ManufacturingDashboardControlPanel({ config, onChange, onReset }: ManufacturingDashboardControlPanelProps) {
@@ -59,17 +60,28 @@ export function ManufacturingDashboardControlPanel({ config, onChange, onReset }
       </Section>
 
       <Section title="Colors">
-        <ColorRow label="Background" value={localConfig.backgroundColor} onChange={(value) => updateImmediate({ backgroundColor: value })} />
-        <ColorRow label="Shell" value={localConfig.shellColor} onChange={(value) => updateImmediate({ shellColor: value })} />
-        <ColorRow label="Cards" value={localConfig.cardColor} onChange={(value) => updateImmediate({ cardColor: value })} />
-        <ColorRow label="Card hover" value={localConfig.cardHoverColor} onChange={(value) => updateImmediate({ cardHoverColor: value })} />
-        <ColorRow label="Border" value={localConfig.borderColor} onChange={(value) => updateImmediate({ borderColor: value })} />
-        <ColorRow label="Text" value={localConfig.textColor} onChange={(value) => updateImmediate({ textColor: value })} />
-        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(value) => updateImmediate({ mutedTextColor: value })} />
-        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(value) => updateImmediate({ accentColor: value })} />
-        <ColorRow label="Success" value={localConfig.successColor} onChange={(value) => updateImmediate({ successColor: value })} />
-        <ColorRow label="Warning" value={localConfig.warningColor} onChange={(value) => updateImmediate({ warningColor: value })} />
-        <ColorRow label="Danger" value={localConfig.dangerColor} onChange={(value) => updateImmediate({ dangerColor: value })} />
+        <ColorRow label="Background" value={localConfig.backgroundColor} onChange={(value) => updateImmediate({ backgroundColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Shell" value={localConfig.shellColor} onChange={(value) => updateImmediate({ shellColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Cards" value={localConfig.cardColor} onChange={(value) => updateImmediate({ cardColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Card hover" value={localConfig.cardHoverColor} onChange={(value) => updateImmediate({ cardHoverColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Border" value={localConfig.borderColor} onChange={(value) => updateImmediate({ borderColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Text" value={localConfig.textColor} onChange={(value) => updateImmediate({ textColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(value) => updateImmediate({ mutedTextColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(value) => updateImmediate({ accentColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Success" value={localConfig.successColor} onChange={(value) => updateImmediate({ successColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Warning" value={localConfig.warningColor} onChange={(value) => updateImmediate({ warningColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Danger" value={localConfig.dangerColor} onChange={(value) => updateImmediate({ dangerColor: value })}   isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

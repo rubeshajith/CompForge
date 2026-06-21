@@ -10,6 +10,8 @@ import {
 import {
   generateAccordionJSX,
   generateAccordionCSS,
+  generateAccordionTSX,
+  generateAccordionTailwind,
 } from "@/lib/generateAccordionCode";
 import { AccordionPreview } from "@/components/playground/AccordionPreview";
 import { AccordionControlPanel } from "@/components/playground/AccordionControlPanel";
@@ -48,6 +50,11 @@ export default function AccordionPlayground() {
 
   const jsxCode = useMemo(() => generateAccordionJSX(config), [config]);
   const cssCode = useMemo(() => generateAccordionCSS(config), [config]);
+  const tsxCode = useMemo(() => generateAccordionTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateAccordionTailwind(config),
+    [config],
+  );
 
   const stageStyle =
     mode === "light"
@@ -73,9 +80,18 @@ export default function AccordionPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+          exportFileName="Accordion"
+        />
+      }
     />
   );
 }

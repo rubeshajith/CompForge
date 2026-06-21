@@ -7,7 +7,12 @@ import {
   formModePresets,
   darkFormConfig,
 } from "@/lib/formConfig";
-import { generateFormJSX, generateFormCSS } from "@/lib/generateFormCode";
+import {
+  generateFormJSX,
+  generateFormCSS,
+  generateFormTSX,
+  generateFormTailwind,
+} from "@/lib/generateFormCode";
 import { FormPreview } from "@/components/playground/FormPreview";
 import { FormControlPanel } from "@/components/playground/FormControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -33,7 +38,8 @@ export default function FormPlayground() {
 
   const jsxCode = useMemo(() => generateFormJSX(config), [config]);
   const cssCode = useMemo(() => generateFormCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateFormTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateFormTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -59,9 +65,17 @@ export default function FormPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

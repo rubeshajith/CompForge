@@ -20,6 +20,7 @@ interface Props {
   config: StepperConfig;
   onChange: (patch: Partial<StepperConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const VARIANTS: StepperVariant[] = [
@@ -106,7 +107,8 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
           label="Track Color"
           value={config.trackColor}
           onChange={(v) => onChange({ trackColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Track Height"
           value={config.trackHeight}
@@ -134,12 +136,14 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Accent"
             value={config.accentColor}
             onChange={(v) => onChange({ accentColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Accent 2"
             value={config.accentColorSecondary}
             onChange={(v) => onChange({ accentColorSecondary: v })}
-          />
+            isDark={isDark}
+/>
           {hasFill && (
             <SliderRow
               label="Fill %"
@@ -161,12 +165,14 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Color 1"
             value={config.accentColor}
             onChange={(v) => onChange({ accentColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Color 2"
             value={config.accentColorSecondary}
             onChange={(v) => onChange({ accentColorSecondary: v })}
-          />
+            isDark={isDark}
+/>
           <SliderRow
             label="Fill %"
             value={config.fillPercent}
@@ -213,22 +219,26 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Point 1"
             value={config.point1Color}
             onChange={(v) => onChange({ point1Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Point 2"
             value={config.point2Color}
             onChange={(v) => onChange({ point2Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Point 3"
             value={config.point3Color}
             onChange={(v) => onChange({ point3Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Point 4"
             value={config.point4Color}
             onChange={(v) => onChange({ point4Color: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -239,12 +249,14 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Thumb Bg"
             value={config.thumbBackground}
             onChange={(v) => onChange({ thumbBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Thumb Border"
             value={config.thumbBorderColor}
             onChange={(v) => onChange({ thumbBorderColor: v })}
-          />
+            isDark={isDark}
+/>
           <SliderRow
             label="Thumb Size"
             value={config.thumbSize}
@@ -269,12 +281,14 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Tooltip Bg"
             value={config.tooltipBackground}
             onChange={(v) => onChange({ tooltipBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Tooltip Text"
             value={config.tooltipTextColor}
             onChange={(v) => onChange({ tooltipTextColor: v })}
-          />
+            isDark={isDark}
+/>
           <SliderRow
             label="Radius"
             value={config.tooltipBorderRadius}
@@ -326,27 +340,32 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Active"
             value={config.stepActiveColor}
             onChange={(v) => onChange({ stepActiveColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Complete"
             value={config.stepCompleteColor}
             onChange={(v) => onChange({ stepCompleteColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Inactive"
             value={config.stepInactiveColor}
             onChange={(v) => onChange({ stepInactiveColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Label"
             value={config.stepLabelColor}
             onChange={(v) => onChange({ stepLabelColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Connector"
             value={config.stepConnectorColor}
             onChange={(v) => onChange({ stepConnectorColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -357,27 +376,32 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Cart"
             value={config.seg1Color}
             onChange={(v) => onChange({ seg1Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Shipping"
             value={config.seg2Color}
             onChange={(v) => onChange({ seg2Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Review"
             value={config.seg3Color}
             onChange={(v) => onChange({ seg3Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Payment"
             value={config.seg4Color}
             onChange={(v) => onChange({ seg4Color: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Label Color"
             value={config.segLabelColor}
             onChange={(v) => onChange({ segLabelColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -393,7 +417,8 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Stripe Color"
             value={config.stripeColor}
             onChange={(v) => onChange({ stripeColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -404,12 +429,14 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
             label="Node Border"
             value={config.verificationNodeBorderColor}
             onChange={(v) => onChange({ verificationNodeBorderColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Node Bg"
             value={config.verificationNodeBackground}
             onChange={(v) => onChange({ verificationNodeBackground: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
       )}
 
@@ -428,7 +455,8 @@ export function StepperControlPanel({ config, onChange, onReset }: Props) {
           label="Label Color"
           value={config.labelColor}
           onChange={(v) => onChange({ labelColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

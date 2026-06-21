@@ -20,6 +20,7 @@ interface LoaderControlPanelProps {
   onReset: () => void;
   onImageUpload: (dataUrl: string) => void;
   onImageClear: () => void;
+  isDark: boolean;
 }
 
 const ANIMATION_OPTIONS: {
@@ -73,6 +74,7 @@ export function LoaderControlPanel({
   onReset,
   onImageUpload,
   onImageClear,
+  isDark,
 }: LoaderControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -486,12 +488,14 @@ export function LoaderControlPanel({
             label="Glow color"
             value={localConfig.glowColor}
             onChange={(v) => handleImmediate({ glowColor: v })}
+            isDark={isDark}
           />
         )}
         <ColorRow
           label="Accent"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -528,6 +532,7 @@ export function LoaderControlPanel({
               label="Color"
               value={localConfig.labelColor}
               onChange={(v) => handleImmediate({ labelColor: v })}
+              isDark={isDark}
             />
             <SliderRow
               label="Size"
@@ -564,6 +569,7 @@ export function LoaderControlPanel({
               label="Background"
               value={localConfig.backgroundColor}
               onChange={(v) => handleImmediate({ backgroundColor: v })}
+              isDark={isDark}
             />
             <SliderRow
               label="Padding"

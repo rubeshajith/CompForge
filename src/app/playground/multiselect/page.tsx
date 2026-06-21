@@ -17,6 +17,8 @@ import { MultiSelectPreview } from "@/components/playground/MultiselectPreview";
 import {
   generateMultiSelectCSS,
   generateMultiSelectJSX,
+  generateMultiSelectTailwind,
+  generateMultiSelectTSX,
 } from "@/lib/generateMultiSelectCode";
 
 export default function MultiSelectPlayground() {
@@ -40,7 +42,11 @@ export default function MultiSelectPlayground() {
 
   const jsxCode = useMemo(() => generateMultiSelectJSX(config), [config]);
   const cssCode = useMemo(() => generateMultiSelectCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateMultiSelectTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateMultiSelectTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -65,9 +71,17 @@ export default function MultiSelectPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

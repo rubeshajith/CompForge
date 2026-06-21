@@ -17,6 +17,7 @@ interface SkeletonControlPanelProps {
   onReset: () => void;
   selectedBoxId: string | null;
   onSelectBox: (id: string | null) => void;
+  isDark: boolean;
 }
 
 let boxCounter = 8;
@@ -36,6 +37,7 @@ export function SkeletonControlPanel({
   onReset,
   selectedBoxId,
   onSelectBox,
+  isDark = true,
 }: SkeletonControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -186,11 +188,13 @@ export function SkeletonControlPanel({
           label="Background"
           value={config.canvasBackground}
           onChange={(v) => onChange({ canvasBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={config.canvasBorder}
           onChange={(v) => onChange({ canvasBorder: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Corner radius"
@@ -214,11 +218,13 @@ export function SkeletonControlPanel({
           label="Base color"
           value={config.shimmerBaseColor}
           onChange={(v) => onChange({ shimmerBaseColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Highlight"
           value={config.shimmerHighlightColor}
           onChange={(v) => onChange({ shimmerHighlightColor: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Speed"

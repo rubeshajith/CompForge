@@ -11,6 +11,7 @@ interface SaasDashboardControlPanelProps {
   config: SaasDashboardConfig;
   onChange: (patch: Partial<SaasDashboardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const themeOptions: SaasDashboardTheme[] = [
@@ -25,6 +26,7 @@ export function SaasDashboardControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: SaasDashboardControlPanelProps) {
   return (
     <ControlPanelShell onReset={onReset}>
@@ -76,7 +78,8 @@ export function SaasDashboardControlPanel({
           label="Custom accent"
           value={config.customAccent}
           onChange={(customAccent) => onChange({ theme: "custom", customAccent })}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

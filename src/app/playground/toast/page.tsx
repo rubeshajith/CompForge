@@ -10,7 +10,12 @@ import {
   toastModePresets,
   darkToastConfig,
 } from "@/lib/toastConfig";
-import { generateToastJSX, generateToastCSS } from "@/lib/generateToastCode";
+import {
+  generateToastJSX,
+  generateToastCSS,
+  generateToastTSX,
+  generateToastTailwind,
+} from "@/lib/generateToastCode";
 import { ToastPreview } from "@/components/playground/ToastPreview";
 import { ToastControlPanel } from "@/components/playground/ToastControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -75,7 +80,8 @@ export default function ToastPlayground() {
   // ── Generated code (memoized) ──
   const jsxCode = useMemo(() => generateToastJSX(config), [config]);
   const cssCode = useMemo(() => generateToastCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateToastTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateToastTailwind(config), [config]);
   // ── Stage background ──
   const stageStyle =
     mode === "light"
@@ -109,9 +115,17 @@ export default function ToastPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

@@ -11,6 +11,8 @@ import {
 import {
   generateLoaderJSX,
   generateLoaderCSS,
+  generateLoaderTSX,
+  generateLoaderTailwind,
 } from "@/lib/generateCustomLoaderCode";
 import { LoaderPreview } from "@/components/playground/CustomLoaderPreview";
 import { LoaderControlPanel } from "@/components/playground/CustomLoaderControlPanel";
@@ -82,7 +84,11 @@ export default function LoaderPlayground() {
 
   const jsxCode = useMemo(() => generateLoaderJSX(config), [config]);
   const cssCode = useMemo(() => generateLoaderCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateLoaderTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateLoaderTailwind(config),
+    [config],
+  );
   // Stage background adapts to mode
   const stageStyle =
     mode === "light"
@@ -122,11 +128,19 @@ export default function LoaderPlayground() {
           imageDataUrl={imageDataUrl}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
           onImageUpload={setImageDataUrl}
           onImageClear={() => setImageDataUrl(null)}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

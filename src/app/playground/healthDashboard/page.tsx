@@ -10,6 +10,8 @@ import {
 import {
   generateOmnidashJSX,
   generateOmnidashCSS,
+  generateOmnidashTSX,
+  generateOmnidashTailwind,
 } from "@/lib/generateHealthDashCode";
 import { OmnidashPreview } from "@/components/playground/HealthDashPreview";
 import { OmnidashControlPanel } from "@/components/playground/HealthDashControlPanel";
@@ -29,7 +31,11 @@ export default function OmnidashPlayground() {
 
   const jsxCode = useMemo(() => generateOmnidashJSX(config), [config]);
   const cssCode = useMemo(() => generateOmnidashCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateOmnidashTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateOmnidashTailwind(config),
+    [config],
+  );
   return (
     <ResizablePlayground
       componentName="OmniDash — HealthTech Clinician Dashboard"
@@ -44,7 +50,14 @@ export default function OmnidashPlayground() {
           onReset={handleReset}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

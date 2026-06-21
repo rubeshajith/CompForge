@@ -890,7 +890,7 @@ export function Calendar({ onDateChange }: CalendarProps) {
 
   return (
     <div
-      className="flex gap-5 items-start font-sans"
+      className="flex gap-5 items-start font-[inherit]"
       style={calendarVars}
       ref={pickerRef}
     >
@@ -958,7 +958,7 @@ export function Calendar({ onDateChange }: CalendarProps) {
                               key={m}
                               className={\`px-3.5 py-2 text-[${fsBase}px] text-[var(--cal-header-text)] cursor-pointer transition-colors hover:bg-[var(--cal-picker-hover)] \${
                                 i === month
-                                  ? "text-[var(--cal-accent)] bg-[var(--cal-accent)]/10 font-semibold"
+                                      ? \`text-[${config.accentColor}] bg-[${config.accentColor}18] font-semibold\`
                                   : ""
                               }\`}
                               onClick={() => selectMonth(i, index)}
@@ -984,7 +984,7 @@ export function Calendar({ onDateChange }: CalendarProps) {
                               key={y}
                               className={\`px-3.5 py-2 text-[${fsBase}px] text-[var(--cal-header-text)] cursor-pointer transition-colors hover:bg-[var(--cal-picker-hover)] \${
                                 y === year
-                                  ? "text-[var(--cal-accent)] bg-[var(--cal-accent)]/10 font-semibold"
+                                      ? \`text-[${config.accentColor}] bg-[${config.accentColor}18] font-semibold\`
                                   : ""
                               }\`}
                               onClick={() => selectYear(y, index)}
@@ -1010,7 +1010,7 @@ export function Calendar({ onDateChange }: CalendarProps) {
 
             {/* Day grid */}
             <div
-              className="grid row-gap-0.5"
+              className="grid"
               style={{ gridTemplateColumns: \`repeat(7, var(--cal-day-size))\`, rowGap: "2px" }}
             >
               {DAY_NAMES.map((d) => (

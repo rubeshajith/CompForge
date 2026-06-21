@@ -11,6 +11,8 @@ import {
 import {
   generateStepperJSX,
   generateStepperCSS,
+  generateStepperTailwind,
+  generateStepperTSX,
 } from "@/lib/generateStepperCode";
 import { StepperPreview } from "@/components/playground/StepperPreview";
 import { StepperControlPanel } from "@/components/playground/StepperControlPanel";
@@ -66,7 +68,8 @@ export default function StepperPlayground() {
 
   const jsxCode = useMemo(() => generateStepperJSX(config), [config]);
   const cssCode = useMemo(() => generateStepperCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateStepperTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateStepperTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -91,9 +94,17 @@ export default function StepperPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

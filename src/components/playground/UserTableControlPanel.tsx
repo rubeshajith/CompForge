@@ -17,6 +17,7 @@ interface Props {
   config: UserTableConfig;
   onChange: (patch: Partial<UserTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function UserTableControlPanel({ config, onChange, onReset }: Props) {
@@ -107,12 +108,14 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => handleImmediate({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleImmediate({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Show Shadow"
           value={localConfig.showShadow}
@@ -126,17 +129,20 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Header Background"
           value={localConfig.headerBackground}
           onChange={(v) => handleImmediate({ headerBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Text"
           value={localConfig.headerTextColor}
           onChange={(v) => handleImmediate({ headerTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Border"
           value={localConfig.headerBorderColor}
           onChange={(v) => handleImmediate({ headerBorderColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Rows ───────────────────────────────────── */}
@@ -145,27 +151,32 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Row Background"
           value={localConfig.rowBackground}
           onChange={(v) => handleImmediate({ rowBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Hover"
           value={localConfig.rowHoverBackground}
           onChange={(v) => handleImmediate({ rowHoverBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={localConfig.rowTextColor}
           onChange={(v) => handleImmediate({ rowTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Subtext"
           value={localConfig.rowSubtextColor}
           onChange={(v) => handleImmediate({ rowSubtextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Divider"
           value={localConfig.rowDividerColor}
           onChange={(v) => handleImmediate({ rowDividerColor: v })}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Striped Rows"
           value={localConfig.stripedRows}
@@ -176,7 +187,8 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
             label="Stripe Color"
             value={localConfig.rowStripeColor}
             onChange={(v) => handleImmediate({ rowStripeColor: v })}
-          />
+            isDark={isDark}
+/>
         )}
       </Section>
 
@@ -186,12 +198,14 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Avatar Background"
           value={localConfig.avatarBackground}
           onChange={(v) => handleImmediate({ avatarBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Avatar Text"
           value={localConfig.avatarTextColor}
           onChange={(v) => handleImmediate({ avatarTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Avatar Size"
           value={localConfig.avatarSize}
@@ -218,32 +232,38 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Admin Background"
           value={localConfig.adminBadgeBackground}
           onChange={(v) => handleImmediate({ adminBadgeBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Admin Text"
           value={localConfig.adminBadgeTextColor}
           onChange={(v) => handleImmediate({ adminBadgeTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Editor Background"
           value={localConfig.editorBadgeBackground}
           onChange={(v) => handleImmediate({ editorBadgeBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Editor Text"
           value={localConfig.editorBadgeTextColor}
           onChange={(v) => handleImmediate({ editorBadgeTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Viewer Background"
           value={localConfig.viewerBadgeBackground}
           onChange={(v) => handleImmediate({ viewerBadgeBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Viewer Text"
           value={localConfig.viewerBadgeTextColor}
           onChange={(v) => handleImmediate({ viewerBadgeTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Badge Radius"
           value={localConfig.badgeBorderRadius}
@@ -261,37 +281,44 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Active Background"
           value={localConfig.activeBackground}
           onChange={(v) => handleImmediate({ activeBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={localConfig.activeTextColor}
           onChange={(v) => handleImmediate({ activeTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Dot"
           value={localConfig.activeDotColor}
           onChange={(v) => handleImmediate({ activeDotColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Inactive Background"
           value={localConfig.inactiveBackground}
           onChange={(v) => handleImmediate({ inactiveBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Inactive Text"
           value={localConfig.inactiveTextColor}
           onChange={(v) => handleImmediate({ inactiveTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending Background"
           value={localConfig.pendingBackground}
           onChange={(v) => handleImmediate({ pendingBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending Text"
           value={localConfig.pendingTextColor}
           onChange={(v) => handleImmediate({ pendingTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Expanded Row ───────────────────────────── */}
@@ -300,17 +327,20 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Expanded Background"
           value={localConfig.expandedBackground}
           onChange={(v) => handleImmediate({ expandedBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Border"
           value={localConfig.expandedAccentBorder}
           onChange={(v) => handleImmediate({ expandedAccentBorder: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Expanded Text"
           value={localConfig.expandedTextColor}
           onChange={(v) => handleImmediate({ expandedTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Pagination ─────────────────────────────── */}
@@ -319,22 +349,26 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Pagination Background"
           value={localConfig.paginationBackground}
           onChange={(v) => handleImmediate({ paginationBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Background"
           value={localConfig.paginationActiveBackground}
           onChange={(v) => handleImmediate({ paginationActiveBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={localConfig.paginationActiveTextColor}
           onChange={(v) => handleImmediate({ paginationActiveTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Page Text"
           value={localConfig.paginationTextColor}
           onChange={(v) => handleImmediate({ paginationTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Accent & Interactive ───────────────────── */}
@@ -343,17 +377,20 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
           label="Accent Color"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Checkbox Color"
           value={localConfig.checkboxColor}
           onChange={(v) => handleImmediate({ checkboxColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chevron Color"
           value={localConfig.chevronColor}
           onChange={(v) => handleImmediate({ chevronColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Summary Cards ──────────────────────────── */}
@@ -369,17 +406,20 @@ export function UserTableControlPanel({ config, onChange, onReset }: Props) {
               label="Card Background"
               value={localConfig.summaryCardBackground}
               onChange={(v) => handleImmediate({ summaryCardBackground: v })}
-            />
+              isDark={isDark}
+/>
             <ColorRow
               label="Card Border"
               value={localConfig.summaryCardBorderColor}
               onChange={(v) => handleImmediate({ summaryCardBorderColor: v })}
-            />
+              isDark={isDark}
+/>
             <ColorRow
               label="Icon Color"
               value={localConfig.summaryCardIconColor}
               onChange={(v) => handleImmediate({ summaryCardIconColor: v })}
-            />
+              isDark={isDark}
+/>
           </>
         )}
       </Section>

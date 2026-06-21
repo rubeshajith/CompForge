@@ -15,6 +15,7 @@ interface RecordTableControlPanelProps {
   config: RecordTableConfig;
   onChange: (patch: Partial<RecordTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 function SelectRow({
@@ -54,6 +55,7 @@ export function RecordTableControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: RecordTableControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
   const debouncedOnChange = useMemo(() => debounce(onChange, 100), [onChange]);
@@ -98,23 +100,37 @@ export function RecordTableControlPanel({
       </Section>
 
       <Section title="Colors">
-        <ColorRow label="Background" value={localConfig.backgroundColor} onChange={(value) => updateImmediate("backgroundColor", value)} />
-        <ColorRow label="Surface" value={localConfig.surfaceColor} onChange={(value) => updateImmediate("surfaceColor", value)} />
-        <ColorRow label="Search" value={localConfig.searchBackground} onChange={(value) => updateImmediate("searchBackground", value)} />
-        <ColorRow label="Border" value={localConfig.borderColor} onChange={(value) => updateImmediate("borderColor", value)} />
-        <ColorRow label="Text" value={localConfig.textColor} onChange={(value) => updateImmediate("textColor", value)} />
-        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(value) => updateImmediate("mutedTextColor", value)} />
-        <ColorRow label="Subtle text" value={localConfig.subtleTextColor} onChange={(value) => updateImmediate("subtleTextColor", value)} />
-        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(value) => updateImmediate("accentColor", value)} />
-        <ColorRow label="Accent text" value={localConfig.accentTextColor} onChange={(value) => updateImmediate("accentTextColor", value)} />
-        <ColorRow label="Hover" value={localConfig.hoverBackground} onChange={(value) => updateImmediate("hoverBackground", value)} />
+        <ColorRow label="Background" value={localConfig.backgroundColor} onChange={(value) => updateImmediate("backgroundColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Surface" value={localConfig.surfaceColor} onChange={(value) => updateImmediate("surfaceColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Search" value={localConfig.searchBackground} onChange={(value) => updateImmediate("searchBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Border" value={localConfig.borderColor} onChange={(value) => updateImmediate("borderColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Text" value={localConfig.textColor} onChange={(value) => updateImmediate("textColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(value) => updateImmediate("mutedTextColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Subtle text" value={localConfig.subtleTextColor} onChange={(value) => updateImmediate("subtleTextColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(value) => updateImmediate("accentColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Accent text" value={localConfig.accentTextColor} onChange={(value) => updateImmediate("accentTextColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Hover" value={localConfig.hoverBackground} onChange={(value) => updateImmediate("hoverBackground", value)}   isDark={isDark}
+/>
       </Section>
 
       <Section title="Status Colors">
-        <ColorRow label="Ready" value={localConfig.readyColor} onChange={(value) => updateImmediate("readyColor", value)} />
-        <ColorRow label="Draft" value={localConfig.draftColor} onChange={(value) => updateImmediate("draftColor", value)} />
-        <ColorRow label="Review" value={localConfig.reviewColor} onChange={(value) => updateImmediate("reviewColor", value)} />
-        <ColorRow label="Archived" value={localConfig.archivedColor} onChange={(value) => updateImmediate("archivedColor", value)} />
+        <ColorRow label="Ready" value={localConfig.readyColor} onChange={(value) => updateImmediate("readyColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Draft" value={localConfig.draftColor} onChange={(value) => updateImmediate("draftColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Review" value={localConfig.reviewColor} onChange={(value) => updateImmediate("reviewColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Archived" value={localConfig.archivedColor} onChange={(value) => updateImmediate("archivedColor", value)}   isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

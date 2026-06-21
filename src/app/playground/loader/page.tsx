@@ -7,7 +7,12 @@ import {
   loaderModePresets,
   darkLoaderConfig,
 } from "@/lib/loaderConfig";
-import { generateLoaderJSX, generateLoaderCSS } from "@/lib/generateLoaderCode";
+import {
+  generateLoaderJSX,
+  generateLoaderCSS,
+  generateLoaderTailwind,
+  generateLoaderTSX,
+} from "@/lib/generateLoaderCode";
 import { LoaderPreview } from "@/components/playground/LoaderPreview";
 import { LoaderControlPanel } from "@/components/playground/LoaderControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -50,7 +55,8 @@ export default function LoaderPlayground() {
 
   const jsxCode = useMemo(() => generateLoaderJSX(config), [config]);
   const cssCode = useMemo(() => generateLoaderCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateLoaderTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateLoaderTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -75,9 +81,17 @@ export default function LoaderPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

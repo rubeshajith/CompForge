@@ -17,12 +17,14 @@ interface Props {
   config: AnalyticsTableConfig;
   onChange: (patch: Partial<AnalyticsTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function AnalyticsTableControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: Props) {
   const [lc, setLc] = useState<AnalyticsTableConfig>(config);
 
@@ -157,22 +159,26 @@ export function AnalyticsTableControlPanel({
           label="Table BG"
           value={lc.tableBackground}
           onChange={handleColor("tableBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={lc.tableBorderColor}
           onChange={handleColor("tableBorderColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header BG"
           value={lc.headerBackground}
           onChange={handleColor("headerBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Text"
           value={lc.headerTextColor}
           onChange={handleColor("headerTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Rows ── */}
@@ -181,32 +187,38 @@ export function AnalyticsTableControlPanel({
           label="Row BG"
           value={lc.rowBackground}
           onChange={handleColor("rowBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover BG"
           value={lc.rowHoverBackground}
           onChange={handleColor("rowHoverBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Selected BG"
           value={lc.rowSelectedBackground}
           onChange={handleColor("rowSelectedBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Border"
           value={lc.rowBorderColor}
           onChange={handleColor("rowBorderColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Primary Text"
           value={lc.rowTextColor}
           onChange={handleColor("rowTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Subtext"
           value={lc.rowSubtextColor}
           onChange={handleColor("rowSubtextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Status Badges ── */}
@@ -215,32 +227,38 @@ export function AnalyticsTableControlPanel({
           label="Active BG"
           value={lc.activeBackground}
           onChange={handleColor("activeBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={lc.activeTextColor}
           onChange={handleColor("activeTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending BG"
           value={lc.pendingBackground}
           onChange={handleColor("pendingBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending Text"
           value={lc.pendingTextColor}
           onChange={handleColor("pendingTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="At-Risk BG"
           value={lc.atRiskBackground}
           onChange={handleColor("atRiskBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="At-Risk Text"
           value={lc.atRiskTextColor}
           onChange={handleColor("atRiskTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Churn Risk Bar ── */}
@@ -249,22 +267,26 @@ export function AnalyticsTableControlPanel({
           label="Track Color"
           value={lc.riskBarTrackColor}
           onChange={handleColor("riskBarTrackColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Low Risk"
           value={lc.riskLowColor}
           onChange={handleColor("riskLowColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Med Risk"
           value={lc.riskMedColor}
           onChange={handleColor("riskMedColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="High Risk"
           value={lc.riskHighColor}
           onChange={handleColor("riskHighColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Sparklines ── */}
@@ -273,17 +295,20 @@ export function AnalyticsTableControlPanel({
           label="Healthy"
           value={lc.sparklineColorHealthy}
           onChange={handleColor("sparklineColorHealthy")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Declining"
           value={lc.sparklineColorDeclining}
           onChange={handleColor("sparklineColorDeclining")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="At-Risk"
           value={lc.sparklineColorAtRisk}
           onChange={handleColor("sparklineColorAtRisk")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Expanded Panel ── */}
@@ -292,57 +317,68 @@ export function AnalyticsTableControlPanel({
           label="Panel BG"
           value={lc.expandedBackground}
           onChange={handleColor("expandedBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Border"
           value={lc.expandedBorderAccentColor}
           onChange={handleColor("expandedBorderAccentColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chart BG"
           value={lc.expandedChartBackground}
           onChange={handleColor("expandedChartBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chart Bar"
           value={lc.expandedChartBarColor}
           onChange={handleColor("expandedChartBarColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chart Highlight"
           value={lc.expandedChartBarHighlight}
           onChange={handleColor("expandedChartBarHighlight")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Meta BG"
           value={lc.expandedMetaBackground}
           onChange={handleColor("expandedMetaBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Meta Border"
           value={lc.expandedMetaBorderColor}
           onChange={handleColor("expandedMetaBorderColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Meta Label"
           value={lc.expandedMetaLabelColor}
           onChange={handleColor("expandedMetaLabelColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Meta Value"
           value={lc.expandedMetaValueColor}
           onChange={handleColor("expandedMetaValueColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="CTA Button"
           value={lc.ctaBackground}
           onChange={handleColor("ctaBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="CTA Text"
           value={lc.ctaTextColor}
           onChange={handleColor("ctaTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Accent ── */}
@@ -351,12 +387,14 @@ export function AnalyticsTableControlPanel({
           label="Accent Color"
           value={lc.accentColor}
           onChange={handleColor("accentColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Text"
           value={lc.accentTextColor}
           onChange={handleColor("accentTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Pagination ── */}
@@ -365,27 +403,32 @@ export function AnalyticsTableControlPanel({
           label="Bar BG"
           value={lc.paginationBackground}
           onChange={handleColor("paginationBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active BG"
           value={lc.paginationActiveBackground}
           onChange={handleColor("paginationActiveBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={lc.paginationActiveTextColor}
           onChange={handleColor("paginationActiveTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Page Text"
           value={lc.paginationTextColor}
           onChange={handleColor("paginationTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={lc.paginationBorderColor}
           onChange={handleColor("paginationBorderColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

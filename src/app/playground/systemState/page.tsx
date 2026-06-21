@@ -10,6 +10,8 @@ import {
 import {
   generateSystemStateJSX,
   generateSystemStateCSS,
+  generateSystemStateTSX,
+  generateSystemStateTailwind,
 } from "@/lib/generateSystemStateCode";
 import { SystemStatePreview } from "@/components/playground/SystemStatePreview";
 import { SystemStateControlPanel } from "@/components/playground/SystemStateControlPanel";
@@ -46,7 +48,11 @@ export default function SystemStatePlayground() {
 
   const jsxCode = useMemo(() => generateSystemStateJSX(config), [config]);
   const cssCode = useMemo(() => generateSystemStateCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateSystemStateTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateSystemStateTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -74,7 +80,14 @@ export default function SystemStatePlayground() {
           mode={mode}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

@@ -238,13 +238,10 @@ export function StepProgressPreview({ config }: StepProgressPreviewProps) {
         height: config.connectorThickness,
         background: "none",
         borderBottom: `${config.connectorThickness}px ${borderStyleMap[config.connectorStyle]} ${isCompleted ? config.connectorCompletedColor : config.connectorIncompleteColor}`,
-        marginTop: -(config.connectorThickness / 2),
         transition: config.animateTransitions
           ? "border-color 0.4s ease"
           : "none",
         alignSelf: "center",
-        position: "relative",
-        top: config.showStepLabels ? `-${config.nodeSize / 2 + 12}px` : "0",
         zIndex: 1,
         flexShrink: 0,
       };
@@ -264,7 +261,7 @@ export function StepProgressPreview({ config }: StepProgressPreviewProps) {
   };
 
   const labelStyle = (index: number): React.CSSProperties => ({
-    marginTop: 8,
+    marginTop: 0,
     fontSize: config.stepLabelFontSize,
     fontWeight: index === activeStep ? 600 : 400,
     color:
@@ -322,30 +319,56 @@ export function StepProgressPreview({ config }: StepProgressPreviewProps) {
           padding: "2rem 1rem",
         }}
       >
+        {/* Row 1: nodes + connectors only */}
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           {steps.map((step, index) => (
             <React.Fragment key={index}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                {renderNode(index)}
-                {config.showStepLabels && (
-                  <span style={labelStyle(index)}>{step}</span>
-                )}
-              </div>
+              {renderNode(index)}
               {index < steps.length - 1 && (
                 <div style={connectorStyle(index)} />
               )}
             </React.Fragment>
           ))}
         </div>
+        {/* Row 2: labels, aligned under each node */}
+        {config.showStepLabels && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              width: "100%",
+              marginTop: 8,
+            }}
+          >
+            {steps.map((step, index) => (
+              <React.Fragment key={index}>
+                <div
+                  style={{
+                    width: config.nodeSize,
+                    minWidth: config.nodeSize,
+                    display: "flex",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <span style={labelStyle(index)}>{step}</span>
+                </div>
+                {index < steps.length - 1 && (
+                  <div
+                    style={{
+                      flex: 1,
+                      minWidth: config.connectorLength,
+                      flexShrink: 0,
+                    }}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
         <p
           style={{
-            marginTop: 24,
+            marginTop: 16,
             fontSize: 12,
             color: "#5a5a72",
             fontFamily: "'DM Mono', monospace",

@@ -16,6 +16,7 @@ interface Props {
   config: OmnidashConfig;
   onChange: (patch: Partial<OmnidashConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 // ─── Theme metadata (label + preview swatch colors) ──────────────────────────
@@ -32,7 +33,12 @@ const THEMES: {
   { id: "rose", label: "Rose", accent: "#fb7185", bg: "#120a0e" },
 ];
 
-export function OmnidashControlPanel({ config, onChange, onReset }: Props) {
+export function OmnidashControlPanel({
+  config,
+  onChange,
+  onReset,
+  isDark = true,
+}: Props) {
   const [activeTheme, setActiveTheme] = useState<OmnidashTheme>("emerald");
 
   function applyPreset(id: Exclude<OmnidashTheme, "custom">) {
@@ -150,6 +156,7 @@ export function OmnidashControlPanel({ config, onChange, onReset }: Props) {
           label="Custom Accent"
           value={config.accentColor}
           onChange={handleCustomAccent}
+          isDark={isDark}
         />
 
         {/* Active theme accent preview */}

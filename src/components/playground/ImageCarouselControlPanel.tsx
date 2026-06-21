@@ -17,12 +17,14 @@ interface Props {
   config: ImageCarouselConfig;
   onChange: (patch: Partial<ImageCarouselConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function ImageCarouselControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: Props) {
   const [local, setLocal] = useState(config);
 
@@ -91,12 +93,14 @@ export function ImageCarouselControlPanel({
           label="Button bg"
           value={local.btnBackground}
           onChange={(v) => handleImmediate({ btnBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Arrow colour"
           value={local.btnColor}
           onChange={(v) => handleImmediate({ btnColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Button radius"
           value={local.btnBorderRadius}
@@ -132,7 +136,8 @@ export function ImageCarouselControlPanel({
           label="Active border"
           value={local.thumbnailBorderColor}
           onChange={(v) => handleImmediate({ thumbnailBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Inactive opacity"
           value={Math.round(local.thumbnailOpacity * 100)}
@@ -164,12 +169,14 @@ export function ImageCarouselControlPanel({
           label="Lens border"
           value={local.lensBorderColor}
           onChange={(v) => handleImmediate({ lensBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Lens fill"
           value={local.lensBackground}
           onChange={(v) => handleImmediate({ lensBackground: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Preview size"
           value={local.zoomPreviewSize}
@@ -192,7 +199,8 @@ export function ImageCarouselControlPanel({
           label="Preview border"
           value={local.zoomPreviewBorderColor}
           onChange={(v) => handleImmediate({ zoomPreviewBorderColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

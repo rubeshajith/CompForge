@@ -14,6 +14,7 @@ interface Props {
   config: MultiSelectConfig;
   onChange: (patch: Partial<MultiSelectConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function MultiSelectControlPanel({ config, onChange, onReset }: Props) {
@@ -32,27 +33,32 @@ export function MultiSelectControlPanel({ config, onChange, onReset }: Props) {
             label="Background"
             value={config.triggerBackground}
             onChange={(v) => onChange({ triggerBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Text"
             value={config.triggerTextColor}
             onChange={(v) => onChange({ triggerTextColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Border"
             value={config.triggerBorderColor}
             onChange={(v) => onChange({ triggerBorderColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Placeholder"
             value={config.placeholderColor}
             onChange={(v) => onChange({ placeholderColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Accent"
             value={config.accentColor}
             onChange={(v) => onChange({ accentColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
 
         <Section title="Dropdown Colors">
@@ -60,27 +66,32 @@ export function MultiSelectControlPanel({ config, onChange, onReset }: Props) {
             label="Background"
             value={config.dropdownBackground}
             onChange={(v) => onChange({ dropdownBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Border"
             value={config.dropdownBorderColor}
             onChange={(v) => onChange({ dropdownBorderColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Hover"
             value={config.optionHoverBackground}
             onChange={(v) => onChange({ optionHoverBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Selected BG"
             value={config.selectedOptionBackground}
             onChange={(v) => onChange({ selectedOptionBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Selected Text"
             value={config.selectedOptionColor}
             onChange={(v) => onChange({ selectedOptionColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
 
         <Section title="Badge">
@@ -88,12 +99,14 @@ export function MultiSelectControlPanel({ config, onChange, onReset }: Props) {
             label="Background"
             value={config.badgeBackground}
             onChange={(v) => onChange({ badgeBackground: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Text"
             value={config.badgeTextColor}
             onChange={(v) => onChange({ badgeTextColor: v })}
-          />
+            isDark={isDark}
+/>
           <SliderRow
             label="Radius"
             value={config.badgeBorderRadius}

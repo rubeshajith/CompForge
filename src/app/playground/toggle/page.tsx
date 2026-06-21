@@ -7,7 +7,12 @@ import {
   toggleModePresets,
   darkToggleConfig,
 } from "@/lib/toggleConfig";
-import { generateToggleJSX, generateToggleCSS } from "@/lib/generateToggleCode";
+import {
+  generateToggleJSX,
+  generateToggleCSS,
+  generateToggleTSX,
+  generateToggleTailwind,
+} from "@/lib/generateToggleCode";
 import { TogglePreview } from "@/components/playground/TogglePreview";
 import { ToggleControlPanel } from "@/components/playground/ToggleControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -76,7 +81,8 @@ export default function TogglePlayground() {
 
   const jsxCode = useMemo(() => generateToggleJSX(config), [config]);
   const cssCode = useMemo(() => generateToggleCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateToggleTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateToggleTailwind(config), [config]);
   return (
     <ResizablePlayground
       componentName="Toggle & Toggle Group"
@@ -89,9 +95,17 @@ export default function TogglePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

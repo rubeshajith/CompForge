@@ -256,6 +256,7 @@ export function generateAccordionCSS(config: AccordionConfig): string {
 .acc-wrap {
   max-width: 100%;
   font-family: 'Instrument Sans', system-ui, sans-serif;
+  background: ${config.backgroundColor};
 }
 
 .acc {
@@ -978,6 +979,7 @@ const ITEMS: AccordionItem[] = [
 
 // Baked-in CSS variable tokens — update these to reskin the Accordion
 const accVars: CSSProperties = {
+"--acc-bg": "${config.backgroundColor}",
   "--acc-border":          "${config.borderColor}",
   "--acc-radius":          "${config.itemBorderRadius}px",
   "--acc-header-bg":       "${config.headerBackground}",
@@ -1024,8 +1026,9 @@ function AccordionItemComponent({ item, isOpen, onToggle }: AccordionItemProps) 
   }, [isOpen]);
 
   return (
-    <div className={\`border border-[var(--acc-border)] rounded-[var(--acc-radius)] overflow-hidden bg-[var(--acc-header-bg)]\${isOpen ? " [box-shadow:0_2px_8px_var(--acc-shadow)]" : ""}\`}
-      ${config.showShadow ? 'style={{ boxShadow: "0 2px 8px var(--acc-shadow)" }}' : ""}
+<div
+  className="border border-[var(--acc-border)] rounded-[var(--acc-radius)] overflow-hidden bg-[var(--acc-header-bg)]"
+  ${config.showShadow ? 'style={{ boxShadow: "0 2px 8px var(--acc-shadow)" }}' : ""}
     >
       <button
         className="w-full flex items-center justify-between bg-[var(--acc-header-bg)] hover:bg-[var(--acc-header-hover-bg)] border-none cursor-pointer text-[var(--acc-header-text)] text-left font-[inherit] transition-colors duration-[${config.animationDuration}ms]"
@@ -1080,7 +1083,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
   return (
     <div
-      className="max-w-full font-sans flex flex-col"
+      className="max-w-full font-[inherit] flex flex-col"
       style={{ ...accVars, width: ${config.accordionWidth}, gap: "var(--acc-gap)" } as CSSProperties}
     >
       {ITEMS.map((item) => (
@@ -1101,6 +1104,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
 // Baked-in CSS variable tokens — update these to reskin the Accordion
 const accVars: CSSProperties = {
+  "--acc-bg":              "${config.backgroundColor}",
   "--acc-border":          "${config.borderColor}",
   "--acc-radius":          "${config.itemBorderRadius}px",
   "--acc-header-bg":       "${config.headerBackground}",
@@ -1135,7 +1139,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
   return (
     <div
-      className="max-w-full font-sans flex flex-col"
+      className="max-w-full font-[inherit] flex flex-col"
       style={{ ...accVars, width: ${config.accordionWidth}, gap: "var(--acc-gap)" } as CSSProperties}
     >
       {ITEMS.map((item, idx) => {
@@ -1144,7 +1148,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
           <div
             key={item.id}
             className={\`border-[1.5px] rounded-[var(--acc-radius)] overflow-hidden transition-[border-color] duration-[${config.animationDuration}ms] \${isOpen ? "border-[var(--acc-accent)]" : "border-[var(--acc-border)]"}\`}
-            ${config.showShadow ? `style={{ boxShadow: isOpen ? \`0 0 0 3px \${accVars["--acc-accent"]}18\` : "0 2px 8px var(--acc-shadow)" }}` : ""}
+            ${config.showShadow ? `style={{ boxShadow: isOpen ? \`0 0 0 3px ${config.accentColor}18\` : "0 2px 8px var(--acc-shadow)" }}` : ""}
           >
             <button
               className="w-full flex items-center gap-[10px] bg-[var(--acc-header-bg)] border-none cursor-pointer text-left font-[inherit] transition-[background,color] duration-[${config.animationDuration}ms]"
@@ -1153,7 +1157,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
                 fontSize: "${headerFs}px",
                 fontWeight: ${config.headerFontWeight},
                 color: isOpen ? "var(--acc-accent)" : "var(--acc-header-text)",
-                background: isOpen ? \`\${accVars["--acc-accent"]}10\` : "var(--acc-header-bg)",
+                background: isOpen ? \`${config.accentColor}1a\` : "var(--acc-header-bg)",
               }}
               onClick={() => toggle(item.id)}
             >
@@ -1178,7 +1182,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
             </button>
             {isOpen && (
               <div
-                className="bg-[var(--acc-content-bg)] text-[var(--acc-content-text)] leading-[1.7] border-t border-[var(--acc-accent)]/30"
+                className="bg-[var(--acc-content-bg)] text-[var(--acc-content-text)] leading-[1.7] border-t border-[${config.accentColor}4d]"
                 style={{ padding: "var(--acc-content-p) var(--acc-px)", fontSize: "${contentFs}px" }}
               >
                 {item.content}
@@ -1197,6 +1201,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
 // Baked-in CSS variable tokens — update these to reskin the Accordion
 const accVars: CSSProperties = {
+  "--acc-bg":              "${config.backgroundColor}",
   "--acc-border":          "${config.borderColor}",
   "--acc-radius":          "${config.itemBorderRadius}px",
   "--acc-header-bg":       "${config.headerBackground}",
@@ -1234,7 +1239,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
   return (
     <div
-      className="max-w-full font-sans border border-[var(--acc-border)] rounded-[var(--acc-radius)] overflow-hidden flex flex-col"
+      className="max-w-full font-[inherit] border border-[var(--acc-border)] rounded-[var(--acc-radius)] overflow-hidden flex flex-col"
       style={{ ...accVars, width: ${config.accordionWidth}, ${config.showShadow ? `boxShadow: "0 4px 24px var(--acc-shadow)"` : ""} } as CSSProperties}
     >
       {ITEMS.map((item, idx) => {
@@ -1248,7 +1253,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
               onClick={() => toggle(item.id)}
             >
               <div
-                className={\`w-[32px] h-[32px] rounded-[8px] flex items-center justify-center text-[14px] shrink-0 transition-[border-color,background,color] duration-[${config.animationDuration}ms] \${isOpen ? "border-[var(--acc-accent)] bg-[var(--acc-accent)]/10 text-[var(--acc-accent)]" : "border border-[var(--acc-border)] bg-transparent text-[var(--acc-icon)]"}\`}
+                className={\`w-[32px] h-[32px] rounded-[8px] flex items-center justify-center text-[14px] shrink-0 transition-[border-color,background,color] duration-[${config.animationDuration}ms] \${isOpen ? "border-[var(--acc-accent)] bg-[${config.accentColor}1a] text-[var(--acc-accent)]" : "border border-[var(--acc-border)] bg-transparent text-[var(--acc-icon)]"}\`}
                 style={{ border: isOpen ? "1.5px solid var(--acc-accent)" : "1.5px solid var(--acc-border)" }}
               >
                 {ICONS[idx]}
@@ -1292,6 +1297,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
 // Baked-in CSS variable tokens — update these to reskin the Accordion
 const accVars: CSSProperties = {
+  "--acc-bg":              "${config.backgroundColor}",
   "--acc-border":               "${config.borderColor}",
   "--acc-radius":               "${config.itemBorderRadius}px",
   "--acc-header-bg":            "${config.headerBackground}",
@@ -1355,7 +1361,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
 
   return (
     <div
-      className="max-w-full font-sans flex flex-col"
+      className="max-w-full font-[inherit] flex flex-col"
       style={{ ...accVars, width: ${config.accordionWidth}, gap: "var(--acc-gap)" } as CSSProperties}
     >
       {NESTED_ITEMS.map((item) => {
@@ -1428,7 +1434,7 @@ export default function Accordion({ onValueChange }: AccordionProps) {
                           </button>
                           {childOpen && (
                             <div
-                              className="text-[var(--acc-content-text)] leading-[1.65] border-t border-[var(--acc-separator)]"
+                              className="bg-[var(--acc-content-bg)] text-[var(--acc-content-text)] leading-[1.65] border-t border-[var(--acc-separator)]"
                               style={{ padding: "10px 14px 14px", fontSize: "${childContentFs}px" }}
                             >
                               {child.content}

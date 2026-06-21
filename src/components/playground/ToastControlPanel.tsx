@@ -22,6 +22,7 @@ interface ToastControlPanelProps {
   config: ToastConfig;
   onChange: (patch: Partial<ToastConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 // ─── Shared pill button ────────────────────────────────────────────
@@ -184,6 +185,7 @@ export function ToastControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: ToastControlPanelProps) {
   const [localRadius, setLocalRadius] = useState(config.borderRadius);
   const [localDuration, setLocalDuration] = useState(
@@ -333,32 +335,38 @@ export function ToastControlPanel({
           label="Background"
           value={config.backgroundColor}
           onChange={(v) => onChange({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.borderColor}
           onChange={(v) => onChange({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Icon"
           value={config.iconColor}
           onChange={(v) => onChange({ iconColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Title"
           value={config.titleColor}
           onChange={(v) => onChange({ titleColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Message"
           value={config.messageColor}
           onChange={(v) => onChange({ messageColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Radius"
           value={localRadius}

@@ -82,8 +82,49 @@ export default function StepProgress({
   currentStep = 0,
   onStepChange,
 }) {
-  return (
-    <div className="sp${isHorizontal ? " sp--horizontal" : " sp--vertical"}">
+  ${
+    isHorizontal
+      ? `return (
+    <div className="sp sp--horizontal">
+      <div className="sp__nodes-row">
+        {steps.map((step, index) => (
+          <div key={index} className="sp__item-group">
+            <div
+              className={\`sp__node \${
+                index < currentStep ? "sp__node--completed"
+                : index === currentStep ? "sp__node--active"
+                : "sp__node--incomplete"
+              }\`}
+              onClick={() => onStepChange?.(index)}
+            >
+              <span className="sp__node-inner">
+                {getLabelContent(index, index < currentStep)}
+              </span>
+            </div>
+            {index < steps.length - 1 && (
+              <div className={\`sp__connector \${index < currentStep - 1 ? "sp__connector--completed" : ""}\`} />
+            )}
+          </div>
+        ))}
+      </div>
+      ${
+        showStepLabels
+          ? `<div className="sp__labels-row">
+        {steps.map((step, index) => (
+          <div key={index} className="sp__label-cell">
+            <span className={\`sp__label \${index === currentStep ? "sp__label--active" : ""}\`}>
+              {step}
+            </span>
+            {index < steps.length - 1 && <div className="sp__label-spacer" />}
+          </div>
+        ))}
+      </div>`
+          : ""
+      }
+    </div>
+  );`
+      : `return (
+    <div className="sp sp--vertical">
       {steps.map((step, index) => (
         <div key={index} className="sp__item-group">
           <div
@@ -100,11 +141,9 @@ export default function StepProgress({
           </div>
           ${
             showStepLabels
-              ? `{${isHorizontal ? "!isHorizontal &&" : ""} (
-            <span className={\`sp__label \${index === currentStep ? "sp__label--active" : ""}\`}>
+              ? `<span className={\`sp__label \${index === currentStep ? "sp__label--active" : ""}\`}>
               {step}
-            </span>
-          )}`
+            </span>`
               : ""
           }
           {index < steps.length - 1 && (
@@ -113,7 +152,8 @@ export default function StepProgress({
         </div>
       ))}
     </div>
-  );
+  );`
+  }
 }`;
 }
 
@@ -253,7 +293,7 @@ ${innerRotate}
   transition: border-color ${animateTransitions ? "0.4s ease" : "0s"};
   ${
     isHorizontal
-      ? `width: ${connectorLength}px;\n  border-bottom: ${connectorThickness}px ${connectorBorderStyle} ${connectorIncompleteColor};\n  align-self: center;\n  position: relative;\n  top: -${showStepLabels ? nodeSize / 2 + 12 : 0}px;`
+      ? `width: ${connectorLength}px;\n  border-bottom: ${connectorThickness}px ${connectorBorderStyle} ${connectorIncompleteColor};\n  align-self: center;`
       : `min-height: ${connectorLength}px;\n  border-left: ${connectorThickness}px ${connectorBorderStyle} ${connectorIncompleteColor};\n  margin-left: ${nodeSize / 2 - connectorThickness / 2}px;`
   }
 }
@@ -283,6 +323,43 @@ ${innerRotate}
   color: ${stepLabelActiveColor};
   font-weight: 600;
 }
+  ${
+    isHorizontal
+      ? `
+/* Horizontal two-row layout */
+.sp__nodes-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sp__item-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sp__labels-row {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.sp__label-cell {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sp__label-spacer {
+  width: ${connectorLength}px;
+  min-width: ${connectorLength}px;
+  flex-shrink: 0;
+}`
+      : ""
+  }
+
 `;
 }
 

@@ -9,6 +9,7 @@ interface MediaDashboardControlPanelProps {
   config: MediaDashboardConfig;
   onChange: (patch: Partial<MediaDashboardConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function MediaDashboardControlPanel({ config, onChange, onReset }: MediaDashboardControlPanelProps) {
@@ -66,16 +67,26 @@ export function MediaDashboardControlPanel({ config, onChange, onReset }: MediaD
       </Section>
 
       <Section title="Colors">
-        <ColorRow label="Background" value={localConfig.backgroundColor} onChange={(value) => updateImmediate({ backgroundColor: value })} />
-        <ColorRow label="Surface" value={localConfig.surfaceColor} onChange={(value) => updateImmediate({ surfaceColor: value })} />
-        <ColorRow label="Cards" value={localConfig.cardColor} onChange={(value) => updateImmediate({ cardColor: value })} />
-        <ColorRow label="Card hover" value={localConfig.cardHoverColor} onChange={(value) => updateImmediate({ cardHoverColor: value })} />
-        <ColorRow label="Border" value={localConfig.borderColor} onChange={(value) => updateImmediate({ borderColor: value })} />
-        <ColorRow label="Text" value={localConfig.textColor} onChange={(value) => updateImmediate({ textColor: value })} />
-        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(value) => updateImmediate({ mutedTextColor: value })} />
-        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(value) => updateImmediate({ accentColor: value })} />
-        <ColorRow label="Secondary" value={localConfig.secondaryColor} onChange={(value) => updateImmediate({ secondaryColor: value })} />
-        <ColorRow label="Tertiary" value={localConfig.tertiaryColor} onChange={(value) => updateImmediate({ tertiaryColor: value })} />
+        <ColorRow label="Background" value={localConfig.backgroundColor} onChange={(value) => updateImmediate({ backgroundColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Surface" value={localConfig.surfaceColor} onChange={(value) => updateImmediate({ surfaceColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Cards" value={localConfig.cardColor} onChange={(value) => updateImmediate({ cardColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Card hover" value={localConfig.cardHoverColor} onChange={(value) => updateImmediate({ cardHoverColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Border" value={localConfig.borderColor} onChange={(value) => updateImmediate({ borderColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Text" value={localConfig.textColor} onChange={(value) => updateImmediate({ textColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Muted text" value={localConfig.mutedTextColor} onChange={(value) => updateImmediate({ mutedTextColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Accent" value={localConfig.accentColor} onChange={(value) => updateImmediate({ accentColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Secondary" value={localConfig.secondaryColor} onChange={(value) => updateImmediate({ secondaryColor: value })}   isDark={isDark}
+/>
+        <ColorRow label="Tertiary" value={localConfig.tertiaryColor} onChange={(value) => updateImmediate({ tertiaryColor: value })}   isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

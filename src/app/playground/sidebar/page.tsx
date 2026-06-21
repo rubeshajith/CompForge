@@ -10,7 +10,11 @@ import {
   SidebarMode,
   sidebarModePresets,
 } from "@/lib/sidebarConfig";
-import { generateSidebarCSS } from "@/lib/generateSidebarCode";
+import {
+  generateSidebarCSS,
+  generateSidebarTailwind,
+  generateSidebarTSX,
+} from "@/lib/generateSidebarCode";
 import { generateSidebarJSX } from "@/lib/generateSidebarCode";
 import { SidebarControlPanel } from "@/components/playground/SidebarControlPanel";
 import { SidebarPreview } from "@/components/playground/SidebarPreview";
@@ -39,7 +43,8 @@ export default function SidebarPlayground() {
 
   const jsxCode = useMemo(() => generateSidebarJSX(config), [config]);
   const cssCode = useMemo(() => generateSidebarCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateSidebarTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateSidebarTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -65,9 +70,17 @@ export default function SidebarPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

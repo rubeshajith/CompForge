@@ -12,10 +12,14 @@ import {
 import {
   generateEcommerceDashboardCSS,
   generateEcommerceDashboardJSX,
+  generateEcommerceDashboardTailwind,
+  generateEcommerceDashboardTSX,
 } from "@/lib/generateEcommerceDashboardCode";
 
 export default function EcommerceDashboardPlayground() {
-  const [config, setConfig] = useState<EcommerceDashboardConfig>(defaultEcommerceDashboardConfig);
+  const [config, setConfig] = useState<EcommerceDashboardConfig>(
+    defaultEcommerceDashboardConfig,
+  );
 
   function handleChange(patch: Partial<EcommerceDashboardConfig>) {
     setConfig((prev) => ({ ...prev, ...patch }));
@@ -25,9 +29,22 @@ export default function EcommerceDashboardPlayground() {
     setConfig(defaultEcommerceDashboardConfig);
   }
 
-  const jsxCode = useMemo(() => generateEcommerceDashboardJSX(config), [config]);
-  const cssCode = useMemo(() => generateEcommerceDashboardCSS(config), [config]);
-
+  const jsxCode = useMemo(
+    () => generateEcommerceDashboardJSX(config),
+    [config],
+  );
+  const cssCode = useMemo(
+    () => generateEcommerceDashboardCSS(config),
+    [config],
+  );
+  const tsxCode = useMemo(
+    () => generateEcommerceDashboardTSX(config),
+    [config],
+  );
+  const tailwindCode = useMemo(
+    () => generateEcommerceDashboardTailwind(config),
+    [config],
+  );
   return (
     <ResizablePlayground
       componentName="E-commerce Dashboard"
@@ -42,7 +59,14 @@ export default function EcommerceDashboardPlayground() {
           onReset={handleReset}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

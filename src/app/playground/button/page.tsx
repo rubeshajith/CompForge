@@ -7,7 +7,12 @@ import {
   buttonModePresets,
   darkButtonConfig,
 } from "@/lib/buttonConfig";
-import { generateButtonJSX, generateButtonCSS } from "@/lib/generateButtonCode";
+import {
+  generateButtonJSX,
+  generateButtonCSS,
+  generateButtonTSX,
+  generateButtonTailwind,
+} from "@/lib/generateButtonCode";
 import { ButtonPreview } from "@/components/playground/ButtonPreview";
 import { ButtonControlPanel } from "@/components/playground/ButtonControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -82,7 +87,8 @@ export default function ButtonPlayground() {
 
   const jsxCode = useMemo(() => generateButtonJSX(config), [config]);
   const cssCode = useMemo(() => generateButtonCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateButtonTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateButtonTailwind(config), [config]);
   return (
     <ResizablePlayground
       componentName="Button & Button Group"
@@ -95,9 +101,17 @@ export default function ButtonPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

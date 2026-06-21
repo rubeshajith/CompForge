@@ -31,6 +31,8 @@ import { DateTimeInputControlPanel } from "@/components/playground/DateTimeInput
 import {
   generateDateTimeInputCSS,
   generateDateTimeInputJSX,
+  generateDateTimeInputTailwind,
+  generateDateTimeInputTSX,
 } from "@/lib/generateDateTimeInputCode";
 
 export default function WeekStripPlayground() {
@@ -59,7 +61,11 @@ export default function WeekStripPlayground() {
 
   const jsxCode = useMemo(() => generateDateTimeInputJSX(config), [config]);
   const cssCode = useMemo(() => generateDateTimeInputCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateDateTimeInputTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateDateTimeInputTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -85,9 +91,17 @@ export default function WeekStripPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

@@ -9,6 +9,7 @@ interface Props {
   config: UploadModalConfig;
   onChange: (patch: Partial<UploadModalConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function UploadModalControlPanel({ config, onChange, onReset }: Props) {
@@ -41,27 +42,42 @@ export function UploadModalControlPanel({ config, onChange, onReset }: Props) {
       </Section>
 
       <Section title="Shell">
-        <ColorRow label="Panel background" value={localConfig.panelBackground} onChange={(value) => updateImmediate("panelBackground", value)} />
-        <ColorRow label="Panel border" value={localConfig.panelBorderColor} onChange={(value) => updateImmediate("panelBorderColor", value)} />
-        <ColorRow label="Overlay" value={localConfig.overlayColor} onChange={(value) => updateImmediate("overlayColor", value)} />
-        <ColorRow label="Title" value={localConfig.titleColor} onChange={(value) => updateImmediate("titleColor", value)} />
-        <ColorRow label="Subtitle" value={localConfig.subtitleColor} onChange={(value) => updateImmediate("subtitleColor", value)} />
+        <ColorRow label="Panel background" value={localConfig.panelBackground} onChange={(value) => updateImmediate("panelBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Panel border" value={localConfig.panelBorderColor} onChange={(value) => updateImmediate("panelBorderColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Overlay" value={localConfig.overlayColor} onChange={(value) => updateImmediate("overlayColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Title" value={localConfig.titleColor} onChange={(value) => updateImmediate("titleColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Subtitle" value={localConfig.subtitleColor} onChange={(value) => updateImmediate("subtitleColor", value)}   isDark={isDark}
+/>
       </Section>
 
       <Section title="Dropzone">
-        <ColorRow label="Dropzone background" value={localConfig.dropzoneBackground} onChange={(value) => updateImmediate("dropzoneBackground", value)} />
-        <ColorRow label="Active background" value={localConfig.dropzoneActiveBackground} onChange={(value) => updateImmediate("dropzoneActiveBackground", value)} />
-        <ColorRow label="Dropzone border" value={localConfig.dropzoneBorderColor} onChange={(value) => updateImmediate("dropzoneBorderColor", value)} />
-        <ColorRow label="Icon background" value={localConfig.dropzoneIconBackground} onChange={(value) => updateImmediate("dropzoneIconBackground", value)} />
-        <ColorRow label="Primary button" value={localConfig.actionButtonBackground} onChange={(value) => updateImmediate("actionButtonBackground", value)} />
+        <ColorRow label="Dropzone background" value={localConfig.dropzoneBackground} onChange={(value) => updateImmediate("dropzoneBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Active background" value={localConfig.dropzoneActiveBackground} onChange={(value) => updateImmediate("dropzoneActiveBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Dropzone border" value={localConfig.dropzoneBorderColor} onChange={(value) => updateImmediate("dropzoneBorderColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Icon background" value={localConfig.dropzoneIconBackground} onChange={(value) => updateImmediate("dropzoneIconBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Primary button" value={localConfig.actionButtonBackground} onChange={(value) => updateImmediate("actionButtonBackground", value)}   isDark={isDark}
+/>
       </Section>
 
       <Section title="Uploads">
-        <ColorRow label="Item background" value={localConfig.itemBackground} onChange={(value) => updateImmediate("itemBackground", value)} />
-        <ColorRow label="Item border" value={localConfig.itemBorderColor} onChange={(value) => updateImmediate("itemBorderColor", value)} />
-        <ColorRow label="Progress fill" value={localConfig.progressFillColor} onChange={(value) => updateImmediate("progressFillColor", value)} />
-        <ColorRow label="Error background" value={localConfig.errorBackground} onChange={(value) => updateImmediate("errorBackground", value)} />
-        <ColorRow label="Error text" value={localConfig.errorTextColor} onChange={(value) => updateImmediate("errorTextColor", value)} />
+        <ColorRow label="Item background" value={localConfig.itemBackground} onChange={(value) => updateImmediate("itemBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Item border" value={localConfig.itemBorderColor} onChange={(value) => updateImmediate("itemBorderColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Progress fill" value={localConfig.progressFillColor} onChange={(value) => updateImmediate("progressFillColor", value)}   isDark={isDark}
+/>
+        <ColorRow label="Error background" value={localConfig.errorBackground} onChange={(value) => updateImmediate("errorBackground", value)}   isDark={isDark}
+/>
+        <ColorRow label="Error text" value={localConfig.errorTextColor} onChange={(value) => updateImmediate("errorTextColor", value)}   isDark={isDark}
+/>
       </Section>
 
       <Section title="Options">

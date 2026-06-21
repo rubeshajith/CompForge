@@ -7,7 +7,12 @@ import {
   checkboxModePresets,
   darkCheckboxConfig,
 } from "@/lib/checkboxConfig";
-import { generateCheckboxJSX, generateCheckboxCSS } from "@/lib/generateCheckboxCode";
+import {
+  generateCheckboxJSX,
+  generateCheckboxCSS,
+  generateCheckboxTSX,
+  generateCheckboxTailwind,
+} from "@/lib/generateCheckboxCode";
 import { CheckboxPreview } from "@/components/playground/CheckboxPreview";
 import { CheckboxControlPanel } from "@/components/playground/CheckboxControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -18,7 +23,7 @@ export default function CheckboxPlayground() {
   const [config, setConfig] = useState<CheckboxConfig>(darkCheckboxConfig);
 
   function handleChange(patch: Partial<CheckboxConfig>) {
-    setConfig(prev => ({ ...prev, ...patch }));
+    setConfig((prev) => ({ ...prev, ...patch }));
   }
 
   function handleModeToggle(newMode: CheckboxMode) {
@@ -26,14 +31,14 @@ export default function CheckboxPlayground() {
     // Preserve variant + geometry + label visibility when switching theme
     setConfig({
       ...checkboxModePresets[newMode],
-      variant:             config.variant,
-      size:                config.size,
-      borderRadius:        config.borderRadius,
-      uncheckedBorderWidth:config.uncheckedBorderWidth,
-      showLabels:          config.showLabels,
-      itemGap:             config.itemGap,
-      labelGap:            config.labelGap,
-      labelFontSize:       config.labelFontSize,
+      variant: config.variant,
+      size: config.size,
+      borderRadius: config.borderRadius,
+      uncheckedBorderWidth: config.uncheckedBorderWidth,
+      showLabels: config.showLabels,
+      itemGap: config.itemGap,
+      labelGap: config.labelGap,
+      labelFontSize: config.labelFontSize,
     });
   }
 
@@ -46,7 +51,11 @@ export default function CheckboxPlayground() {
 
   const jsxCode = useMemo(() => generateCheckboxJSX(config), [config]);
   const cssCode = useMemo(() => generateCheckboxCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateCheckboxTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateCheckboxTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -66,16 +75,23 @@ export default function CheckboxPlayground() {
       mode={mode}
       onModeToggle={handleModeToggle}
       modeHint="Switching resets colors · variant & geometry preserved"
-
       preview={<CheckboxPreview config={config} />}
       controls={
         <CheckboxControlPanel
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

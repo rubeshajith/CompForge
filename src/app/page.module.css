@@ -30,9 +30,47 @@
 }
 
 .logoMark {
-  font-size: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--accent);
   line-height: 1;
+}
+
+.logoIcon {
+  width: 34px;
+  height: 34px;
+  display: block;
+  overflow: visible;
+}
+
+.logoTile {
+  fill: color-mix(in srgb, var(--accent) 13%, var(--surface));
+  stroke: color-mix(in srgb, var(--accent) 62%, var(--border));
+  stroke-width: 1.5;
+}
+
+.logoCode,
+.logoSlash,
+.logoSpark {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logoCode {
+  stroke-width: 2.4;
+}
+
+.logoSlash {
+  stroke-width: 2;
+  opacity: 0.82;
+}
+
+.logoSpark {
+  stroke-width: 1.8;
+  color: var(--text-primary);
 }
 
 .logoText {
@@ -207,7 +245,7 @@
 
 .libraryTools {
   width: min(1120px, 100%);
-  margin: 0 auto 24px;
+
   display: grid;
   gap: 16px;
   padding: 0 48px;

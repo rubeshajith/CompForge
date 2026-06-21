@@ -21,6 +21,7 @@ interface Props {
   config: FormConfig;
   onChange: (patch: Partial<FormConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const FIELD_TYPE_LABELS: Record<FieldType, string> = {
@@ -347,12 +348,14 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.formBackground}
           onChange={(v) => onChange({ formBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.formBorderColor}
           onChange={(v) => onChange({ formBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.formBorderRadius}
@@ -393,7 +396,8 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Label Color"
           value={config.labelColor}
           onChange={(v) => onChange({ labelColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Label Size"
           value={localConfig.labelFontSize}
@@ -407,7 +411,8 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Required *"
           value={config.requiredColor}
           onChange={(v) => onChange({ requiredColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Input Fields ────────────────────────────────────────────── */}
@@ -416,27 +421,32 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.inputBackground}
           onChange={(v) => onChange({ inputBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.inputBorderColor}
           onChange={(v) => onChange({ inputBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Focus Border"
           value={config.inputFocusBorderColor}
           onChange={(v) => onChange({ inputFocusBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.inputTextColor}
           onChange={(v) => onChange({ inputTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={config.inputPlaceholderColor}
           onChange={(v) => onChange({ inputPlaceholderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.inputBorderRadius}
@@ -463,22 +473,26 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Panel BG"
           value={config.dropdownBackground}
           onChange={(v) => onChange({ dropdownBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Border"
           value={config.dropdownBorderColor}
           onChange={(v) => onChange({ dropdownBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Item Hover BG"
           value={config.dropdownItemHoverBg}
           onChange={(v) => onChange({ dropdownItemHoverBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Item Text"
           value={config.dropdownItemTextColor}
           onChange={(v) => onChange({ dropdownItemTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Accent ──────────────────────────────────────────────────── */}
@@ -487,12 +501,14 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Accent Color"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Text"
           value={config.accentTextColor}
           onChange={(v) => onChange({ accentTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Submit Button ────────────────────────────────────────────── */}
@@ -501,12 +517,14 @@ export function FormControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.buttonBackground}
           onChange={(v) => onChange({ buttonBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Color"
           value={config.buttonTextColor}
           onChange={(v) => onChange({ buttonTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={localConfig.buttonBorderRadius}

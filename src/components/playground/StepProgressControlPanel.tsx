@@ -23,6 +23,7 @@ interface StepProgressControlPanelProps {
   config: StepProgressConfig;
   onChange: (patch: Partial<StepProgressConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 type SegmentOption<T extends string> = { value: T; label: string };
@@ -72,6 +73,7 @@ export function StepProgressControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: StepProgressControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -188,12 +190,14 @@ export function StepProgressControlPanel({
           label="Background"
           value={config.completedBackground}
           onChange={(v) => onChange({ completedBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.completedBorderColor}
           onChange={(v) => onChange({ completedBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text / Icon"
           value={config.completedTextColor}
@@ -207,17 +211,20 @@ export function StepProgressControlPanel({
           label="Background"
           value={config.activeBackground}
           onChange={(v) => onChange({ activeBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.activeBorderColor}
           onChange={(v) => onChange({ activeBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.activeTextColor}
           onChange={(v) => onChange({ activeTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ToggleRow
           label="Glow Ring"
           value={config.activeGlow}
@@ -231,17 +238,20 @@ export function StepProgressControlPanel({
           label="Background"
           value={config.incompleteBackground}
           onChange={(v) => onChange({ incompleteBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.incompleteBorderColor}
           onChange={(v) => onChange({ incompleteBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.incompleteTextColor}
           onChange={(v) => onChange({ incompleteTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Connector */}
@@ -278,12 +288,14 @@ export function StepProgressControlPanel({
           label="Completed"
           value={config.connectorCompletedColor}
           onChange={(v) => onChange({ connectorCompletedColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Incomplete"
           value={config.connectorIncompleteColor}
           onChange={(v) => onChange({ connectorIncompleteColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* Step Labels */}
@@ -308,12 +320,14 @@ export function StepProgressControlPanel({
               label="Default Color"
               value={config.stepLabelColor}
               onChange={(v) => onChange({ stepLabelColor: v })}
-            />
+              isDark={isDark}
+/>
             <ColorRow
               label="Active Color"
               value={config.stepLabelActiveColor}
               onChange={(v) => onChange({ stepLabelActiveColor: v })}
-            />
+              isDark={isDark}
+/>
           </>
         )}
       </Section>

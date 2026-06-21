@@ -17,12 +17,14 @@ interface DataTableControlPanelProps {
   config: DataTableConfig;
   onChange: (patch: Partial<DataTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function DataTableControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: DataTableControlPanelProps) {
   const [localConfig, setLocalConfig] = useState<DataTableConfig>(config);
 
@@ -151,22 +153,26 @@ export function DataTableControlPanel({
           label="Table Background"
           value={lc.tableBackground}
           onChange={handleColor("tableBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border Color"
           value={lc.tableBorderColor}
           onChange={handleColor("tableBorderColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Background"
           value={lc.headerBackground}
           onChange={handleColor("headerBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Text"
           value={lc.headerTextColor}
           onChange={handleColor("headerTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Rows ─── */}
@@ -175,22 +181,26 @@ export function DataTableControlPanel({
           label="Row Background"
           value={lc.rowBackground}
           onChange={handleColor("rowBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Hover"
           value={lc.rowHoverBackground}
           onChange={handleColor("rowHoverBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Border"
           value={lc.rowBorderColor}
           onChange={handleColor("rowBorderColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Primary Text"
           value={lc.rowTextColor}
           onChange={handleColor("rowTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Subtext / Muted"
           value={lc.rowSubtextColor}
@@ -204,12 +214,14 @@ export function DataTableControlPanel({
           label="Expand Background"
           value={lc.expandedRowBackground}
           onChange={handleColor("expandedRowBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Border"
           value={lc.expandedBorderAccentColor}
           onChange={handleColor("expandedBorderAccentColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Filters Bar ─── */}
@@ -218,22 +230,26 @@ export function DataTableControlPanel({
           label="Bar Background"
           value={lc.filterBarBackground}
           onChange={handleColor("filterBarBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chip Background"
           value={lc.filterChipBackground}
           onChange={handleColor("filterChipBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chip Text"
           value={lc.filterChipTextColor}
           onChange={handleColor("filterChipTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Chip Border"
           value={lc.filterChipBorderColor}
           onChange={handleColor("filterChipBorderColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Amounts ─── */}
@@ -242,12 +258,14 @@ export function DataTableControlPanel({
           label="Debit Color"
           value={lc.debitColor}
           onChange={handleColor("debitColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Credit Color"
           value={lc.creditColor}
           onChange={handleColor("creditColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Status Badges ─── */}
@@ -256,32 +274,38 @@ export function DataTableControlPanel({
           label="Completed BG"
           value={lc.completedBackground}
           onChange={handleColor("completedBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Completed Text"
           value={lc.completedTextColor}
           onChange={handleColor("completedTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending BG"
           value={lc.pendingBackground}
           onChange={handleColor("pendingBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending Text"
           value={lc.pendingTextColor}
           onChange={handleColor("pendingTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Flagged BG"
           value={lc.flaggedBackground}
           onChange={handleColor("flaggedBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Flagged Text"
           value={lc.flaggedTextColor}
           onChange={handleColor("flaggedTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Accent ─── */}
@@ -290,12 +314,14 @@ export function DataTableControlPanel({
           label="Accent Color"
           value={lc.accentColor}
           onChange={handleColor("accentColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Text"
           value={lc.accentTextColor}
           onChange={handleColor("accentTextColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ─── Pagination ─── */}
@@ -304,27 +330,32 @@ export function DataTableControlPanel({
           label="Pagination BG"
           value={lc.paginationBackground}
           onChange={handleColor("paginationBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Page BG"
           value={lc.paginationActiveBackground}
           onChange={handleColor("paginationActiveBackground")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Page Text"
           value={lc.paginationActiveTextColor}
           onChange={handleColor("paginationActiveTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Page Text"
           value={lc.paginationTextColor}
           onChange={handleColor("paginationTextColor")}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Page Border"
           value={lc.paginationBorderColor}
           onChange={handleColor("paginationBorderColor")}
-        />
+          isDark={isDark}
+/>
       </Section>
     </ControlPanelShell>
   );

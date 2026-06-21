@@ -7,7 +7,12 @@ import {
   menuBarModePresets,
   darkMenuBarConfig,
 } from "@/lib/menuBarConfig";
-import { generateMenuBarJSX, generateMenuBarCSS } from "@/lib/generateMenuBarCode";
+import {
+  generateMenuBarJSX,
+  generateMenuBarCSS,
+  generateMenuBarTSX,
+  generateMenuBarTailwind,
+} from "@/lib/generateMenuBarCode";
 import { MenuBarPreview } from "@/components/playground/MenuBarPreview";
 import { MenuBarControlPanel } from "@/components/playground/MenuBarControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -49,7 +54,8 @@ export default function MenuBarPlayground() {
 
   const jsxCode = useMemo(() => generateMenuBarJSX(config), [config]);
   const cssCode = useMemo(() => generateMenuBarCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateMenuBarTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateMenuBarTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -68,16 +74,23 @@ export default function MenuBarPlayground() {
       mode={mode}
       onModeToggle={handleModeToggle}
       modeHint="Switching resets colors · variant & animation preserved"
-
       preview={<MenuBarPreview config={config} />}
       controls={
         <MenuBarControlPanel
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

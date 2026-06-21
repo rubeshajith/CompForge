@@ -8,6 +8,8 @@ import { ResizablePlayground } from "@/components/playground/ResizablePlayground
 import {
   generateOrderTableCSS,
   generateOrderTableJSX,
+  generateOrderTableTailwind,
+  generateOrderTableTSX,
 } from "@/lib/generateOrderTableCode";
 import {
   OrderTableConfig,
@@ -49,7 +51,11 @@ export default function OrderTablePlayground() {
 
   const jsxCode = useMemo(() => generateOrderTableJSX(config), [config]);
   const cssCode = useMemo(() => generateOrderTableCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateOrderTableTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateOrderTableTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -75,9 +81,17 @@ export default function OrderTablePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

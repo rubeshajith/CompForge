@@ -17,9 +17,15 @@ interface Props {
   config: SidebarConfig;
   onChange: (patch: Partial<SidebarConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
-export function SidebarControlPanel({ config, onChange, onReset }: Props) {
+export function SidebarControlPanel({
+  config,
+  onChange,
+  onReset,
+  isDark = true,
+}: Props) {
   const [localConfig, setLocalConfig] = useState(config);
 
   // Sync local when parent resets
@@ -91,21 +97,25 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => handleImmediate({ backgroundColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleImmediate({ borderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Logo area border"
           value={localConfig.logoAreaBorderColor}
           onChange={(v) => handleImmediate({ logoAreaBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Footer border"
           value={localConfig.footerBorderColor}
           onChange={(v) => handleImmediate({ footerBorderColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -115,11 +125,13 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Accent color"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Accent dim"
           value={localConfig.accentDim}
           onChange={(v) => handleImmediate({ accentDim: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -129,21 +141,25 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Text"
           value={localConfig.itemTextColor}
           onChange={(v) => handleImmediate({ itemTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon"
           value={localConfig.itemIconColor}
           onChange={(v) => handleImmediate({ itemIconColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover bg"
           value={localConfig.itemHoverBackground}
           onChange={(v) => handleImmediate({ itemHoverBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover text"
           value={localConfig.itemHoverTextColor}
           onChange={(v) => handleImmediate({ itemHoverTextColor: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Item radius"
@@ -162,21 +178,25 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Active bg"
           value={localConfig.itemActiveBackground}
           onChange={(v) => handleImmediate({ itemActiveBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Active text"
           value={localConfig.itemActiveTextColor}
           onChange={(v) => handleImmediate({ itemActiveTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Active icon"
           value={localConfig.itemActiveIconColor}
           onChange={(v) => handleImmediate({ itemActiveIconColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Indicator bar"
           value={localConfig.itemActiveIndicatorColor}
           onChange={(v) => handleImmediate({ itemActiveIndicatorColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -186,11 +206,13 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Label color"
           value={localConfig.sectionLabelColor}
           onChange={(v) => handleImmediate({ sectionLabelColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Chevron color"
           value={localConfig.chevronColor}
           onChange={(v) => handleImmediate({ chevronColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -200,21 +222,25 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Text"
           value={localConfig.submenuTextColor}
           onChange={(v) => handleImmediate({ submenuTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Active text"
           value={localConfig.submenuActiveTextColor}
           onChange={(v) => handleImmediate({ submenuActiveTextColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Active bg"
           value={localConfig.submenuActiveBackground}
           onChange={(v) => handleImmediate({ submenuActiveBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Active dot"
           value={localConfig.submenuDotColor}
           onChange={(v) => handleImmediate({ submenuDotColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -224,16 +250,19 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.popoutBackground}
           onChange={(v) => handleImmediate({ popoutBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={localConfig.popoutBorderColor}
           onChange={(v) => handleImmediate({ popoutBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Header text"
           value={localConfig.popoutHeaderColor}
           onChange={(v) => handleImmediate({ popoutHeaderColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -243,16 +272,19 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.tooltipBackground}
           onChange={(v) => handleImmediate({ tooltipBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={localConfig.tooltipBorderColor}
           onChange={(v) => handleImmediate({ tooltipBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Text"
           value={localConfig.tooltipTextColor}
           onChange={(v) => handleImmediate({ tooltipTextColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -262,16 +294,19 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.collapseButtonBackground}
           onChange={(v) => handleImmediate({ collapseButtonBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={localConfig.collapseButtonBorderColor}
           onChange={(v) => handleImmediate({ collapseButtonBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Icon"
           value={localConfig.collapseButtonIconColor}
           onChange={(v) => handleImmediate({ collapseButtonIconColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Hover border"
@@ -279,11 +314,13 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           onChange={(v) =>
             handleImmediate({ collapseButtonHoverBorderColor: v })
           }
+          isDark={isDark}
         />
         <ColorRow
           label="Hover icon"
           value={localConfig.collapseButtonHoverIconColor}
           onChange={(v) => handleImmediate({ collapseButtonHoverIconColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -293,16 +330,19 @@ export function SidebarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={localConfig.badgeBackground}
           onChange={(v) => handleImmediate({ badgeBackground: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Border"
           value={localConfig.badgeBorderColor}
           onChange={(v) => handleImmediate({ badgeBorderColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Text"
           value={localConfig.badgeTextColor}
           onChange={(v) => handleImmediate({ badgeTextColor: v })}
+          isDark={isDark}
         />
       </Section>
 

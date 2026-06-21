@@ -19,6 +19,7 @@ interface Props {
   config: MenuBarConfig;
   onChange: (patch: Partial<MenuBarConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const VARIANT_OPTIONS: {
@@ -105,12 +106,14 @@ export function MenuBarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.barBackground}
           onChange={(v) => handleImmediate({ barBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.barBorderColor}
           onChange={(v) => handleImmediate({ barBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={syncedLocal.barBorderRadius}
@@ -156,27 +159,32 @@ export function MenuBarControlPanel({ config, onChange, onReset }: Props) {
           label="Text"
           value={config.itemTextColor}
           onChange={(v) => handleImmediate({ itemTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover Background"
           value={config.itemHoverBackground}
           onChange={(v) => handleImmediate({ itemHoverBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover Text"
           value={config.itemHoverTextColor}
           onChange={(v) => handleImmediate({ itemHoverTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Background"
           value={config.itemActiveBackground}
           onChange={(v) => handleImmediate({ itemActiveBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={config.itemActiveTextColor}
           onChange={(v) => handleImmediate({ itemActiveTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={syncedLocal.itemBorderRadius}
@@ -212,12 +220,14 @@ export function MenuBarControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.popupBackground}
           onChange={(v) => handleImmediate({ popupBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.popupBorderColor}
           onChange={(v) => handleImmediate({ popupBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Border Radius"
           value={syncedLocal.popupBorderRadius}
@@ -249,17 +259,20 @@ export function MenuBarControlPanel({ config, onChange, onReset }: Props) {
           label="Text"
           value={config.optionTextColor}
           onChange={(v) => handleImmediate({ optionTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover Background"
           value={config.optionHoverBackground}
           onChange={(v) => handleImmediate({ optionHoverBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover Text"
           value={config.optionHoverTextColor}
           onChange={(v) => handleImmediate({ optionHoverTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={syncedLocal.optionFontSize}
@@ -301,7 +314,8 @@ export function MenuBarControlPanel({ config, onChange, onReset }: Props) {
           label="Divider Color"
           value={config.dividerColor}
           onChange={(v) => handleImmediate({ dividerColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Animation ── */}

@@ -12,6 +12,8 @@ import {
 import {
   generateFilterModalJSX,
   generateFilterModalCSS,
+  generateFilterModalTSX,
+  generateFilterModalTailwind,
 } from "@/lib/generateFilterModalCode";
 import { FilterModalPreview } from "@/components/playground/FilterModalPreview";
 import { FilterModalControlPanel } from "@/components/playground/FilterModalControlPanel";
@@ -58,7 +60,11 @@ export default function FilterModalPlayground() {
 
   const jsxCode = useMemo(() => generateFilterModalJSX(config), [config]);
   const cssCode = useMemo(() => generateFilterModalCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateFilterModalTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateFilterModalTailwind(config),
+    [config],
+  );
   // Light mode stage: subtle grid
   const stageStyle =
     mode === "light"
@@ -84,9 +90,17 @@ export default function FilterModalPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

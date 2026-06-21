@@ -166,6 +166,7 @@
 }
 
 /* ── Preview stage ── */
+/* 1. previewStage — single scroll container, no flex tricks */
 .previewStage {
   flex: 1;
   min-height: 0;
@@ -197,6 +198,7 @@
     24px 24px;
 }
 
+/* 2. previewStageLight — same, just light bg */
 .previewStageLight {
   background: #f4f4f8;
   background-image:
@@ -225,18 +227,23 @@
     24px 24px;
 }
 
-/* Inner scroll so large components (e.g. range calendar) can be scrolled without breaking layout */
 .previewScroll {
   width: 100%;
-
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: auto;
   padding: 32px;
   box-sizing: border-box;
 }
 
+/* previewContent — unchanged, just centers the actual component */
+.previewContent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* ── Drag handle ── */
 .dragHandle {
   flex-shrink: 0;

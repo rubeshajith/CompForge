@@ -16,6 +16,8 @@ import {
 import {
   generateUserTableCSS,
   generateUserTableJSX,
+  generateUserTableTailwind,
+  generateUserTableTSX,
 } from "@/lib/generateUserTableCode";
 
 export default function DataTablePlayground() {
@@ -52,7 +54,11 @@ export default function DataTablePlayground() {
 
   const jsxCode = useMemo(() => generateUserTableJSX(config), [config]);
   const cssCode = useMemo(() => generateUserTableCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateUserTableTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateUserTableTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -77,9 +83,17 @@ export default function DataTablePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

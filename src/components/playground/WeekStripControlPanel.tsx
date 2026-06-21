@@ -16,6 +16,7 @@ interface Props {
   config: WeekStripConfig;
   onChange: (patch: Partial<WeekStripConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
@@ -41,12 +42,14 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.backgroundColor}
           onChange={(v) => onChange({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={config.borderColor}
           onChange={(v) => onChange({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Radius"
           value={localConfig.borderRadius}
@@ -77,7 +80,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Color"
           value={config.monthLabelColor}
           onChange={(v) => onChange({ monthLabelColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={localConfig.monthLabelSize}
@@ -98,7 +102,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Color"
           value={config.dayNameColor}
           onChange={(v) => onChange({ dayNameColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={localConfig.dayNameSize}
@@ -119,7 +124,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Text"
           value={config.dayNumberColor}
           onChange={(v) => onChange({ dayNumberColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={localConfig.dayNumberSize}
@@ -136,7 +142,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Today Color"
           value={config.todayColor}
           onChange={(v) => onChange({ todayColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Selection ── */}
@@ -145,12 +152,14 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Background"
           value={config.selectedBackground}
           onChange={(v) => onChange({ selectedBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={config.selectedTextColor}
           onChange={(v) => onChange({ selectedTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Radius"
           value={localConfig.selectedBorderRadius}
@@ -167,7 +176,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Hover BG"
           value={config.hoverBackground}
           onChange={(v) => onChange({ hoverBackground: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Past Days ── */}
@@ -197,7 +207,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Dot Color"
           value={config.dotColor}
           onChange={(v) => onChange({ dotColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Navigation ── */}
@@ -206,7 +217,8 @@ export function WeekStripControlPanel({ config, onChange, onReset }: Props) {
           label="Chevron Color"
           value={config.chevronColor}
           onChange={(v) => onChange({ chevronColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Day Button Size ── */}

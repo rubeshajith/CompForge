@@ -15,6 +15,7 @@ interface ToggleControlPanelProps {
   config: ToggleConfig;
   onChange: (patch: Partial<ToggleConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 function SelectRow<T extends string>({
@@ -156,28 +157,41 @@ export function ToggleControlPanel({ config, onChange, onReset }: ToggleControlP
 
       {/* ── Inactive State Colors ── */}
       <Section title="Inactive Colors">
-        <ColorRow label="Track BG" value={config.trackBg} onChange={(v) => onChange({ trackBg: v })} />
-        <ColorRow label="Track Border" value={config.trackBorder} onChange={(v) => onChange({ trackBorder: v })} />
-        <ColorRow label="Text" value={config.inactiveText} onChange={(v) => onChange({ inactiveText: v })} />
-        <ColorRow label="Hover BG" value={config.inactiveHoverBg} onChange={(v) => onChange({ inactiveHoverBg: v })} />
+        <ColorRow label="Track BG" value={config.trackBg} onChange={(v) => onChange({ trackBg: v })}   isDark={isDark}
+/>
+        <ColorRow label="Track Border" value={config.trackBorder} onChange={(v) => onChange({ trackBorder: v })}   isDark={isDark}
+/>
+        <ColorRow label="Text" value={config.inactiveText} onChange={(v) => onChange({ inactiveText: v })}   isDark={isDark}
+/>
+        <ColorRow label="Hover BG" value={config.inactiveHoverBg} onChange={(v) => onChange({ inactiveHoverBg: v })}   isDark={isDark}
+/>
       </Section>
 
       {/* ── Active State Colors ── */}
       <Section title="Active Colors">
-        <ColorRow label="Background" value={config.activeBg} onChange={(v) => onChange({ activeBg: v })} />
-        <ColorRow label="Text" value={config.activeText} onChange={(v) => onChange({ activeText: v })} />
-        <ColorRow label="Border" value={config.activeBorder} onChange={(v) => onChange({ activeBorder: v })} />
-        <ColorRow label="Thumb (Switch)" value={config.thumbColor} onChange={(v) => onChange({ thumbColor: v })} />
+        <ColorRow label="Background" value={config.activeBg} onChange={(v) => onChange({ activeBg: v })}   isDark={isDark}
+/>
+        <ColorRow label="Text" value={config.activeText} onChange={(v) => onChange({ activeText: v })}   isDark={isDark}
+/>
+        <ColorRow label="Border" value={config.activeBorder} onChange={(v) => onChange({ activeBorder: v })}   isDark={isDark}
+/>
+        <ColorRow label="Thumb (Switch)" value={config.thumbColor} onChange={(v) => onChange({ thumbColor: v })}   isDark={isDark}
+/>
       </Section>
 
       {/* ── Group Colors ── */}
       {config.groupEnabled && (
         <Section title="Group Colors">
-          <ColorRow label="Track BG" value={config.groupBg} onChange={(v) => onChange({ groupBg: v })} />
-          <ColorRow label="Track Border" value={config.groupBorder} onChange={(v) => onChange({ groupBorder: v })} />
-          <ColorRow label="Active Indicator" value={config.groupActiveIndicatorBg} onChange={(v) => onChange({ groupActiveIndicatorBg: v })} />
-          <ColorRow label="Active Text" value={config.groupActiveText} onChange={(v) => onChange({ groupActiveText: v })} />
-          <ColorRow label="Inactive Text" value={config.groupInactiveText} onChange={(v) => onChange({ groupInactiveText: v })} />
+          <ColorRow label="Track BG" value={config.groupBg} onChange={(v) => onChange({ groupBg: v })}   isDark={isDark}
+/>
+          <ColorRow label="Track Border" value={config.groupBorder} onChange={(v) => onChange({ groupBorder: v })}   isDark={isDark}
+/>
+          <ColorRow label="Active Indicator" value={config.groupActiveIndicatorBg} onChange={(v) => onChange({ groupActiveIndicatorBg: v })}   isDark={isDark}
+/>
+          <ColorRow label="Active Text" value={config.groupActiveText} onChange={(v) => onChange({ groupActiveText: v })}   isDark={isDark}
+/>
+          <ColorRow label="Inactive Text" value={config.groupInactiveText} onChange={(v) => onChange({ groupInactiveText: v })}   isDark={isDark}
+/>
         </Section>
       )}
 

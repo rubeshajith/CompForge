@@ -19,6 +19,7 @@ interface Props {
   config: EmojiConfig;
   onChange: (patch: Partial<EmojiConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const VARIANTS: EmojiVariant[] = [
@@ -56,7 +57,12 @@ const ANIM_LABELS: Record<EmojiAnimation, string> = {
   rubber: "⤢ Rubber",
 };
 
-export function EmojiControlPanel({ config, onChange, onReset }: Props) {
+export function EmojiControlPanel({
+  config,
+  onChange,
+  onReset,
+  isDark = true,
+}: Props) {
   const [localConfig, setLocalConfig] = useState(config);
 
   const debouncedOnChange = useMemo(() => debounce(onChange, 80), [onChange]);
@@ -183,21 +189,25 @@ export function EmojiControlPanel({ config, onChange, onReset }: Props) {
           label="Face color"
           value={config.faceColor}
           onChange={(v) => onChange({ faceColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Face shade"
           value={config.faceShadeColor}
           onChange={(v) => onChange({ faceShadeColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Outline"
           value={config.outlineColor}
           onChange={(v) => onChange({ outlineColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Cheeks"
           value={config.cheekColor}
           onChange={(v) => onChange({ cheekColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -207,21 +217,25 @@ export function EmojiControlPanel({ config, onChange, onReset }: Props) {
           label="Eyes"
           value={config.eyeColor}
           onChange={(v) => onChange({ eyeColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Pupils"
           value={config.pupilColor}
           onChange={(v) => onChange({ pupilColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Mouth"
           value={config.mouthColor}
           onChange={(v) => onChange({ mouthColor: v })}
+          isDark={isDark}
         />
         <ColorRow
           label="Accent (details)"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
+          isDark={isDark}
         />
       </Section>
 
@@ -236,6 +250,7 @@ export function EmojiControlPanel({ config, onChange, onReset }: Props) {
           label="Background color"
           value={config.backgroundColor}
           onChange={(v) => onChange({ backgroundColor: v })}
+          isDark={isDark}
         />
         <SliderRow
           label="Corner radius"

@@ -12,6 +12,8 @@ import {
 import {
   generateImageCarouselJSX,
   generateImageCarouselCSS,
+  generateImageCarouselTSX,
+  generateImageCarouselTailwind,
 } from "@/lib/generateImageCarouselCode";
 import { ImageCarouselPreview } from "@/components/playground/ImageCarouselPreview";
 import { ImageCarouselControlPanel } from "@/components/playground/ImageCarouselControlPanel";
@@ -50,7 +52,11 @@ export default function ImageCarouselPlayground() {
 
   const jsxCode = useMemo(() => generateImageCarouselJSX(config), [config]);
   const cssCode = useMemo(() => generateImageCarouselCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateImageCarouselTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateImageCarouselTailwind(config),
+    [config],
+  );
   // Light-mode stage: clean grid background
   const stageStyle =
     mode === "light"
@@ -76,9 +82,17 @@ export default function ImageCarouselPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

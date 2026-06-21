@@ -21,12 +21,14 @@ import { FeedbackModalControlPanel } from "@/components/playground/FeedbackModal
 import {
   darkFeedbackModalConfig,
   FeedbackModalMode,
-  dark,
-  FeedbackModalModeFeedbackModalConfig,
   feedbackModalModePresets,
 } from "@/lib/feedbackModalConfig";
 import { FeedbackModalConfig } from "@/lib/feedbackModalConfig";
-import { generateFeedbackModalCSS } from "@/lib/generateFeedbackModalCode";
+import {
+  generateFeedbackModalCSS,
+  generateFeedbackModalTailwind,
+  generateFeedbackModalTSX,
+} from "@/lib/generateFeedbackModalCode";
 import { generateFeedbackModalJSX } from "@/lib/generateFeedbackModalCode";
 import { FeedbackModalPreview } from "@/components/playground/FeedbackModalPreview";
 
@@ -56,7 +58,11 @@ export default function FeedbackModalPlayground() {
 
   const jsxCode = useMemo(() => generateFeedbackModalJSX(config), [config]);
   const cssCode = useMemo(() => generateFeedbackModalCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateFeedbackModalTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateFeedbackModalTailwind(config),
+    [config],
+  );
   // Light mode stage: subtle grid
   const stageStyle =
     mode === "light"
@@ -82,9 +88,17 @@ export default function FeedbackModalPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

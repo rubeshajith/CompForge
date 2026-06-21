@@ -28,6 +28,8 @@ import { AnalyticsTablePreview } from "@/components/playground/AnalyticsTablePre
 import {
   generateAnalyticsTableCSS,
   generateAnalyticsTableJSX,
+  generateAnalyticsTableTailwind,
+  generateAnalyticsTableTSX,
 } from "@/lib/generateAnalyticsTableCode";
 
 export default function DataTablePlayground() {
@@ -72,7 +74,11 @@ export default function DataTablePlayground() {
 
   const jsxCode = useMemo(() => generateAnalyticsTableJSX(config), [config]);
   const cssCode = useMemo(() => generateAnalyticsTableCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateAnalyticsTableTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateAnalyticsTableTailwind(config),
+    [config],
+  );
   // Light mode stage: crosshatch grid
   const stageStyle =
     mode === "light"
@@ -98,9 +104,17 @@ export default function DataTablePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

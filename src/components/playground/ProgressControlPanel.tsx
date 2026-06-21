@@ -17,6 +17,7 @@ interface ProgressControlPanelProps {
   config: ProgressConfig;
   onChange: (patch: Partial<ProgressConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const ALL_VARIANTS = Object.keys(progressVariantLabels) as ProgressVariant[];
@@ -25,6 +26,7 @@ export function ProgressControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: ProgressControlPanelProps) {
   const [localConfig, setLocalConfig] = useState<ProgressConfig>(config);
 
@@ -118,17 +120,20 @@ export function ProgressControlPanel({
           label="Accent Primary"
           value={localConfig.accentColor}
           onChange={(v) => handleImmediate({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Secondary"
           value={localConfig.accentSecondary}
           onChange={(v) => handleImmediate({ accentSecondary: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Tertiary"
           value={localConfig.accentTertiary}
           onChange={(v) => handleImmediate({ accentTertiary: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Track / BG"
           value={localConfig.trackColor}
@@ -138,12 +143,14 @@ export function ProgressControlPanel({
           label="Surface"
           value={localConfig.backgroundColor}
           onChange={(v) => handleImmediate({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleImmediate({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Text Colors ─────────────────────────────────────────── */}
@@ -152,17 +159,20 @@ export function ProgressControlPanel({
           label="Label Color"
           value={localConfig.labelColor}
           onChange={(v) => handleImmediate({ labelColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Muted Color"
           value={localConfig.mutedColor}
           onChange={(v) => handleImmediate({ mutedColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Value Color"
           value={localConfig.valueColor}
           onChange={(v) => handleImmediate({ valueColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Font Size"
           value={localConfig.fontSize}
@@ -180,17 +190,20 @@ export function ProgressControlPanel({
           label="Success"
           value={localConfig.successColor}
           onChange={(v) => handleImmediate({ successColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Warning"
           value={localConfig.warningColor}
           onChange={(v) => handleImmediate({ warningColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Danger"
           value={localConfig.dangerColor}
           onChange={(v) => handleImmediate({ dangerColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Dimensions ──────────────────────────────────────────── */}

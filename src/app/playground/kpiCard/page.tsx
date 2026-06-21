@@ -9,7 +9,12 @@ import {
   kpiCardModePresets,
   darkKpiCardConfig,
 } from "@/lib/kpiCardConfig";
-import { generateKpiCardJSX, generateKpiCardCSS } from "@/lib/generateKpiCardCode";
+import {
+  generateKpiCardJSX,
+  generateKpiCardCSS,
+  generateKpiCardTSX,
+  generateKpiCardTailwind,
+} from "@/lib/generateKpiCardCode";
 import { KpiCardPreview } from "@/components/playground/KpiCardPreview";
 import { KpiCardControlPanel } from "@/components/playground/KpiCardControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -18,7 +23,14 @@ import { ResizablePlayground } from "@/components/playground/ResizablePlayground
 // Behavioral props preserved across mode switches
 type BehavioralProps = Pick<
   KpiCardConfig,
-  "chartVariant" | "label" | "value" | "percentChange" | "changeDirection" | "subText" | "showBadge" | "animateChart"
+  | "chartVariant"
+  | "label"
+  | "value"
+  | "percentChange"
+  | "changeDirection"
+  | "subText"
+  | "showBadge"
+  | "animateChart"
 >;
 
 function pickBehavioral(c: KpiCardConfig): BehavioralProps {
@@ -53,7 +65,8 @@ export default function KpiCardPlayground() {
 
   const jsxCode = useMemo(() => generateKpiCardJSX(config), [config]);
   const cssCode = useMemo(() => generateKpiCardCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateKpiCardTSX(config), [config]);
+  const tailwindCode = useMemo(() => generateKpiCardTailwind(config), [config]);
   const stageStyle =
     mode === "light"
       ? {
@@ -72,16 +85,23 @@ export default function KpiCardPlayground() {
       mode={mode}
       onModeToggle={handleModeToggle}
       modeHint="Switching resets colors · chart variant, label & data preserved"
-      stageStyle={stageStyle}
       preview={<KpiCardPreview config={config} />}
       controls={
         <KpiCardControlPanel
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

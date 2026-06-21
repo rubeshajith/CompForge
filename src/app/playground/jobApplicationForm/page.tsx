@@ -16,6 +16,8 @@ import { ResizablePlayground } from "@/components/playground/ResizablePlayground
 import {
   generateJobApplicationFormCSS,
   generateJobApplicationFormJSX,
+  generateJobApplicationFormTailwind,
+  generateJobApplicationFormTSX,
 } from "@/lib/generateJobApplicationFormCode";
 
 // Behavioral props that survive a theme switch / reset
@@ -70,7 +72,14 @@ export default function JobApplicationFormPlayground() {
     () => generateJobApplicationFormCSS(config),
     [config],
   );
-
+  const tsxCode = useMemo(
+    () => generateJobApplicationFormTSX(config),
+    [config],
+  );
+  const tailwindCode = useMemo(
+    () => generateJobApplicationFormTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -95,9 +104,17 @@ export default function JobApplicationFormPlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

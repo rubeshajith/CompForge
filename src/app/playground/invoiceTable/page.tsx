@@ -12,6 +12,8 @@ import {
 import {
   generateInvoiceTableJSX,
   generateInvoiceTableCSS,
+  generateInvoiceTableTSX,
+  generateInvoiceTableTailwind,
 } from "@/lib/generateInvoiceTableCode";
 import { InvoiceTablePreview } from "@/components/playground/InvoiceTablePreview";
 import { InvoiceTableControlPanel } from "@/components/playground/InvoiceTableControlPanel";
@@ -72,7 +74,11 @@ export default function InvoiceTablePlayground() {
 
   const jsxCode = useMemo(() => generateInvoiceTableJSX(config), [config]);
   const cssCode = useMemo(() => generateInvoiceTableCSS(config), [config]);
-
+  const tsxCode = useMemo(() => generateInvoiceTableTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateInvoiceTableTailwind(config),
+    [config],
+  );
   const stageStyle =
     mode === "light"
       ? {
@@ -97,9 +103,17 @@ export default function InvoiceTablePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

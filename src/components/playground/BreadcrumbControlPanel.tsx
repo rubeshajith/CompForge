@@ -19,6 +19,7 @@ interface BreadcrumbControlPanelProps {
   config: BreadcrumbConfig;
   onChange: (patch: Partial<BreadcrumbConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 const VARIANTS: { value: BreadcrumbVariant; label: string }[] = [
@@ -33,6 +34,7 @@ export function BreadcrumbControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: BreadcrumbControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -114,27 +116,32 @@ export function BreadcrumbControlPanel({
           label="Background"
           value={config.backgroundColor}
           onChange={(v) => onChange({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Item BG"
           value={config.itemBackground}
           onChange={(v) => onChange({ itemBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Item Hover BG"
           value={config.itemHoverBackground}
           onChange={(v) => onChange({ itemHoverBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active BG"
           value={config.activeBackground}
           onChange={(v) => onChange({ activeBackground: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent"
           value={config.accentColor}
           onChange={(v) => onChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Text ───────────────────────────────────────────── */}
@@ -143,22 +150,26 @@ export function BreadcrumbControlPanel({
           label="Text"
           value={config.textColor}
           onChange={(v) => onChange({ textColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Hover"
           value={config.textHoverColor}
           onChange={(v) => onChange({ textHoverColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Text"
           value={config.activeTextColor}
           onChange={(v) => onChange({ activeTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Separator"
           value={config.separatorColor}
           onChange={(v) => onChange({ separatorColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Border ─────────────────────────────────────────── */}
@@ -167,12 +178,14 @@ export function BreadcrumbControlPanel({
           label="Border"
           value={config.borderColor}
           onChange={(v) => onChange({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Border"
           value={config.activeBorderColor}
           onChange={(v) => onChange({ activeBorderColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Typography ─────────────────────────────────────── */}

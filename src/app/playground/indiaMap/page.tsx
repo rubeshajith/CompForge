@@ -11,7 +11,12 @@ import {
   MapMetric,
   ChartType,
 } from "@/lib/indiaMapConfig";
-import { generateIndiaMapJSX, generateIndiaMapCSS } from "@/lib/generateIndiaMapCode";
+import {
+  generateIndiaMapJSX,
+  generateIndiaMapCSS,
+  generateIndiaMapTailwind,
+  generateIndiaMapTSX,
+} from "@/lib/generateIndiaMapCode";
 import { IndiaMapPreview } from "@/components/playground/IndiaMapPreview";
 import { IndiaMapControlPanel } from "@/components/playground/IndiaMapControlPanel";
 import { CodePanel } from "@/components/playground/CodePanel";
@@ -42,7 +47,7 @@ export default function IndiaMapPlayground() {
     const preset = indiaMapModePresets[newMode];
     // Preserve all behavioral props
     const preserved = Object.fromEntries(
-      behavioralProps.map((k) => [k, config[k]])
+      behavioralProps.map((k) => [k, config[k]]),
     ) as Partial<IndiaMapConfig>;
     setConfig({ ...preset, ...preserved });
   }
@@ -50,13 +55,18 @@ export default function IndiaMapPlayground() {
   function handleReset() {
     const preset = indiaMapModePresets[mode];
     const preserved = Object.fromEntries(
-      behavioralProps.map((k) => [k, config[k]])
+      behavioralProps.map((k) => [k, config[k]]),
     ) as Partial<IndiaMapConfig>;
     setConfig({ ...preset, ...preserved });
   }
 
   const jsxCode = useMemo(() => generateIndiaMapJSX(config), [config]);
   const cssCode = useMemo(() => generateIndiaMapCSS(config), [config]);
+  const tsxCode = useMemo(() => generateIndiaMapTSX(config), [config]);
+  const tailwindCode = useMemo(
+    () => generateIndiaMapTailwind(config),
+    [config],
+  );
 
   const stageStyle =
     mode === "light"
@@ -76,16 +86,23 @@ export default function IndiaMapPlayground() {
       mode={mode}
       onModeToggle={handleModeToggle}
       modeHint="Switching resets colors · metric, chart type & size preserved"
-
       preview={<IndiaMapPreview config={config} />}
       controls={
         <IndiaMapControlPanel
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={jsxCode} css={cssCode} />}
+      code={
+        <CodePanel
+          jsx={jsxCode}
+          css={cssCode}
+          tsx={tsxCode}
+          tailwind={tailwindCode}
+        />
+      }
     />
   );
 }

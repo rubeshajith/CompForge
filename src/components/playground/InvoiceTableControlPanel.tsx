@@ -17,12 +17,14 @@ interface InvoiceTableControlPanelProps {
   config: InvoiceTableConfig;
   onChange: (patch: Partial<InvoiceTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function InvoiceTableControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: InvoiceTableControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -93,37 +95,44 @@ export function InvoiceTableControlPanel({
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => handleChange({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Toolbar Background"
           value={localConfig.toolbarBackgroundColor}
           onChange={(v) => handleChange({ toolbarBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Toolbar Border"
           value={localConfig.toolbarBorderColor}
           onChange={(v) => handleChange({ toolbarBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Background"
           value={localConfig.headerBackgroundColor}
           onChange={(v) => handleChange({ headerBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Text"
           value={localConfig.headerTextColor}
           onChange={(v) => handleChange({ headerTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleChange({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Divider"
           value={localConfig.dividerColor}
           onChange={(v) => handleChange({ dividerColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Rows & Cells ── */}
@@ -132,22 +141,26 @@ export function InvoiceTableControlPanel({
           label="Row Hover"
           value={localConfig.rowHoverColor}
           onChange={(v) => handleChange({ rowHoverColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Selected Row"
           value={localConfig.selectedRowColor}
           onChange={(v) => handleChange({ selectedRowColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Cell Text"
           value={localConfig.cellTextColor}
           onChange={(v) => handleChange({ cellTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Cell Muted Text"
           value={localConfig.cellMutedColor}
           onChange={(v) => handleChange({ cellMutedColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Accent ── */}
@@ -156,17 +169,20 @@ export function InvoiceTableControlPanel({
           label="Accent Color"
           value={localConfig.accentColor}
           onChange={(v) => handleChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Text"
           value={localConfig.accentTextColor}
           onChange={(v) => handleChange({ accentTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Invoice # Color"
           value={localConfig.invoiceNumColor}
           onChange={(v) => handleChange({ invoiceNumColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Avatar ── */}
@@ -175,12 +191,14 @@ export function InvoiceTableControlPanel({
           label="Avatar Background"
           value={localConfig.avatarBackgroundColor}
           onChange={(v) => handleChange({ avatarBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Avatar Text"
           value={localConfig.avatarTextColor}
           onChange={(v) => handleChange({ avatarTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Status Tabs ── */}
@@ -189,32 +207,38 @@ export function InvoiceTableControlPanel({
           label="Active Tab Background"
           value={localConfig.tabActiveBg}
           onChange={(v) => handleChange({ tabActiveBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Tab Text"
           value={localConfig.tabActiveText}
           onChange={(v) => handleChange({ tabActiveText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Tab Hover Background"
           value={localConfig.tabHoverBg}
           onChange={(v) => handleChange({ tabHoverBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Inactive Tab Text"
           value={localConfig.tabInactiveText}
           onChange={(v) => handleChange({ tabInactiveText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Badge Background"
           value={localConfig.tabBadgeBg}
           onChange={(v) => handleChange({ tabBadgeBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Badge Text"
           value={localConfig.tabBadgeText}
           onChange={(v) => handleChange({ tabBadgeText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Status Badges ── */}
@@ -223,37 +247,44 @@ export function InvoiceTableControlPanel({
           label="Paid — Background"
           value={localConfig.paidBg}
           onChange={(v) => handleChange({ paidBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Paid — Text"
           value={localConfig.paidText}
           onChange={(v) => handleChange({ paidText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending — Background"
           value={localConfig.pendingBg}
           onChange={(v) => handleChange({ pendingBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Pending — Text"
           value={localConfig.pendingText}
           onChange={(v) => handleChange({ pendingText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Overdue — Background"
           value={localConfig.overdueBg}
           onChange={(v) => handleChange({ overdueBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Overdue — Text"
           value={localConfig.overdueText}
           onChange={(v) => handleChange({ overdueText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Overdue Days Color"
           value={localConfig.overdueDaysColor}
           onChange={(v) => handleChange({ overdueDaysColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Payment ── */}
@@ -262,12 +293,14 @@ export function InvoiceTableControlPanel({
           label="Icon Color"
           value={localConfig.paymentIconColor}
           onChange={(v) => handleChange({ paymentIconColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text Color"
           value={localConfig.paymentTextColor}
           onChange={(v) => handleChange({ paymentTextColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Actions ── */}
@@ -276,12 +309,14 @@ export function InvoiceTableControlPanel({
           label="Icon Color"
           value={localConfig.actionIconColor}
           onChange={(v) => handleChange({ actionIconColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Hover Background"
           value={localConfig.actionHoverBg}
           onChange={(v) => handleChange({ actionHoverBg: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Search ── */}
@@ -290,22 +325,26 @@ export function InvoiceTableControlPanel({
           label="Background"
           value={localConfig.searchBackgroundColor}
           onChange={(v) => handleChange({ searchBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.searchBorderColor}
           onChange={(v) => handleChange({ searchBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Text"
           value={localConfig.searchTextColor}
           onChange={(v) => handleChange({ searchTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Placeholder"
           value={localConfig.searchPlaceholderColor}
           onChange={(v) => handleChange({ searchPlaceholderColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Pagination ── */}
@@ -314,27 +353,32 @@ export function InvoiceTableControlPanel({
           label="Footer Background"
           value={localConfig.footerBackgroundColor}
           onChange={(v) => handleChange({ footerBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer Text"
           value={localConfig.footerTextColor}
           onChange={(v) => handleChange({ footerTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Page Background"
           value={localConfig.paginationActiveBg}
           onChange={(v) => handleChange({ paginationActiveBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Page Text"
           value={localConfig.paginationActiveText}
           onChange={(v) => handleChange({ paginationActiveText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Page Button Border"
           value={localConfig.paginationBorderColor}
           onChange={(v) => handleChange({ paginationBorderColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Features ── */}

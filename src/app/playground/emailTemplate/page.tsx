@@ -84,9 +84,10 @@ export default function EmailTemplatePlayground() {
           config={config}
           onChange={handleChange}
           onReset={handleReset}
+          isDark={mode === "dark"}
         />
       }
-      code={<CodePanel jsx={htmlCode} css="" />}
+      code={<CodePanel jsx={htmlCode} css="" tsx="" tailwind="" />}
     />
   );
 }

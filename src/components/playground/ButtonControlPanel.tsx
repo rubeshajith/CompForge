@@ -15,6 +15,7 @@ interface ButtonControlPanelProps {
   config: ButtonConfig;
   onChange: (patch: Partial<ButtonConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 // ─── Inline select row (shared local primitive) ───────────────────────────────
@@ -124,44 +125,58 @@ export function ButtonControlPanel({ config, onChange, onReset }: ButtonControlP
       {/* ── Solid Colors ── */}
       {config.variant === "solid" && (
         <Section title="Solid Colors">
-          <ColorRow label="Background" value={config.solidBg} onChange={(v) => onChange({ solidBg: v })} />
-          <ColorRow label="Text" value={config.solidText} onChange={(v) => onChange({ solidText: v })} />
-          <ColorRow label="Hover BG" value={config.solidHoverBg} onChange={(v) => onChange({ solidHoverBg: v })} />
-          <ColorRow label="Border" value={config.solidBorder} onChange={(v) => onChange({ solidBorder: v })} />
+          <ColorRow label="Background" value={config.solidBg} onChange={(v) => onChange({ solidBg: v })}   isDark={isDark}
+/>
+          <ColorRow label="Text" value={config.solidText} onChange={(v) => onChange({ solidText: v })}   isDark={isDark}
+/>
+          <ColorRow label="Hover BG" value={config.solidHoverBg} onChange={(v) => onChange({ solidHoverBg: v })}   isDark={isDark}
+/>
+          <ColorRow label="Border" value={config.solidBorder} onChange={(v) => onChange({ solidBorder: v })}   isDark={isDark}
+/>
         </Section>
       )}
 
       {/* ── Outline Colors ── */}
       {config.variant === "outline" && (
         <Section title="Outline Colors">
-          <ColorRow label="Border" value={config.outlineBorder} onChange={(v) => onChange({ outlineBorder: v })} />
-          <ColorRow label="Text" value={config.outlineText} onChange={(v) => onChange({ outlineText: v })} />
-          <ColorRow label="Hover BG" value={config.outlineHoverBg} onChange={(v) => onChange({ outlineHoverBg: v })} />
+          <ColorRow label="Border" value={config.outlineBorder} onChange={(v) => onChange({ outlineBorder: v })}   isDark={isDark}
+/>
+          <ColorRow label="Text" value={config.outlineText} onChange={(v) => onChange({ outlineText: v })}   isDark={isDark}
+/>
+          <ColorRow label="Hover BG" value={config.outlineHoverBg} onChange={(v) => onChange({ outlineHoverBg: v })}   isDark={isDark}
+/>
         </Section>
       )}
 
       {/* ── Ghost Colors ── */}
       {config.variant === "ghost" && (
         <Section title="Ghost Colors">
-          <ColorRow label="Text" value={config.ghostText} onChange={(v) => onChange({ ghostText: v })} />
-          <ColorRow label="Hover BG" value={config.ghostHoverBg} onChange={(v) => onChange({ ghostHoverBg: v })} />
+          <ColorRow label="Text" value={config.ghostText} onChange={(v) => onChange({ ghostText: v })}   isDark={isDark}
+/>
+          <ColorRow label="Hover BG" value={config.ghostHoverBg} onChange={(v) => onChange({ ghostHoverBg: v })}   isDark={isDark}
+/>
         </Section>
       )}
 
       {/* ── Soft Colors ── */}
       {config.variant === "soft" && (
         <Section title="Soft Colors">
-          <ColorRow label="Background" value={config.softBg} onChange={(v) => onChange({ softBg: v })} />
-          <ColorRow label="Text" value={config.softText} onChange={(v) => onChange({ softText: v })} />
-          <ColorRow label="Hover BG" value={config.softHoverBg} onChange={(v) => onChange({ softHoverBg: v })} />
+          <ColorRow label="Background" value={config.softBg} onChange={(v) => onChange({ softBg: v })}   isDark={isDark}
+/>
+          <ColorRow label="Text" value={config.softText} onChange={(v) => onChange({ softText: v })}   isDark={isDark}
+/>
+          <ColorRow label="Hover BG" value={config.softHoverBg} onChange={(v) => onChange({ softHoverBg: v })}   isDark={isDark}
+/>
         </Section>
       )}
 
       {/* ── Link Colors ── */}
       {config.variant === "link" && (
         <Section title="Link Colors">
-          <ColorRow label="Text" value={config.linkText} onChange={(v) => onChange({ linkText: v })} />
-          <ColorRow label="Hover Text" value={config.linkHoverText} onChange={(v) => onChange({ linkHoverText: v })} />
+          <ColorRow label="Text" value={config.linkText} onChange={(v) => onChange({ linkText: v })}   isDark={isDark}
+/>
+          <ColorRow label="Hover Text" value={config.linkHoverText} onChange={(v) => onChange({ linkHoverText: v })}   isDark={isDark}
+/>
         </Section>
       )}
 

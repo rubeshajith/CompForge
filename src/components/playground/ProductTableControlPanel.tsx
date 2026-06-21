@@ -17,12 +17,14 @@ interface DataTableControlPanelProps {
   config: DataTableConfig;
   onChange: (patch: Partial<DataTableConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function ProductTableControlPanel({
   config,
   onChange,
   onReset,
+  isDark = true,
 }: DataTableControlPanelProps) {
   const [localConfig, setLocalConfig] = useState(config);
 
@@ -116,32 +118,38 @@ export function ProductTableControlPanel({
           label="Background"
           value={localConfig.backgroundColor}
           onChange={(v) => handleChange({ backgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Header Background"
           value={localConfig.headerBackgroundColor}
           onChange={(v) => handleChange({ headerBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Hover"
           value={localConfig.rowHoverColor}
           onChange={(v) => handleChange({ rowHoverColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Selected Row"
           value={localConfig.selectedRowColor}
           onChange={(v) => handleChange({ selectedRowColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Border"
           value={localConfig.borderColor}
           onChange={(v) => handleChange({ borderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Row Divider"
           value={localConfig.dividerColor}
           onChange={(v) => handleChange({ dividerColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Typography ── */}
@@ -150,7 +158,8 @@ export function ProductTableControlPanel({
           label="Header Text"
           value={localConfig.headerTextColor}
           onChange={(v) => handleChange({ headerTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Header Font Size"
           value={localConfig.headerFontSize}
@@ -164,12 +173,14 @@ export function ProductTableControlPanel({
           label="Cell Text"
           value={localConfig.cellTextColor}
           onChange={(v) => handleChange({ cellTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Cell Muted Text"
           value={localConfig.cellMutedColor}
           onChange={(v) => handleChange({ cellMutedColor: v })}
-        />
+          isDark={isDark}
+/>
         <SliderRow
           label="Cell Font Size"
           value={localConfig.cellFontSize}
@@ -187,17 +198,20 @@ export function ProductTableControlPanel({
           label="Accent Color"
           value={localConfig.accentColor}
           onChange={(v) => handleChange({ accentColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Accent Text"
           value={localConfig.accentTextColor}
           onChange={(v) => handleChange({ accentTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="SKU Color"
           value={localConfig.skuColor}
           onChange={(v) => handleChange({ skuColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Status Badges ── */}
@@ -206,42 +220,50 @@ export function ProductTableControlPanel({
           label="In Stock — Bg"
           value={localConfig.inStockBg}
           onChange={(v) => handleChange({ inStockBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="In Stock — Text"
           value={localConfig.inStockText}
           onChange={(v) => handleChange({ inStockText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Low Stock — Bg"
           value={localConfig.lowStockBg}
           onChange={(v) => handleChange({ lowStockBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Low Stock — Text"
           value={localConfig.lowStockText}
           onChange={(v) => handleChange({ lowStockText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="OOS — Bg"
           value={localConfig.oosBg}
           onChange={(v) => handleChange({ oosBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="OOS — Text"
           value={localConfig.oosText}
           onChange={(v) => handleChange({ oosText: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Discontinued — Bg"
           value={localConfig.discontinuedBg}
           onChange={(v) => handleChange({ discontinuedBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Discontinued — Text"
           value={localConfig.discontinuedText}
           onChange={(v) => handleChange({ discontinuedText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Toolbar ── */}
@@ -250,22 +272,26 @@ export function ProductTableControlPanel({
           label="Toolbar Bg"
           value={localConfig.toolbarBackgroundColor}
           onChange={(v) => handleChange({ toolbarBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Toolbar Border"
           value={localConfig.toolbarBorderColor}
           onChange={(v) => handleChange({ toolbarBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Filter Chip Bg"
           value={localConfig.filterChipBg}
           onChange={(v) => handleChange({ filterChipBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Filter Chip Text"
           value={localConfig.filterChipText}
           onChange={(v) => handleChange({ filterChipText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Detail Panel ── */}
@@ -274,32 +300,38 @@ export function ProductTableControlPanel({
           label="Panel Background"
           value={localConfig.panelBackgroundColor}
           onChange={(v) => handleChange({ panelBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Border"
           value={localConfig.panelBorderColor}
           onChange={(v) => handleChange({ panelBorderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Header Text"
           value={localConfig.panelHeaderColor}
           onChange={(v) => handleChange({ panelHeaderColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Label"
           value={localConfig.panelLabelColor}
           onChange={(v) => handleChange({ panelLabelColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Value"
           value={localConfig.panelValueColor}
           onChange={(v) => handleChange({ panelValueColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Panel Accent"
           value={localConfig.panelAccentColor}
           onChange={(v) => handleChange({ panelAccentColor: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Pagination / Footer ── */}
@@ -308,22 +340,26 @@ export function ProductTableControlPanel({
           label="Footer Bg"
           value={localConfig.footerBackgroundColor}
           onChange={(v) => handleChange({ footerBackgroundColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Footer Text"
           value={localConfig.footerTextColor}
           onChange={(v) => handleChange({ footerTextColor: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Page Bg"
           value={localConfig.paginationActiveBg}
           onChange={(v) => handleChange({ paginationActiveBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Active Page Text"
           value={localConfig.paginationActiveText}
           onChange={(v) => handleChange({ paginationActiveText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Bulk Action Bar ── */}
@@ -332,12 +368,14 @@ export function ProductTableControlPanel({
           label="Bulk Bar Bg"
           value={localConfig.bulkBarBg}
           onChange={(v) => handleChange({ bulkBarBg: v })}
-        />
+          isDark={isDark}
+/>
         <ColorRow
           label="Bulk Bar Text"
           value={localConfig.bulkBarText}
           onChange={(v) => handleChange({ bulkBarText: v })}
-        />
+          isDark={isDark}
+/>
       </Section>
 
       {/* ── Feature Toggles ── */}

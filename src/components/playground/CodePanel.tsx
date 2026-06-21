@@ -13,6 +13,7 @@ interface Props {
   css: string;
   tsx: string;
   tailwind: string;
+  exportFileName?: string; // Optional base name for exported files (without extension)
 }
 
 // Derived file tabs based on the current framework + styling selection
@@ -22,36 +23,48 @@ interface FileTab {
   language: string;
 }
 
-function getFileTabs(
-  framework: Framework,
-  styling: Styling,
-  { jsx, css, tsx, tailwind }: Props,
-): FileTab[] {
-  // Tailwind is always TSX, single file — no separate CSS tab
-  if (styling === "tailwind") {
-    return [
-      { label: "Calendar.tailwind.tsx", code: tailwind, language: "tsx" },
-    ];
-  }
-  // JSX + CSS
-  if (framework === "jsx") {
-    return [
-      { label: "Calendar.jsx", code: jsx, language: "jsx" },
-      { label: "Calendar.css", code: css, language: "css" },
-    ];
-  }
-  // TSX + CSS
-  return [
-    { label: "Calendar.tsx", code: tsx, language: "tsx" },
-    { label: "Calendar.css", code: css, language: "css" },
-  ];
-}
-
-export function CodePanel({ jsx, css, tsx, tailwind }: Props) {
+export function CodePanel({ jsx, css, tsx, tailwind, exportFileName }: Props) {
   const [framework, setFramework] = useState<Framework>("jsx");
   const [styling, setStyling] = useState<Styling>("css");
   const [activeFile, setActiveFile] = useState(0);
   const [copied, setCopied] = useState(false);
+
+  function getFileTabs(
+    framework: Framework,
+    styling: Styling,
+    { jsx, css, tsx, tailwind }: Props,
+  ): FileTab[] {
+    // Tailwind is always TSX, single file — no separate CSS tab
+    if (styling === "tailwind") {
+      return [
+        {
+          label: `${exportFileName || "index"}.tailwind.tsx`,
+          code: tailwind,
+          language: "tsx",
+        },
+      ];
+    }
+    // JSX + CSS
+    if (framework === "jsx") {
+      return [
+        {
+          label: `${exportFileName || "index"}.jsx`,
+          code: jsx,
+          language: "jsx",
+        },
+        {
+          label: `${exportFileName || "index"}.css`,
+          code: css,
+          language: "css",
+        },
+      ];
+    }
+    // TSX + CSS
+    return [
+      { label: `${exportFileName || "index"}.tsx`, code: tsx, language: "tsx" },
+      { label: `${exportFileName || "index"}.css`, code: css, language: "css" },
+    ];
+  }
 
   const fileTabs = getFileTabs(framework, styling, { jsx, css, tsx, tailwind });
 

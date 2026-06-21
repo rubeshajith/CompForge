@@ -15,6 +15,7 @@ interface Props {
   config: DropdownConfig;
   onChange: (patch: Partial<DropdownConfig>) => void;
   onReset: () => void;
+  isDark?: boolean;
 }
 
 export function ControlPanel({ config, onChange, onReset }: Props) {
@@ -35,27 +36,32 @@ export function ControlPanel({ config, onChange, onReset }: Props) {
             label="Background"
             value={config.backgroundColor}
             onChange={(v) => onChange({ backgroundColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Text"
             value={config.textColor}
             onChange={(v) => onChange({ textColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Border"
             value={config.borderColor}
             onChange={(v) => onChange({ borderColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Accent"
             value={config.accentColor}
             onChange={(v) => onChange({ accentColor: v })}
-          />
+            isDark={isDark}
+/>
           <ColorRow
             label="Placeholder"
             value={config.placeholderColor}
             onChange={(v) => onChange({ placeholderColor: v })}
-          />
+            isDark={isDark}
+/>
         </Section>
 
         {/* SHAPE */}

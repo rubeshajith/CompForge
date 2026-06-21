@@ -962,6 +962,7 @@ const atVars: CSSProperties = {
   "--at-pagination-active-bg":       "${c.paginationActiveBackground}",
   "--at-pagination-active-text":     "${c.paginationActiveTextColor}",
   "--at-accent":                     "${c.accentColor}",
+  "--at-accent-text":                "${c.accentTextColor}",
   "--at-page-btn-radius":            "${pageBtnRadius}px",
 } as CSSProperties;
 
@@ -1034,7 +1035,7 @@ function ExpandedChart({ data, barColor, barHighlight, bg }: ExpandedChartProps)
   const maxIdx = data.indexOf(Math.max(...data));
   return (
     <div
-      className="rounded-[var(--at-radius)] p-4 h-40 flex flex-col gap-2 border border-[var(--at-chart-bar)]/20"
+      className={\`rounded-[var(--at-radius)] p-4 h-40 flex flex-col gap-2 border border-[\${c.expandedChartBarColor}33]\`}
       style={{ background: bg }}
     >
       <div className="flex-1 flex items-end gap-[6px]">
@@ -1089,7 +1090,7 @@ export default function AnalyticsTable({ onRowSelect }: AnalyticsTableProps) {
   };
 
   return (
-    <div className="font-sans text-[${fsBase}px] w-full" style={atVars}>
+    <div className="font-[inherit] text-[${fsBase}px] w-full" style={atVars}>
       ${
         c.animateExpand
           ? `<style>{\`
